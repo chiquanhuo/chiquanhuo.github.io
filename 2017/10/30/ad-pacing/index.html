@@ -19,7 +19,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/adpacing/b_400.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/adpacing/a_9000.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/adpacing/b_9000.png">
-<meta property="og:updated_time" content="2017-10-30T15:23:34.410Z">
+<meta property="og:updated_time" content="2017-10-31T14:06:14.667Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Ad-Pacing 均匀出量总结">
 <meta name="twitter:description" content="​       大部分广告经常面临一个问题，广告上线后瞬间就产生大量的曝光，推广计划瞬间达到每天的下量而不得不暂停推广。最近我通过改造平台的均匀出量功能对广告曝光速度进行实时控制，进而使得广告当天的消耗曲线跟平台消耗曲线相符。​       在实现均匀出量功能时，需要考虑到的因素有广告主的广告推广日限量，前一段时段广告消耗速度，消耗量，广告推广的时间段，平台大盘流量预估等。 问题之前均匀出量的方案">
@@ -190,9 +190,13 @@
 </ul>
 <p>上面的公式存在比较多的问题：</p>
 <ul>
-<li>这几个变量都是通过配置文件固定的，导致每个同等级的广告出量的预估都一样，但是每个广告的优先级却不一样的情况下，其出量速度是不同的。举个例子，广告A和广告B的计划推广量都是200，但是广告A是游戏，广告B是应用，广告A的优先级比广告B高，正常来说用户获取这两个广告的概率一样，但是点击并安装激活广告A的概率可能比B的高，就会导致A已经放完量，B却没放完。</li>
-<li>如果上一个时间段的余量全部放到下一个时间段放，下一个时间段计划放的量会有一个陡增，效果与我们的目标不符。</li>
-<li>广告的消耗是指对广告主结算的量，而不是请求数，一个用户能请求到广告，就应该让用户继续完成这个广告。所以这条公式并没有直接限制广告的请求量。</li>
+<li><p>这几个变量都是通过配置文件固定的，导致每个同等级的广告出量的预估都一样，但是每个广告的优先级却不一样的情况下，其出量速度是不同的。举个例子，广告A和广告B的计划推广量都是200，但是广告A是游戏，广告B是应用，广告A的优先级比广告B高，正常来说用户获取这两个广告的概率一样，但是点击并安装激活广告A的概率可能比B的高，就会导致A已经放完量，B却没放完。</p>
+</li>
+<li><p>如果上一个时间段的余量全部放到下一个时间段放，下一个时间段计划放的量会有一个陡增，效果与我们的目标不符。</p>
+</li>
+<li><p>广告的消耗是指对广告主结算的量，而不是请求数，一个用户能请求到广告，就应该让用户继续完成这个广告。所以这条公式并没有直接限制广告的请求量。</p>
+<a id="more"></a>
+</li>
 </ul>
 <h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><ol>
 <li>首先统计前两天和上周同日对广告主有效的激活数(CPA)和请求数(REQ)，把这3天的数据算出平均数，得到当天的平台大盘的预估曲线；使用上周同日是防止节假日数据量的激增。</li>
@@ -335,11 +339,11 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/10/30/hello-world/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2017/10/31/mac-lnmp/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          Hello World
+          mac搭建LNMP(linux+nginx+mysql+php)环境
         
       </div>
     </a>

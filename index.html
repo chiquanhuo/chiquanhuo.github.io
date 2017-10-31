@@ -152,36 +152,33 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-hello-world" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-mac-lnmp" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/30/hello-world/">Hello World</a>
+      <a class="article-title" href="/2017/10/31/mac-lnmp/">mac搭建LNMP(linux+nginx+mysql+php)环境</a>
     </h1>
   
 
         
-        <a href="/2017/10/30/hello-world/" class="archive-article-date">
-  	<time datetime="2017-10-30T08:10:56.095Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-30</time>
+        <a href="/2017/10/31/mac-lnmp/" class="archive-article-date">
+  	<time datetime="2017-10-31T13:57:36.853Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-31</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
+        <p>​       因为本人工作环境是linux的LNMP, 最近心血来潮想在mac上面也搭一个这样的环境，因此就有下面的操作，以下操作是在osx 10.11.6下进行的。</p>
+<h2 id="安装homebrew"><a href="#安装homebrew" class="headerlink" title="安装homebrew"></a>安装homebrew</h2><p>总所周知，在mac上面开发的，一般都会用到homebrew，这个工具就是类似ubuntu下的apt-get的操作。<br>首先先在appstore下载安装xcode和xcode-select，然后使用homebrew官网的安装命令，进行安装homebrew。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ruby -e <span class="string">"<span class="variable">$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)</span>"</span></div></pre></td></tr></table></figure>
+<p>之后使用<code>brew doctor</code>检查brew是否安装成功。检查成功后就可以使用<code>brew install FORMULA</code>安装所需要的工具。</p>
+        
+          <a class="article-more-a" href="/2017/10/31/mac-lnmp/#more">more >></a>
+        
       
 
       
@@ -193,7 +190,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/30/hello-world/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/10/31/mac-lnmp/">展开全文 >></a>
         </p>
       
 
@@ -254,59 +251,14 @@
 </ul>
 <p>上面的公式存在比较多的问题：</p>
 <ul>
-<li>这几个变量都是通过配置文件固定的，导致每个同等级的广告出量的预估都一样，但是每个广告的优先级却不一样的情况下，其出量速度是不同的。举个例子，广告A和广告B的计划推广量都是200，但是广告A是游戏，广告B是应用，广告A的优先级比广告B高，正常来说用户获取这两个广告的概率一样，但是点击并安装激活广告A的概率可能比B的高，就会导致A已经放完量，B却没放完。</li>
-<li>如果上一个时间段的余量全部放到下一个时间段放，下一个时间段计划放的量会有一个陡增，效果与我们的目标不符。</li>
-<li>广告的消耗是指对广告主结算的量，而不是请求数，一个用户能请求到广告，就应该让用户继续完成这个广告。所以这条公式并没有直接限制广告的请求量。</li>
-</ul>
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><ol>
-<li>首先统计前两天和上周同日对广告主有效的激活数(CPA)和请求数(REQ)，把这3天的数据算出平均数，得到当天的平台大盘的预估曲线；使用上周同日是防止节假日数据量的激增。</li>
-<li>把一天时间通过每5分钟分隔成288个时间段，每个用户在相应的广告激活一次则实时记录一次，记录一个广告在不同时间点激活的情况。</li>
-<li>一开始并没有考虑到广告的激活数跟请求数是不对等的；一个用户从请求一个广告到激活广告对应的应用是需要多个动作才完成，请求－&gt;展示-&gt;点击-&gt;下载-&gt;安装-&gt;激活. 所以一开始的公式如下：</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">F = (L - C) * P / SUMp</div></pre></td></tr></table></figure>
-<ul>
-<li>L: 广告的限量</li>
-<li>C: 该广告当前时间段之前已经消耗的量</li>
-<li>P: 平台大盘这个时间段预估的激活数</li>
-<li>SUMp: 大盘剩余时间预估的激活数；前一个时间段的余量放到剩余的投放时间里面按照比例分配到各时间段投放</li>
-<li>F: 预估该时间段限制广告投放请求数</li>
-</ul>
-<ol>
-<li>只限制激活数是不行的，因为请求数与激活数不对等，一个用户请求成功广告不应该不跟这个用户结算，因此我们只能限制请求，而每个用户当没有达到请求广告限制数前，都应该能获取到这个广告，而不是通过概率限制用户获取广告。因此把请求数与激活数的比例引入公式中</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">F = (L - C) * REQp / SUMp</div></pre></td></tr></table></figure>
-<ul>
-<li>REQp: 平台大盘这个时间段预估的请求数</li>
-</ul>
-<ol>
-<li>以上的工作看上去很不错，但是我们会发现只用以上的公式会出现以前方案存在的问题：每个同等级的广告出量的预估都一样。 因为每个广告都有自己的优先级，一个广告列表有多个广告，用户点击这些广告的概率会因为广告位置的不同而不同，或者因为兴趣不同而不同。因此这里引入一个不断变化的参数，使广告的出量自动调整。</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">F = (L - C) * REQp / SUMp * \alpha</div></pre></td></tr></table></figure>
-<ul>
-<li>alpha : <ul>
-<li>每5分钟统计这个广告激活数与请求数的比例得出来，如果这个广告限制的请求数转化成实际的激活数达不到预估的激活数，则把 alpha 调高，超过预估值则调低；然后当广告的优先级上升，我们就会根据之前的优先级和现在的优先级做一个比例，使alpha调低，让广告不至于一下子飙上去，优先级下降同理。</li>
-<li>广告的限量比较少的话，我们会使 alpha 的上升调慢，例如本来根据现实数据计算到的 alpha 是10的，但是实际 alpha 就只上升5.</li>
-<li>当广告的激活数与限制请求数的比例不变，alpha值则不变</li>
-</ul>
+<li><p>这几个变量都是通过配置文件固定的，导致每个同等级的广告出量的预估都一样，但是每个广告的优先级却不一样的情况下，其出量速度是不同的。举个例子，广告A和广告B的计划推广量都是200，但是广告A是游戏，广告B是应用，广告A的优先级比广告B高，正常来说用户获取这两个广告的概率一样，但是点击并安装激活广告A的概率可能比B的高，就会导致A已经放完量，B却没放完。</p>
 </li>
-</ul>
-<h2 id="存在问题"><a href="#存在问题" class="headerlink" title="存在问题"></a>存在问题</h2><ul>
-<li>每个时段用户数是不一样的，所以应该用户数也是需要自己调整的，但是因为成本问题，暂时先不考虑。</li>
-</ul>
-<h2 id="优化后的效果"><a href="#优化后的效果" class="headerlink" title="优化后的效果"></a>优化后的效果</h2><ul>
-<li><p>以前量少的广告一下子就能把量出完。如下图：</p>
-<p><img src="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/adpacing/a_400.png" alt="限量200的广告A"></p>
+<li><p>如果上一个时间段的余量全部放到下一个时间段放，下一个时间段计划放的量会有一个陡增，效果与我们的目标不符。</p>
 </li>
-<li><p>量少的广告计划在一整天投放，到23点50分还有量可以出，如下图：</p>
-<p><img src="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/adpacing/b_400.png" alt="限量200的广告B"></p>
-</li>
-<li><p>量大的广告一天投放计划中，到了下午2点基本就消耗完了，如下图：</p>
-<p><img src="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/adpacing/a_9000.png" alt="限量8000的广告D"></p>
-</li>
-<li><p>量大的广告的曲线基本跟大盘数据相同<br><img src="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/adpacing/b_9000.png" alt="限量8000的广告D"></p>
-</li>
-</ul>
-
+<li><p>广告的消耗是指对广告主结算的量，而不是请求数，一个用户能请求到广告，就应该让用户继续完成这个广告。所以这条公式并没有直接限制广告的请求量。</p>
+        
+          <a class="article-more-a" href="/2017/10/30/ad-pacing/#more">more >></a>
+        
       
 
       
