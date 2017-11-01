@@ -6,24 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Ad-Pacing 均匀出量总结 | Forster&#39;s Blog</title>
+  <title>mac搭建LNMP(linux+nginx+mysql+php)环境 | Forster&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="​       大部分广告经常面临一个问题，广告上线后瞬间就产生大量的曝光，推广计划瞬间达到每天的下量而不得不暂停推广。最近我通过改造平台的均匀出量功能对广告曝光速度进行实时控制，进而使得广告当天的消耗曲线跟平台消耗曲线相符。​       在实现均匀出量功能时，需要考虑到的因素有广告主的广告推广日限量，前一段时段广告消耗速度，消耗量，广告推广的时间段，平台大盘流量预估等。 问题之前均匀出量的方案">
+  <meta name="description" content="​       因为本人工作环境是linux的LNMP, 最近心血来潮想在mac上面也搭一个这样的环境，因此就有下面的操作，以下操作是在osx 10.11.6下进行的。 安装homebrew总所周知，在mac上面开发的，一般都会用到homebrew，这个工具就是类似ubuntu下的apt-get的操作。首先先在appstore下载安装xcode和xcode-select，然后使用homebrew官">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Ad-Pacing 均匀出量总结">
-<meta property="og:url" content="http://yoursite.com/2017/10/30/ad-pacing/index.html">
+<meta property="og:title" content="mac搭建LNMP(linux+nginx+mysql+php)环境">
+<meta property="og:url" content="http://yoursite.com/2016/11/03/mac-lnmp/index.html">
 <meta property="og:site_name" content="Forster&#39;s Blog">
-<meta property="og:description" content="​       大部分广告经常面临一个问题，广告上线后瞬间就产生大量的曝光，推广计划瞬间达到每天的下量而不得不暂停推广。最近我通过改造平台的均匀出量功能对广告曝光速度进行实时控制，进而使得广告当天的消耗曲线跟平台消耗曲线相符。​       在实现均匀出量功能时，需要考虑到的因素有广告主的广告推广日限量，前一段时段广告消耗速度，消耗量，广告推广的时间段，平台大盘流量预估等。 问题之前均匀出量的方案">
+<meta property="og:description" content="​       因为本人工作环境是linux的LNMP, 最近心血来潮想在mac上面也搭一个这样的环境，因此就有下面的操作，以下操作是在osx 10.11.6下进行的。 安装homebrew总所周知，在mac上面开发的，一般都会用到homebrew，这个工具就是类似ubuntu下的apt-get的操作。首先先在appstore下载安装xcode和xcode-select，然后使用homebrew官">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/adpacing/a_400.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/adpacing/b_400.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/adpacing/a_9000.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/adpacing/b_9000.png">
-<meta property="og:updated_time" content="2017-10-31T14:06:14.667Z">
+<meta property="og:updated_time" content="2016-11-03T14:00:00.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Ad-Pacing 均匀出量总结">
-<meta name="twitter:description" content="​       大部分广告经常面临一个问题，广告上线后瞬间就产生大量的曝光，推广计划瞬间达到每天的下量而不得不暂停推广。最近我通过改造平台的均匀出量功能对广告曝光速度进行实时控制，进而使得广告当天的消耗曲线跟平台消耗曲线相符。​       在实现均匀出量功能时，需要考虑到的因素有广告主的广告推广日限量，前一段时段广告消耗速度，消耗量，广告推广的时间段，平台大盘流量预估等。 问题之前均匀出量的方案">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/adpacing/a_400.png">
+<meta name="twitter:title" content="mac搭建LNMP(linux+nginx+mysql+php)环境">
+<meta name="twitter:description" content="​       因为本人工作环境是linux的LNMP, 最近心血来潮想在mac上面也搭一个这样的环境，因此就有下面的操作，以下操作是在osx 10.11.6下进行的。 安装homebrew总所周知，在mac上面开发的，一般都会用到homebrew，这个工具就是类似ubuntu下的apt-get的操作。首先先在appstore下载安装xcode和xcode-select，然后使用homebrew官">
   
     <link rel="alternative" href="/atom.xml" title="Forster&#39;s Blog" type="application/atom+xml">
   
@@ -159,93 +154,63 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-ad-pacing" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-mac-lnmp" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Ad-Pacing 均匀出量总结
+      mac搭建LNMP(linux+nginx+mysql+php)环境
     </h1>
   
 
         
-        <a href="/2017/10/30/ad-pacing/" class="archive-article-date">
-  	<time datetime="2017-10-30T08:10:56.095Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-30</time>
+        <a href="/2016/11/03/mac-lnmp/" class="archive-article-date">
+  	<time datetime="2016-11-03T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-11-03</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>​       大部分广告经常面临一个问题，广告上线后瞬间就产生大量的曝光，推广计划瞬间达到每天的下量而不得不暂停推广。最近我通过改造平台的均匀出量功能对广告曝光速度进行实时控制，进而使得广告当天的消耗曲线跟平台消耗曲线相符。<br>​       在实现均匀出量功能时，需要考虑到的因素有广告主的广告推广日限量，前一段时段广告消耗速度，消耗量，广告推广的时间段，平台大盘流量预估等。</p>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>之前均匀出量的方案比较粗暴，其公式是</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Q = (S + Z) / Y</div></pre></td></tr></table></figure>
-<ul>
-<li>S值为根据上一个时间段投放比例求得这个时间段计划推广量</li>
-<li>Z值为上一个时间段的余量</li>
-<li>Y值为预估的该时间段最大出量推广量</li>
-<li>Q值为用户每小时请求广告的频率</li>
-</ul>
-<p>上面的公式存在比较多的问题：</p>
-<ul>
-<li><p>这几个变量都是通过配置文件固定的，导致每个同等级的广告出量的预估都一样，但是每个广告的优先级却不一样的情况下，其出量速度是不同的。举个例子，广告A和广告B的计划推广量都是200，但是广告A是游戏，广告B是应用，广告A的优先级比广告B高，正常来说用户获取这两个广告的概率一样，但是点击并安装激活广告A的概率可能比B的高，就会导致A已经放完量，B却没放完。</p>
-</li>
-<li><p>如果上一个时间段的余量全部放到下一个时间段放，下一个时间段计划放的量会有一个陡增，效果与我们的目标不符。</p>
-</li>
-<li><p>广告的消耗是指对广告主结算的量，而不是请求数，一个用户能请求到广告，就应该让用户继续完成这个广告。所以这条公式并没有直接限制广告的请求量。</p>
+        <p>​       因为本人工作环境是linux的LNMP, 最近心血来潮想在mac上面也搭一个这样的环境，因此就有下面的操作，以下操作是在osx 10.11.6下进行的。</p>
+<h2 id="安装homebrew"><a href="#安装homebrew" class="headerlink" title="安装homebrew"></a>安装homebrew</h2><p>总所周知，在mac上面开发的，一般都会用到homebrew，这个工具就是类似ubuntu下的apt-get的操作。<br>首先先在appstore下载安装xcode和xcode-select，然后使用homebrew官网的安装命令，进行安装homebrew。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ruby -e <span class="string">"<span class="variable">$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)</span>"</span></div></pre></td></tr></table></figure>
+<p>之后使用<code>brew doctor</code>检查brew是否安装成功。检查成功后就可以使用<code>brew install FORMULA</code>安装所需要的工具。</p>
 <a id="more"></a>
-</li>
-</ul>
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><ol>
-<li>首先统计前两天和上周同日对广告主有效的激活数(CPA)和请求数(REQ)，把这3天的数据算出平均数，得到当天的平台大盘的预估曲线；使用上周同日是防止节假日数据量的激增。</li>
-<li>把一天时间通过每5分钟分隔成288个时间段，每个用户在相应的广告激活一次则实时记录一次，记录一个广告在不同时间点激活的情况。</li>
-<li>一开始并没有考虑到广告的激活数跟请求数是不对等的；一个用户从请求一个广告到激活广告对应的应用是需要多个动作才完成，请求－&gt;展示-&gt;点击-&gt;下载-&gt;安装-&gt;激活. 所以一开始的公式如下：</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">F = (L - C) * P / SUMp</div></pre></td></tr></table></figure>
-<ul>
-<li>L: 广告的限量</li>
-<li>C: 该广告当前时间段之前已经消耗的量</li>
-<li>P: 平台大盘这个时间段预估的激活数</li>
-<li>SUMp: 大盘剩余时间预估的激活数；前一个时间段的余量放到剩余的投放时间里面按照比例分配到各时间段投放</li>
-<li>F: 预估该时间段限制广告投放请求数</li>
-</ul>
-<ol>
-<li>只限制激活数是不行的，因为请求数与激活数不对等，一个用户请求成功广告不应该不跟这个用户结算，因此我们只能限制请求，而每个用户当没有达到请求广告限制数前，都应该能获取到这个广告，而不是通过概率限制用户获取广告。因此把请求数与激活数的比例引入公式中</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">F = (L - C) * REQp / SUMp</div></pre></td></tr></table></figure>
-<ul>
-<li>REQp: 平台大盘这个时间段预估的请求数</li>
-</ul>
-<ol>
-<li>以上的工作看上去很不错，但是我们会发现只用以上的公式会出现以前方案存在的问题：每个同等级的广告出量的预估都一样。 因为每个广告都有自己的优先级，一个广告列表有多个广告，用户点击这些广告的概率会因为广告位置的不同而不同，或者因为兴趣不同而不同。因此这里引入一个不断变化的参数，使广告的出量自动调整。</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">F = (L - C) * REQp / SUMp * \alpha</div></pre></td></tr></table></figure>
-<ul>
-<li>alpha : <ul>
-<li>每5分钟统计这个广告激活数与请求数的比例得出来，如果这个广告限制的请求数转化成实际的激活数达不到预估的激活数，则把 alpha 调高，超过预估值则调低；然后当广告的优先级上升，我们就会根据之前的优先级和现在的优先级做一个比例，使alpha调低，让广告不至于一下子飙上去，优先级下降同理。</li>
-<li>广告的限量比较少的话，我们会使 alpha 的上升调慢，例如本来根据现实数据计算到的 alpha 是10的，但是实际 alpha 就只上升5.</li>
-<li>当广告的激活数与限制请求数的比例不变，alpha值则不变</li>
-</ul>
-</li>
-</ul>
-<h2 id="存在问题"><a href="#存在问题" class="headerlink" title="存在问题"></a>存在问题</h2><ul>
-<li>每个时段用户数是不一样的，所以应该用户数也是需要自己调整的，但是因为成本问题，暂时先不考虑。</li>
-</ul>
-<h2 id="优化后的效果"><a href="#优化后的效果" class="headerlink" title="优化后的效果"></a>优化后的效果</h2><ul>
-<li><p>以前量少的广告一下子就能把量出完。如下图：</p>
-<p><img src="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/adpacing/a_400.png" alt="限量200的广告A"></p>
-</li>
-<li><p>量少的广告计划在一整天投放，到23点50分还有量可以出，如下图：</p>
-<p><img src="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/adpacing/b_400.png" alt="限量200的广告B"></p>
-</li>
-<li><p>量大的广告一天投放计划中，到了下午2点基本就消耗完了，如下图：</p>
-<p><img src="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/adpacing/a_9000.png" alt="限量8000的广告D"></p>
-</li>
-<li><p>量大的广告的曲线基本跟大盘数据相同<br><img src="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/adpacing/b_9000.png" alt="限量8000的广告D"></p>
-</li>
-</ul>
+<h2 id="安装PHP"><a href="#安装PHP" class="headerlink" title="安装PHP"></a>安装PHP</h2><p>首先加入brew官方的几个软件源</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">brew tap homebrew/dupes</div><div class="line">brew tap homebrew/versions</div><div class="line">brew tap homebrew/php</div></pre></td></tr></table></figure>
+<p>PHP默认配置安装是在Apache环境运行，而且没有fpm扩展，为了让PHP在nignx运行，则需要在安装编译PHP时候带上以下参数。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">brew install php56 \</div><div class="line">--without-snmp \</div><div class="line">--without-apache \</div><div class="line">--with-debug \</div><div class="line">--with-fpm \</div><div class="line">--with-intl \</div><div class="line">--with-homebrew-curl \</div><div class="line">--with-imap \</div><div class="line">--with-mysql \</div><div class="line">--with-tidy</div></pre></td></tr></table></figure>
+<p>因为osx自带PHP环境，我们需要把brew的PHP替换掉原来的，因此需要在<code>~/.bashrc</code>加入以下命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">export</span> PATH=<span class="string">"/usr/local/bin:/usr/local/sbin:<span class="variable">$PATH</span>"</span></div></pre></td></tr></table></figure>
+<p>如果需要安装新的PHP扩展，则只需要输入<code>brew search php56</code>查看哪些扩展是需要的并还没有安装，然后输入自己需要扩展：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">brew install php56-msgpack php56-memcache php56-memcached php56-mongo php56-xdebug</div></pre></td></tr></table></figure>
+<p>然后将php-fpm加入开机启动</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ln -sfv /usr/<span class="built_in">local</span>/opt/php56/homebrew.mxcl.php56.plist ~/Library/LaunchAgents</div><div class="line">launchctl load ~/Library/LaunchAgents/homebrew.mxcl.php56.plist</div></pre></td></tr></table></figure>
+<h2 id="安装Nginx"><a href="#安装Nginx" class="headerlink" title="安装Nginx"></a>安装Nginx</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">brew install nginx</div></pre></td></tr></table></figure>
+<p>安装可以使用以下命令，启动或者关闭，或者重新加载配置文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">nginx -s reload|reopen|stop|quit</div></pre></td></tr></table></figure>
+<p>nginx默认时监听8080端口，如果我们需要它监听80端口，就需要root权限操作nginx</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo chown root:wheel /usr/<span class="built_in">local</span>/Cellar/nginx/1.10.1/bin/nginx</div><div class="line">sudo chmod u+s /usr/<span class="built_in">local</span>/Cellar/nginx/1.10.1/bin/nginx</div></pre></td></tr></table></figure>
+<p>最后使用root权限启动<code>sudo nginx</code><br>这里我们可以设置nginx开机自动启动</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ln -sfv /usr/<span class="built_in">local</span>/opt/nginx/homebrew.mxcl.nginx.plist ~/Library/LaunchAgents</div><div class="line">launchctl load ~/Library/LaunchAgents/homebrew.mxcl.nginx.plist</div></pre></td></tr></table></figure>
+<p>nginx一般会监听多个域名，所以按照ubuntu的nginx的配置结构进行如下操作</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir -p /usr/<span class="built_in">local</span>/etc/nginx/sites-available</div><div class="line">mkdir -p /usr/<span class="built_in">local</span>/etc/nginx/sites-enabled</div></pre></td></tr></table></figure>
+<p>编辑nginx全局配置</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim <span class="regexp">/usr/</span>local<span class="regexp">/etc/</span>nginx<span class="regexp">/nginx.conf</span></div></pre></td></tr></table></figure>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">worker_processes</span>  <span class="number">1</span>;</div><div class="line"><span class="attribute">error_log</span>   /usr/local/var/logs/nginx/error.log <span class="literal">debug</span>;</div><div class="line"><span class="attribute">pid</span>        /usr/local/var/run/nginx.pid;</div><div class="line"></div><div class="line"><span class="section">events</span> &#123;</div><div class="line">    <span class="attribute">worker_connections</span>  <span class="number">256</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="section">http</span> &#123;</div><div class="line">    <span class="attribute">include</span>       mime.types;</div><div class="line">    <span class="attribute">default_type</span>  application/octet-stream;</div><div class="line"></div><div class="line">    <span class="attribute">sendfile</span>        <span class="literal">on</span>;</div><div class="line">    <span class="attribute">keepalive_timeout</span>  <span class="number">65</span>;</div><div class="line">    <span class="attribute">port_in_redirect</span> <span class="literal">off</span>;</div><div class="line"></div><div class="line">    <span class="attribute">include</span> /usr/local/etc/nginx/sites-enabled/*;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后<code>/usr/local/etc/nginx/sites-enabled/</code>目录下可以一个文件对应一个域名配置。这里是default配置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim /usr/<span class="built_in">local</span>/etc/nginx/sites-enabled/default</div></pre></td></tr></table></figure>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="section">server</span> &#123;</div><div class="line">    <span class="attribute">listen</span>       <span class="number">80</span>;</div><div class="line">    <span class="attribute">server_name</span>  localhost;</div><div class="line">    <span class="attribute">root</span>         /Users/chikuen/webroot/;</div><div class="line"></div><div class="line">    <span class="attribute">location</span> / &#123;</div><div class="line">        <span class="attribute">index</span>  index.html index.htm index.php;</div><div class="line">        <span class="attribute">include</span>     /usr/local/etc/nginx/conf.d/php-fpm;</div><div class="line">    &#125;</div><div class="line">    <span class="attribute">location</span> <span class="regexp">~ \.php$</span> &#123;</div><div class="line">        <span class="attribute">try_files</span>                   <span class="variable">$uri</span> = <span class="number">404</span>;</div><div class="line">        <span class="attribute">fastcgi_pass</span>                <span class="number">127.0.0.1:9000</span>;</div><div class="line">        <span class="attribute">fastcgi_index</span>               index.php;</div><div class="line">        <span class="attribute">fastcgi_intercept_errors</span>    <span class="literal">on</span>;</div><div class="line">        <span class="attribute">include</span> /usr/local/etc/nginx/fastcgi.conf;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>配置后，启动php-fpm和nginx就可以用浏览器验证是否配置成功了。</p>
+<h2 id="安装MySQL"><a href="#安装MySQL" class="headerlink" title="安装MySQL"></a>安装MySQL</h2><p>安装mysql比较简单了,</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">brew install mysql</div></pre></td></tr></table></figure>
+<p>启动和停止可用<code>mysql.server start/stop</code><br>然后使用<code>mysql_secure_installation</code>对mysql进行配置初始化<br>开机启动</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cp /usr/<span class="built_in">local</span>/Cellar/mysql/5.7.15/homebrew.mxcl.mysql.plist ~/Library/LaunchAgents/</div></pre></td></tr></table></figure>
+<h2 id="安装phpmyadmin"><a href="#安装phpmyadmin" class="headerlink" title="安装phpmyadmin"></a>安装phpmyadmin</h2><p>去phpmyadmin官网下载最新版本 <a href="https://www.phpmyadmin.net/downloads/" target="_blank" rel="external">https://www.phpmyadmin.net/downloads/</a><br>把下载包解压复制到<code>/Users/chikuen/webroot/</code><br>打开<code>127.0.0.1/phpmyadmin/setup/</code>进行配置</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>mac上面搭建LNMP环境主要难点在于文件目录关联正确；主要如果装好homebrew就可以很容易地搭建好本地环境。</p>
 
       
 
@@ -325,7 +290,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2017/10/30/ad-pacing/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2016/11/03/mac-lnmp/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -339,15 +304,11 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/10/31/mac-lnmp/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          mac搭建LNMP(linux+nginx+mysql+php)环境
-        
-      </div>
-    </a>
   
+    <a href="/2016/10/28/ad-pacing/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Ad-Pacing 均匀出量总结</div>
+      <i class="icon-circle-right"></i>
+    </a>
   
 </nav>
 
