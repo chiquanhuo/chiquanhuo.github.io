@@ -6,15 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Forster&#39;s Blog</title>
+  <title>Redis频次控制 | Forster&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Forster&#39;s Blog">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="背景最近做项目需要实现一个频次控制的功能，具体要求类似是限制一个ip在1分钟内最多请求10次。使用redis来控制请求速率是比较好的方法。 官网资料官网 中提到的第一种方法： 123456789101112FUNCTION LIMIT_API_CALL(ip):    keyname = ip    current = GET(keyname)    IF current != NULL AND">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis频次控制">
+<meta property="og:url" content="http://yoursite.com/2016/11/03/2016-11-11-redis_req_limit/index.html">
 <meta property="og:site_name" content="Forster&#39;s Blog">
+<meta property="og:description" content="背景最近做项目需要实现一个频次控制的功能，具体要求类似是限制一个ip在1分钟内最多请求10次。使用redis来控制请求速率是比较好的方法。 官网资料官网 中提到的第一种方法： 123456789101112FUNCTION LIMIT_API_CALL(ip):    keyname = ip    current = GET(keyname)    IF current != NULL AND">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-11-01T16:12:34.514Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Forster&#39;s Blog">
+<meta name="twitter:title" content="Redis频次控制">
+<meta name="twitter:description" content="背景最近做项目需要实现一个频次控制的功能，具体要求类似是限制一个ip在1分钟内最多请求10次。使用redis来控制请求速率是比较好的方法。 官网资料官网 中提到的第一种方法： 123456789101112FUNCTION LIMIT_API_CALL(ip):    keyname = ip    current = GET(keyname)    IF current != NULL AND">
   
     <link rel="alternative" href="/atom.xml" title="Forster&#39;s Blog" type="application/atom+xml">
   
@@ -150,16 +154,14 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-2016-11-11-redis_req_limit" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="post-2016-11-11-redis_req_limit" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/11/03/2016-11-11-redis_req_limit/">Redis频次控制</a>
+    <h1 class="article-title" itemprop="name">
+      Redis频次控制
     </h1>
   
 
@@ -176,11 +178,85 @@
 <h2 id="官网资料"><a href="#官网资料" class="headerlink" title="官网资料"></a>官网资料</h2><p><a href="http://redis.io/commands/INCR#pattern-rate-limiter" target="_blank" rel="external">官网</a> 中提到的第一种方法：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">FUNCTION LIMIT_API_CALL(ip):</div><div class="line">    keyname = ip</div><div class="line">    current = GET(keyname)</div><div class="line">    IF current != NULL AND current &gt; 10 THEN</div><div class="line">        ERROR "too many requests per second"</div><div class="line">    ELSE</div><div class="line">        MULTI</div><div class="line">            INCR(keyname,1)</div><div class="line">            EXPIRE(keyname,60)</div><div class="line">        EXEC</div><div class="line">        PERFORM_API_CALL()</div><div class="line">END</div></pre></td></tr></table></figure>
 <p>这是一种简单快捷的方法对一个ip请求频率的控制，但是这里我们可以发现并不是我们所需要的一个ip一分钟内最多请求10次，而是当ip请求到达10次，我们把这个key锁定，并设置ttl为1分钟。</p>
-        
-          <a class="article-more-a" href="/2016/11/03/2016-11-11-redis_req_limit/#more">more >></a>
-        
+<a id="more"></a>
+<p>另外官网又推出第二种存在问题的方法，其问题在官网也说明了，就是存在<code>竞争条件</code>问题。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">FUNCTION LIMIT_API_CALL(ip):</div><div class="line">    current = GET(ip)</div><div class="line">    IF current != NULL AND current &gt; 10 THEN</div><div class="line">        ERROR "too many requests per second"</div><div class="line">    ELSE</div><div class="line">        value = INCR(ip)</div><div class="line">        IF value == 1 THEN</div><div class="line">            EXPIRE(value,60)</div><div class="line">    END</div><div class="line">    PERFORM_API_CALL()</div><div class="line">END</div></pre></td></tr></table></figure>
+<p>当redis同一时间接收多个请求，这些请求都是相同的ip，就会存在一开始这个key的值为0，然后多个ip同时在0的基础上<code>incr</code>后，value的值将可能会比1大，则不会跳入<code>expire</code>语句里面；因此这个key将不会有ttl，一直存在于redis中从而达不到限制频次。</p>
+<p>之后官网说到当redis版本大于2.6，可以通过调用lua脚本实现频次控制。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">local current</div><div class="line">current = redis.call("incr",KEYS[1])</div><div class="line">if tonumber(current) == 1 then</div><div class="line">	redis.call("expire",KEYS[1],60)</div><div class="line">end</div></pre></td></tr></table></figure>
+<p>这个能解决上面所说的竞争条件问题，并且满足我们的需求，所以我们可以使用lua来限制。<br>那么如果redis还没有达到2.6时，也是可以通过使用<code>watch</code>,<code>multi</code>,<code>exec</code>进行频次控制。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">FUNCTION LIMIT_API_CALL(ip):</div><div class="line">	keyname = ip</div><div class="line">	WATCH keyname</div><div class="line">	current = GET(keyname)</div><div class="line">	IF current != NULL AND current &gt; 10 THEN</div><div class="line">    	ERROR "too many requests per second"</div><div class="line">	ELSE IF current == 1 THEN</div><div class="line">    	EXPIRE(keyname, 60)</div><div class="line">	END</div><div class="line">	MULTI</div><div class="line">    	INCR(keyname,1)</div><div class="line">	EXEC</div><div class="line">	PERFORM_API_CALL()</div><div class="line">END</div></pre></td></tr></table></figure>
+<p>通过<code>watch</code>监视keyanme 是否被其他命令所改动，那么事务将被打断；如果没有被改动则进行判断其值是否已经等于1了，如果等于1则设置ttl。</p>
+<h2 id="php-golang-使用lua脚本实现频次控制"><a href="#php-golang-使用lua脚本实现频次控制" class="headerlink" title="php/golang 使用lua脚本实现频次控制"></a>php/golang 使用lua脚本实现频次控制</h2><p>因为工作需要，我一般是使用php和golang语言，接下来我将会贴出php和golang如何调用lua脚本。另外这里我没有使用<code>watch</code>,<code>multi</code>,<code>exec</code>进行频次控制，其原因在下一节会讲到。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">$redis = <span class="keyword">new</span> Redis();</div><div class="line">$redis-&gt;pconnect(<span class="string">"127.0.0.1"</span>, <span class="number">6379</span>);</div><div class="line">$lua = <span class="string">&lt;&lt;&lt;LUA</span></div><div class="line"><span class="string">    local final = 0</span></div><div class="line"><span class="string">    local times = redis.call('incr', KEYS[1])</span></div><div class="line"><span class="string">    if times == 1 then</span></div><div class="line"><span class="string">        redis.call('expire', KEYS[1], ARGV[1])</span></div><div class="line"><span class="string">    end</span></div><div class="line"><span class="string">    if times &gt;= tonumber(ARGV[2]) then</span></div><div class="line"><span class="string">        final = -1</span></div><div class="line"><span class="string">    end</span></div><div class="line"><span class="string">    return final</span></div><div class="line"><span class="string">LUA;</span></div><div class="line">$sha = $redis-&gt;script(<span class="string">"load"</span>, $lua);</div><div class="line">$keys = <span class="keyword">array</span>(<span class="string">"ip"</span>, <span class="number">60</span>, <span class="number">10</span>);</div><div class="line">$result = $redis-&gt;evalSha($sha, $keys, <span class="number">1</span>);</div><div class="line"><span class="keyword">if</span> ($result == <span class="number">-1</span>) &#123;</div><div class="line">    each <span class="string">"ip request too much"</span>;</div><div class="line">&#125;</div><div class="line"><span class="meta">?&gt;</span></div></pre></td></tr></table></figure>
+<p><code>EVAL</code>和<code>EVALSHA</code>命令是从 Redis 2.6.0 版本开始的，使用内置的lua解释器，可以对lua脚本进行求值。Redis使用单个lua解释器去运行所有脚本，并且lua脚本会以原子性(atomic)的方式执行：当某个脚本正在运行的时候，不会有其他脚本或Redis命令被执行。lua的开销取决于scrpit的大小，所以当运行很慢的script的，则开销很大，但是一般都是非常快的。<br>这里为什么使用evalSha而不是 eval ,因为 eval 需要每次执行都需要发送一次脚本主体。redis本身有一个缓存机制，所以不应该付出太多带宽成本。使用 evalSha 可以减少带宽，首先是通过把lua脚本存到缓存中，然后用SHA1校验指向指定的脚本，每一次redis调用 evalSha 时，都会先通过这个sha1查缓存是否存在脚本，不存在才去调用脚本。所以一般都会使用 evalSha 代替 eval 。</p>
+<p>以下是golang的脚本</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> (</div><div class="line">    <span class="string">"gopkg.in/redis.v4"</span></div><div class="line">    <span class="string">"fmt"</span></div><div class="line"></div><div class="line">)</div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">    ip := <span class="string">"127.0.0.1"</span></div><div class="line">    c := redis.NewClient(&amp;redis.Options&#123;</div><div class="line">        Addr:     <span class="string">"127.0.0.1:6379"</span>,</div><div class="line">        Password: <span class="string">""</span>,</div><div class="line">        DB:       <span class="number">0</span>,</div><div class="line">    script :=<span class="string">`</span></div><div class="line"><span class="string">local final = 0</span></div><div class="line"><span class="string">local times = redis.call('incr', KEYS[1])</span></div><div class="line"><span class="string">if times == 1 then</span></div><div class="line"><span class="string">    redis.call('expire', KEYS[1], ARGV[1])</span></div><div class="line"><span class="string">end</span></div><div class="line"><span class="string">if times &gt;= tonumber(ARGV[2]) then</span></div><div class="line"><span class="string">    final = -1</span></div><div class="line"><span class="string">end</span></div><div class="line"><span class="string">return final`</span></div><div class="line">    sha1, err := c.ScriptLoad(script).Result()</div><div class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</div><div class="line">        fmt.Println(err.Error())</div><div class="line">    &#125;</div><div class="line">    keys := []<span class="keyword">string</span>&#123;ip&#125;</div><div class="line">    args := []<span class="keyword">string</span>&#123;<span class="string">"60"</span>, <span class="string">"10"</span>&#125;</div><div class="line">    res, _ := c.EvalSha(sha1, keys, args).Result()</div><div class="line">    <span class="keyword">if</span> res.(<span class="keyword">int64</span>) == <span class="number">-1</span> &#123;</div><div class="line">        fmt.Println(<span class="string">"ip request too much"</span>)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="watch-multi-exec-与-lua-比较"><a href="#watch-multi-exec-与-lua-比较" class="headerlink" title="watch/multi/exec 与 lua 比较"></a>watch/multi/exec 与 lua 比较</h2><ol>
+<li>lua 和 multi/exec 一样是都是原子操作，每次执行都可以保证不受其他命令干扰。因为multi/exec 返回的是事务，而不是某个key的值，所以如果在multi/exec时加入多个判断或者对某个key进行操作就需要添加watch操作，监视某个key，是否会被其他命令操作，此watch为乐观锁。</li>
+<li>一般情况下，如果只有少数客户端尝试对watch/multi/exec 进行修改，那么事务通常不回发生明显冲突或者重试，但是如果操作需要进行多次通信，或者发生冲突几率高，则使用watch/multi/exec需要多次重试才能完成，lua脚本却不需要重试多次才能完成，因为lua一旦启动，则要到结束脚本才能进行后面的操作。</li>
+</ol>
+<p>使用apache 自带的压力测试工具 ab 对watch/multi/exec 和 lua 进行测试。ab使用方法具体介绍在 <a href="http://www.jianshu.com/p/43d04d8baaf7" target="_blank" rel="external">ab压力测试使用</a><br>测试代码如下：</p>
+<p>test_multi.php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">$redis = <span class="keyword">new</span> Redis();</div><div class="line">$redis-&gt;pconnect(<span class="string">"127.0.0.1"</span>, <span class="number">6379</span>);</div><div class="line">$redis-&gt;watch(<span class="string">"ip"</span>);</div><div class="line">$current = $redis-&gt;get(<span class="string">"ip"</span>);</div><div class="line"><span class="keyword">if</span> (!<span class="keyword">empty</span>($current) &amp;&amp; $current &gt; <span class="number">10</span>) &#123;</div><div class="line">    <span class="keyword">echo</span> <span class="string">"too much ip"</span>;</div><div class="line">&#125; <span class="keyword">elseif</span> ($current == <span class="number">1</span>) &#123;</div><div class="line">    $redis-&gt;expire(<span class="string">"ip"</span>, <span class="number">60</span>);</div><div class="line">&#125;</div><div class="line">$redis-&gt;multi()-&gt;incr(<span class="string">"ip"</span>, <span class="number">1</span>)-&gt;exec();</div><div class="line"><span class="meta">?&gt;</span></div></pre></td></tr></table></figure>
+<p>test_lua.php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">    $redis = <span class="keyword">new</span> Redis();</div><div class="line">    $redis-&gt;pconnect(<span class="string">"127.0.0.1"</span>, <span class="number">6379</span>);</div><div class="line">    $lua = <span class="string">&lt;&lt;&lt;LUA</span></div><div class="line"><span class="string">        local final = 0</span></div><div class="line"><span class="string">        local times = redis.call('incr', KEYS[1])</span></div><div class="line"><span class="string">        if times == 1 then</span></div><div class="line"><span class="string">            redis.call('expire', KEYS[1], ARGV[1])</span></div><div class="line"><span class="string">        end</span></div><div class="line"><span class="string">        if times &gt;= tonumber(ARGV[2]) then</span></div><div class="line"><span class="string">            final = -1</span></div><div class="line"><span class="string">        end</span></div><div class="line"><span class="string">        return final</span></div><div class="line"><span class="string">LUA;</span></div><div class="line">    $sha = $redis-&gt;script(<span class="string">"load"</span>, $lua);</div><div class="line">    $keys = <span class="keyword">array</span>(<span class="string">"ip"</span>, <span class="number">3600</span>, <span class="number">10</span>);</div><div class="line">    $result = $redis-&gt;evalSha($sha, $keys,  <span class="number">1</span>);</div><div class="line">    <span class="keyword">if</span> ($result == <span class="number">-1</span>) &#123;</div><div class="line">    	<span class="keyword">echo</span> <span class="string">"ip request too much"</span>;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>测试环境是5000个请求，20个并发量 <code>ab -n 5000 -c 20 http://127.0.0.1/test_lua.php</code></p>
+<table>
+<thead>
+<tr>
+<th>测试指标</th>
+<th>watch/multi/exec</th>
+<th>lua</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Requests per second</td>
+<td>220.59 bytes</td>
+<td>1960.22 bytes</td>
+</tr>
+<tr>
+<td>Time per request</td>
+<td>90.665 ms</td>
+<td>10.203 ms</td>
+</tr>
+<tr>
+<td>Time per request</td>
+<td>4.533 ms</td>
+<td>0.510 ms</td>
+</tr>
+<tr>
+<td>Time token for tests</td>
+<td>22.666 sec</td>
+<td>2.551 sec</td>
+</tr>
+</tbody>
+</table>
+
       
 
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>今晚加鸡腿<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
       
     </div>
     <div class="article-info article-info-index">
@@ -189,16 +265,75 @@
       
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016/11/03/2016-11-11-redis_req_limit/">展开全文 >></a>
-        </p>
-      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2016/11/03/2016-11-11-redis_req_limit/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2016/11/03/mac-lnmp/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">mac搭建LNMP(linux+nginx+mysql+php)环境</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -218,156 +353,21 @@
 
 
 
+  
+  <!-- UY BEGIN -->
+<div id="uyan_frame" ></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2147812"></script>
+<!-- UY END -->
 
   
-    <article id="post-mac-lnmp" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/11/03/mac-lnmp/">mac搭建LNMP(linux+nginx+mysql+php)环境</a>
-    </h1>
+  
   
 
-        
-        <a href="/2016/11/03/mac-lnmp/" class="archive-article-date">
-  	<time datetime="2016-11-03T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-11-03</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>​       因为本人工作环境是linux的LNMP, 最近心血来潮想在mac上面也搭一个这样的环境，因此就有下面的操作，以下操作是在osx 10.11.6下进行的。</p>
-<h2 id="安装homebrew"><a href="#安装homebrew" class="headerlink" title="安装homebrew"></a>安装homebrew</h2><p>总所周知，在mac上面开发的，一般都会用到homebrew，这个工具就是类似ubuntu下的apt-get的操作。<br>首先先在appstore下载安装xcode和xcode-select，然后使用homebrew官网的安装命令，进行安装homebrew。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ruby -e <span class="string">"<span class="variable">$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)</span>"</span></div></pre></td></tr></table></figure>
-<p>之后使用<code>brew doctor</code>检查brew是否安装成功。检查成功后就可以使用<code>brew install FORMULA</code>安装所需要的工具。</p>
-        
-          <a class="article-more-a" href="/2016/11/03/mac-lnmp/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016/11/03/mac-lnmp/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-ad-pacing" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/10/28/ad-pacing/">Ad-Pacing 均匀出量总结</a>
-    </h1>
   
 
-        
-        <a href="/2016/10/28/ad-pacing/" class="archive-article-date">
-  	<time datetime="2016-10-28T01:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-10-28</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>​       大部分广告经常面临一个问题，广告上线后瞬间就产生大量的曝光，推广计划瞬间达到每天的下量而不得不暂停推广。最近我通过改造平台的均匀出量功能对广告曝光速度进行实时控制，进而使得广告当天的消耗曲线跟平台消耗曲线相符。<br>​       在实现均匀出量功能时，需要考虑到的因素有广告主的广告推广日限量，前一段时段广告消耗速度，消耗量，广告推广的时间段，平台大盘流量预估等。</p>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>之前均匀出量的方案比较粗暴，其公式是</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Q = (S + Z) / Y</div></pre></td></tr></table></figure>
-<ul>
-<li>S值为根据上一个时间段投放比例求得这个时间段计划推广量</li>
-<li>Z值为上一个时间段的余量</li>
-<li>Y值为预估的该时间段最大出量推广量</li>
-<li>Q值为用户每小时请求广告的频率</li>
-</ul>
-<p>上面的公式存在比较多的问题：</p>
-<ul>
-<li><p>这几个变量都是通过配置文件固定的，导致每个同等级的广告出量的预估都一样，但是每个广告的优先级却不一样的情况下，其出量速度是不同的。举个例子，广告A和广告B的计划推广量都是200，但是广告A是游戏，广告B是应用，广告A的优先级比广告B高，正常来说用户获取这两个广告的概率一样，但是点击并安装激活广告A的概率可能比B的高，就会导致A已经放完量，B却没放完。</p>
-</li>
-<li><p>如果上一个时间段的余量全部放到下一个时间段放，下一个时间段计划放的量会有一个陡增，效果与我们的目标不符。</p>
-</li>
-<li><p>广告的消耗是指对广告主结算的量，而不是请求数，一个用户能请求到广告，就应该让用户继续完成这个广告。所以这条公式并没有直接限制广告的请求量。</p>
-        
-          <a class="article-more-a" href="/2016/10/28/ad-pacing/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016/10/28/ad-pacing/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
   
+
   
 
 
@@ -390,8 +390,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: true,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
