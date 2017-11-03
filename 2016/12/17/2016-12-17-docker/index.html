@@ -6,15 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives | Forster&#39;s Blog</title>
+  <title>docker简介 | Forster&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Forster&#39;s Blog">
-<meta property="og:url" content="http://yoursite.com/archives/index.html">
+  <meta name="description" content="Docker是什么最近阅读了下《第一本Docker书》，学习到关于docker的一些知识。Docker是一个能够把开发的应用程序部署到容器的开源引擎；它提供了一个简单，轻量的建模方式，让我们的程序能快速，高效地开发，测试到部署，上线。每个容器具有隔离性，互不影响。  Docker是cs架构，其核心组件主要有：  Docker 客户端和服务器: 用户主要与这两个组件交互，docker会把所有工作完成">
+<meta name="keywords" content="docker总结">
+<meta property="og:type" content="article">
+<meta property="og:title" content="docker简介">
+<meta property="og:url" content="http://yoursite.com/2016/12/17/2016-12-17-docker/index.html">
 <meta property="og:site_name" content="Forster&#39;s Blog">
+<meta property="og:description" content="Docker是什么最近阅读了下《第一本Docker书》，学习到关于docker的一些知识。Docker是一个能够把开发的应用程序部署到容器的开源引擎；它提供了一个简单，轻量的建模方式，让我们的程序能快速，高效地开发，测试到部署，上线。每个容器具有隔离性，互不影响。  Docker是cs架构，其核心组件主要有：  Docker 客户端和服务器: 用户主要与这两个组件交互，docker会把所有工作完成">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2016/12/17/2016-12-17-docker/!--￼6--">
+<meta property="og:updated_time" content="2017-11-03T05:02:54.506Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Forster&#39;s Blog">
+<meta name="twitter:title" content="docker简介">
+<meta name="twitter:description" content="Docker是什么最近阅读了下《第一本Docker书》，学习到关于docker的一些知识。Docker是一个能够把开发的应用程序部署到容器的开源引擎；它提供了一个简单，轻量的建模方式，让我们的程序能快速，高效地开发，测试到部署，上线。每个容器具有隔离性，互不影响。  Docker是cs架构，其核心组件主要有：  Docker 客户端和服务器: 用户主要与这两个组件交互，docker会把所有工作完成">
+<meta name="twitter:image" content="http://yoursite.com/2016/12/17/2016-12-17-docker/!--￼6--">
   
     <link rel="alternative" href="/atom.xml" title="Forster&#39;s Blog" type="application/atom+xml">
   
@@ -150,415 +157,238 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-2016-12-17-docker" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      docker简介
+    </h1>
+  
+
+
+        
+        <a href="/2016/12/17/2016-12-17-docker/" class="archive-article-date">
+  	<time datetime="2016-12-17T15:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-17</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Docker是什么"><a href="#Docker是什么" class="headerlink" title="Docker是什么"></a>Docker是什么</h1><p>最近阅读了下《第一本Docker书》，学习到关于docker的一些知识。Docker是一个能够把开发的应用程序部署到容器的开源引擎；它提供了一个简单，轻量的建模方式，让我们的程序能快速，高效地开发，测试到部署，上线。每个容器具有隔离性，互不影响。<br>  Docker是cs架构，其核心组件主要有：</p>
+<ul>
+<li>Docker 客户端和服务器: 用户主要与这两个组件交互，docker会把所有工作完成并返回结果。</li>
+<li>Docker 镜像: 是容器的“源代码”, 用户基于镜像运行自己的容器。是docker生命周期的构建阶段</li>
+<li>Registry: 保存用户构建的镜像，公共registry 为docker hub。</li>
+<li>Docker 容器: docker生命周期的启动与执行阶段。</li>
+</ul>
+<p>它基于Linux容器技术（LXC），Namespace，Cgroup，UnionFS（联合文件系统）等技术,通过这些技术拥有一些特性。</p>
+<ul>
+<li>Namespace: 每个容器都有自己单独的名字空间,通过不同的命名使文件系统隔离，互不干扰。</li>
+<li>cgroup(控制组): 为每个容器分配不同的系统资源，使资源隔离。</li>
+<li>UnionFS (联合文件系统)：是一种分层、轻量级并且高性能的文件系统，它支持对 文件系统的修改作为一次提交来一层层的叠加，同时可以将不同目录挂载到同一个虚拟文件系统下；docker使用的AUFS 就是一种UnionFS.</li>
+<li>网络隔离：每个进程容器运行在自己的网络命名空间里，拥有自己的虚拟接口和IP地址 </li>
+</ul>
+<p>有几个比较重要的概念：</p>
+<ul>
+<li>Docker image：镜像是只读的，镜像中包含有需要运行的文件。镜像用来创建container，一个镜像可以运行多个container；镜像可以通过Dockerfile创建，也可以从Docker hub/registry上下载。</li>
+<li>Docker container：容器是Docker的运行组件，启动一个镜像就是一个容器，容器是一个隔离环境，多个容器之间不会相互影响，保证容器中的程序运行在一个相对安全的环境中。</li>
+</ul>
+<p>image，container，registry之间的关系：<br><img src="!--￼6--" alt="docker"></p>
+<h1 id="Docker的使用"><a href="#Docker的使用" class="headerlink" title="Docker的使用"></a>Docker的使用</h1><p>这里是在os x系统中使用boot2docker 工具安装docker。首先docker只能在64位的cpu架构的计算机和linux3.8版本以上运行。在os x中安装boot2docker 依赖<figure class="highlight plain"><figcaption><span>```Docker 客户端```。</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">1. 安装[VirutalBox下载地址](https://www.virtualbox.org/wiki/Downloads) 和 boot2docker：```brew install boot2docker</div></pre></td></tr></table></figure></p>
+<ol>
+<li><p>在 VirtualBox 里面初始化boot2docker <figure class="highlight plain"><figcaption><span>init``` 启动boot2docker ``` boot2docker up``` 能在 VirtualBox 中看到该虚拟机变成 Running 状态;</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">3. 使用 ```sudo docker -d``` 启动docker的守护进程；用命令行进入boot2docker构建docker ```boot2docker ssh</div></pre></td></tr></table></figure></p>
+</li>
+<li><p>使用Dockerfile搭建一个redis镜像和容器为例子</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"># Dockerfile</div><div class="line"></div><div class="line">FROM ubuntu:14.04  # 设置基本的镜像</div><div class="line">MAINTAINER zhiquan # 用来指定维护者的姓名和联系方式</div><div class="line">RUN apt-get update # 会上面指定的镜像里执行任何命令,此处为执行apt-get update</div><div class="line">RUN apt-get -yqq install redis-server redis-tools</div><div class="line">EXPOSE 6379  # 设置一个端口在运行的镜像中暴露在外</div><div class="line">ENTRYPOINT [&quot;/usr/bin/redis-server&quot;]  # 镜像在初始化时需要执行的命令，不可被重写覆盖</div><div class="line">CMD []  # 镜像运行默认参数，可被重写覆盖</div></pre></td></tr></table></figure>
+<p>还有一个<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">构建redis 镜像</div></pre></td></tr></table></figure></p>
+<p>sudo docker build -t ck/redis .<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">启动容器</div></pre></td></tr></table></figure></p>
+<p>sudo docker run -d -p 6379 –name redis ck/redis<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">查看端口</div></pre></td></tr></table></figure></p>
+<p>sudo docker port redis 6379<br>0.0.0.0:48250<br>```</p>
+<p>在boot2docker 里安装redis-tools,使用<code>redis-cli -h 127.0.0.1 -p 48250</code> 查看redis服务器是否正常。</p>
+<h1 id="Docker的常用命令"><a href="#Docker的常用命令" class="headerlink" title="Docker的常用命令"></a>Docker的常用命令</h1><ul>
+<li>docker info: 查看当前docker信息</li>
+<li>docker images: 列出所有镜像(images) </li>
+<li>docker ps: 列出正在运行的(容器)containers </li>
+<li>docker pull ubuntu: 下载镜像 </li>
+<li>docker run -i -t ubuntu /bin/bash: 运行ubuntu镜像, -i:保证容器的STDIN开启了 -t: 分配一个伪tty中端。 –name: 重命名一个镜像。</li>
+<li>docker rmi $(docker images -q): 删除所有image</li>
+<li>docker rm $(docker ps -a -q):  删除所有已经停止的容器</li>
+<li>docker commit : 将container的变化作为一个新的镜像</li>
+</ul>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>今晚加鸡腿<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/09/14/2017-09-14-golang调用python/" class="archive-article-date">
-  	<time datetime="2017-09-14T13:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-14</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/09/14/2017-09-14-golang调用python/">Golang调用Python</a>
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Golang python</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">docker总结</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2016/12/17/2016-12-17-docker/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/09/08/2017-09-08-zeppelin便捷转化crontab/" class="archive-article-date">
-  	<time datetime="2017-09-08T13:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-08</time>
-</a>
+<nav id="article-nav">
+  
+    <a href="/2016/12/29/2016-12-29-xhprof/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          PHP性能测试工具－xhprof
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/11/03/2016-11-11-redis_req_limit/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Redis频次控制</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/09/08/2017-09-08-zeppelin便捷转化crontab/">Zeppelin便捷转化Crontab</a>
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">crontab python 动态生成函数</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Docker是什么"><span class="toc-number">1.</span> <span class="toc-text">Docker是什么</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Docker的使用"><span class="toc-number">2.</span> <span class="toc-text">Docker的使用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Docker的常用命令"><span class="toc-number">3.</span> <span class="toc-text">Docker的常用命令</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+        
+    </div>
+</aside>
+
+
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/08/15/2017-08-15-golang笔记-并发/" class="archive-article-date">
-  	<time datetime="2017-08-15T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-15</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/08/15/2017-08-15-golang笔记-并发/">golang 并发使用</a>
-    </h1>
-  
+  <!-- UY BEGIN -->
+<div id="uyan_frame" ></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2147812"></script>
+<!-- UY END -->
 
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">并发简析</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/07/12/2017-07-12-HTTP反向代理初识/" class="archive-article-date">
-  	<time datetime="2017-07-12T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-12</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/07/12/2017-07-12-HTTP反向代理初识/">HTTP反向代理初识</a>
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">nginx和haproxy</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/05/22/2017-05-22-初识Spark/" class="archive-article-date">
-  	<time datetime="2017-05-22T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-22</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/05/22/2017-05-22-初识Spark/">初识Spark</a>
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/05/15/2017-05-16-Protobuf/" class="archive-article-date">
-  	<time datetime="2017-05-15T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-15</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/05/15/2017-05-16-Protobuf/">Protobuf</a>
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Protobuf//" class="article-tag-list-link color4">Protobuf</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/04/20/2017-04-20-验证码总结/" class="archive-article-date">
-  	<time datetime="2017-04-20T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-20</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/04/20/2017-04-20-验证码总结/">captcha</a>
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/验证码//" class="article-tag-list-link color4">验证码</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/03/29/2017-03-15-tornado与gevent/" class="archive-article-date">
-  	<time datetime="2017-03-29T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-29</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/03/29/2017-03-15-tornado与gevent/">gevent</a>
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">gevent</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/03/13/2017-03-13-AES学习/" class="archive-article-date">
-  	<time datetime="2017-03-13T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-13</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/03/13/2017-03-13-AES学习/">AES</a>
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">AES加解密</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/02/21/2017-02-21-ssdb和redis比较/" class="archive-article-date">
-  	<time datetime="2017-02-21T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-02-21</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/02/21/2017-02-21-ssdb和redis比较/">ssdb</a>
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">golang</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
   
-    </div></section>
+  
   
 
-    
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="extend next" rel="next" href="/archives/page/2/">Next &raquo;</a>
-    </nav>
+  
+
+  
+
   
 
 
@@ -582,8 +412,8 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

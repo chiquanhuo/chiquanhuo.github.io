@@ -6,15 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives | Forster&#39;s Blog</title>
+  <title>gevent | Forster&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Forster&#39;s Blog">
-<meta property="og:url" content="http://yoursite.com/archives/index.html">
+  <meta name="description" content="content{:toc}  协程和线程 协程：共享堆，不共享栈，协程由程序员在协程的代码里显示调度；是编译器级的  线程：拥有自己独立的栈和共享的堆，共享堆，不共享栈，线程由操作系统调度； 是操作系统级的  区别：协程避免了无意义的调度，由此可以提高性能，但也因此，程序员必须自己承担调度的责任；同时，s协程也失去了标准线程使用多CPU的能力。   Tornado tornado 是一个pyth">
+<meta name="keywords" content="gevent">
+<meta property="og:type" content="article">
+<meta property="og:title" content="gevent">
+<meta property="og:url" content="http://yoursite.com/2017/03/29/2017-03-15-tornado与gevent/index.html">
 <meta property="og:site_name" content="Forster&#39;s Blog">
+<meta property="og:description" content="content{:toc}  协程和线程 协程：共享堆，不共享栈，协程由程序员在协程的代码里显示调度；是编译器级的  线程：拥有自己独立的栈和共享的堆，共享堆，不共享栈，线程由操作系统调度； 是操作系统级的  区别：协程避免了无意义的调度，由此可以提高性能，但也因此，程序员必须自己承担调度的责任；同时，s协程也失去了标准线程使用多CPU的能力。   Tornado tornado 是一个pyth">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2017/03/29/2017-03-15-tornado与gevent/!--￼2--">
+<meta property="og:updated_time" content="2017-07-13T01:49:05.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Forster&#39;s Blog">
+<meta name="twitter:title" content="gevent">
+<meta name="twitter:description" content="content{:toc}  协程和线程 协程：共享堆，不共享栈，协程由程序员在协程的代码里显示调度；是编译器级的  线程：拥有自己独立的栈和共享的堆，共享堆，不共享栈，线程由操作系统调度； 是操作系统级的  区别：协程避免了无意义的调度，由此可以提高性能，但也因此，程序员必须自己承担调度的责任；同时，s协程也失去了标准线程使用多CPU的能力。   Tornado tornado 是一个pyth">
+<meta name="twitter:image" content="http://yoursite.com/2017/03/29/2017-03-15-tornado与gevent/!--￼2--">
   
     <link rel="alternative" href="/atom.xml" title="Forster&#39;s Blog" type="application/atom+xml">
   
@@ -150,310 +157,82 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-2017-03-15-tornado与gevent" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/09/14/2017-09-14-golang调用python/" class="archive-article-date">
-  	<time datetime="2017-09-14T13:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-14</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/09/14/2017-09-14-golang调用python/">Golang调用Python</a>
+    <h1 class="article-title" itemprop="name">
+      gevent
     </h1>
   
 
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Golang python</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/09/08/2017-09-08-zeppelin便捷转化crontab/" class="archive-article-date">
-  	<time datetime="2017-09-08T13:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-08</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/09/08/2017-09-08-zeppelin便捷转化crontab/">Zeppelin便捷转化Crontab</a>
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">crontab python 动态生成函数</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/08/15/2017-08-15-golang笔记-并发/" class="archive-article-date">
-  	<time datetime="2017-08-15T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-15</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/08/15/2017-08-15-golang笔记-并发/">golang 并发使用</a>
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">并发简析</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/07/12/2017-07-12-HTTP反向代理初识/" class="archive-article-date">
-  	<time datetime="2017-07-12T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-12</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/07/12/2017-07-12-HTTP反向代理初识/">HTTP反向代理初识</a>
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">nginx和haproxy</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/05/22/2017-05-22-初识Spark/" class="archive-article-date">
-  	<time datetime="2017-05-22T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-22</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/05/22/2017-05-22-初识Spark/">初识Spark</a>
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/05/15/2017-05-16-Protobuf/" class="archive-article-date">
-  	<time datetime="2017-05-15T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-15</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/05/15/2017-05-16-Protobuf/">Protobuf</a>
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Protobuf//" class="article-tag-list-link color4">Protobuf</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/04/20/2017-04-20-验证码总结/" class="archive-article-date">
-  	<time datetime="2017-04-20T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-20</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/04/20/2017-04-20-验证码总结/">captcha</a>
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/验证码//" class="article-tag-list-link color4">验证码</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/03/29/2017-03-15-tornado与gevent/" class="archive-article-date">
+        
+        <a href="/2017/03/29/2017-03-15-tornado与gevent/" class="archive-article-date">
   	<time datetime="2017-03-29T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-29</time>
 </a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>content<br>{:toc}</li>
+</ul>
+<h1 id="协程和线程"><a href="#协程和线程" class="headerlink" title="协程和线程"></a>协程和线程</h1><ul>
+<li><p>协程：共享堆，不共享栈，协程由程序员在协程的代码里显示调度；是编译器级的</p>
+</li>
+<li><p>线程：拥有自己独立的栈和共享的堆，共享堆，不共享栈，线程由操作系统调度； 是操作系统级的</p>
+</li>
+<li><p>区别：协程避免了无意义的调度，由此可以提高性能，但也因此，程序员必须自己承担调度的责任；同时，s协程也失去了标准线程使用多CPU的能力。</p>
+</li>
+</ul>
+<h1 id="Tornado"><a href="#Tornado" class="headerlink" title="Tornado"></a>Tornado</h1><ul>
+<li>tornado 是一个python的框架，直接内嵌了http服务器，本身时单线程的异步网络程序。tornado拥有无阻塞一步的特性。一般的程序，在执行阶段若遇到I/O事件，整个进程会被阻塞，直到事件结束，程序才能继续执行；但是tornado的核心是事件驱动和对应的回调函数组成，即当I/O事件的发生，则绑定一个callback，程序继续执行其他事件，等之前的I/O事件之行完后，调用callback即可。</li>
+<li>tornado 核心模块是ioloop 和 iostream。ioloop类似while循环对事件进行循环；iostream为无阻塞的套接字。</li>
+</ul>
+<p>只用tornado如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/env python</div><div class="line"># encoding: utf-8</div><div class="line"></div><div class="line">import tornado.ioloop</div><div class="line">import tornado.web</div><div class="line">import requests</div><div class="line">from tornado.concurrent import run_on_executor</div><div class="line">from concurrent.futures import ThreadPoolExecutor</div><div class="line">import redis</div><div class="line"></div><div class="line">URL = &quot;http://www.baidu.com&quot;</div><div class="line"></div><div class="line">I = 0</div><div class="line"></div><div class="line">class MainHandler(tornado.web.RequestHandler):</div><div class="line">    executor = ThreadPoolExecutor(max_workers=4)</div><div class="line">    @tornado.web.asynchronous</div><div class="line">    @tornado.gen.coroutine</div><div class="line">    def get(self):</div><div class="line">        global I</div><div class="line">        I += 1 </div><div class="line">        n = I</div><div class="line">        print &quot;=&gt; %s&quot; % n</div><div class="line">        n = yield self.on_response(URL, n)</div><div class="line">        print &quot;=&gt; %s&quot; % n</div><div class="line">        self.write(&quot;Done %s&quot; % n)</div><div class="line"></div><div class="line">    @run_on_executor</div><div class="line">    def on_response(self, url, i):</div><div class="line">    requests.get(url)</div><div class="line">        return i</div><div class="line"></div><div class="line">handler = tornado.web.Application([(r&quot;/&quot;, MainHandler)],)</div><div class="line"></div><div class="line">if __name__ == &quot;__main__&quot;:</div><div class="line">    handler.listen(18010)</div><div class="line">    tornado.ioloop.IOLoop.instance().start()</div></pre></td></tr></table></figure></p>
+<h1 id="gevent"><a href="#gevent" class="headerlink" title="gevent"></a>gevent</h1><ul>
+<li>gevent是一个基于greenlet的Python的并发框架，以协程greenlet为核心，使用了epoll事件监听机制以及诸多其他优化而变得高效。</li>
+<li>因为是基于协程的框架，适合在替代线程的场景使用</li>
+<li>供了一个monkey类，可以将现有基于Python线程直接转化为greenlet，相当于打了补丁。</li>
+</ul>
+<p>在tornado基础上加入gevent, 因为url 请求baidu时，被ban掉了，现在用redis操作模拟请求url</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/env python</div><div class="line"># encoding: utf-8</div><div class="line"></div><div class="line">import tornado.ioloop</div><div class="line">import tornado.web</div><div class="line">import requests</div><div class="line">from tornado.concurrent import run_on_executor</div><div class="line">from concurrent.futures import ThreadPoolExecutor</div><div class="line">from gevent import monkey</div><div class="line">import gevent</div><div class="line">import functools</div><div class="line"></div><div class="line">from tornado.concurrent import Future</div><div class="line"></div><div class="line">monkey.patch_all()</div><div class="line"></div><div class="line">import redis</div><div class="line"></div><div class="line">I = 0</div><div class="line"></div><div class="line">def gfuture(func):</div><div class="line">@functools.wraps(func)</div><div class="line">    def f(*args, **kwargs):</div><div class="line">        loop = tornado.ioloop.IOLoop.current()</div><div class="line">        future = Future()</div><div class="line"></div><div class="line">        def call_method():</div><div class="line">            try:</div><div class="line">                result = func(*args, **kwargs)</div><div class="line">                loop.add_callback(functools.partial(future.set_result, result))</div><div class="line">            except Exception, e:</div><div class="line">                loop.add_callback(functools.partial(future.set_exception, e))</div><div class="line">        gevent.spawn(call_method)</div><div class="line">        return future</div><div class="line">    return f</div><div class="line"></div><div class="line">class MainHandler(tornado.web.RequestHandler):</div><div class="line">    @tornado.web.asynchronous</div><div class="line">    @tornado.gen.coroutine</div><div class="line">    def get(self):</div><div class="line">        global I</div><div class="line">        I += 1 </div><div class="line">        n = I</div><div class="line">        n = yield self.on_response(n)</div><div class="line">        self.write(&quot;Donw %s&quot; % n)</div><div class="line"></div><div class="line">    @gfuture</div><div class="line">    def on_response(self, i):</div><div class="line">        pool = redis.ConnectionPool(host=&quot;127.0.0.1&quot;, port=6379)</div><div class="line">        r = redis.Redis(connection_pool=pool)</div><div class="line">        r.set(&quot;test&quot;, i)</div><div class="line">        return i</div><div class="line"></div><div class="line">handler = tornado.web.Application([(r&quot;/&quot;, MainHandler)],)</div><div class="line"></div><div class="line">if __name__ == &quot;__main__&quot;:</div><div class="line">    handler.listen(18010)</div><div class="line">    tornado.ioloop.IOLoop.instance().start()</div></pre></td></tr></table></figure>
+<h1 id="tornado-vs-gevent-amp-tornado"><a href="#tornado-vs-gevent-amp-tornado" class="headerlink" title="tornado vs. (gevent&amp;tornado)"></a>tornado vs. (gevent&amp;tornado)</h1><p>使用上面的代码作为server，使用apachebenchmark 工具进行并发测试，所得的结果如下</p>
+<p><img src="!--￼2--" alt="tornado&amp;gevent"></p>
+<p>从上面可得，gevent处理并发的能力比tornado强。</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>今晚加鸡腿<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/03/29/2017-03-15-tornado与gevent/">gevent</a>
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -465,100 +244,134 @@
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2017/03/29/2017-03-15-tornado与gevent/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/03/13/2017-03-13-AES学习/" class="archive-article-date">
-  	<time datetime="2017-03-13T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-13</time>
-</a>
+<nav id="article-nav">
+  
+    <a href="/2017/04/20/2017-04-20-验证码总结/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          captcha
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/03/13/2017-03-13-AES学习/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">AES</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/03/13/2017-03-13-AES学习/">AES</a>
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">AES加解密</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#协程和线程"><span class="toc-number">1.</span> <span class="toc-text">协程和线程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Tornado"><span class="toc-number">2.</span> <span class="toc-text">Tornado</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#gevent"><span class="toc-number">3.</span> <span class="toc-text">gevent</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#tornado-vs-gevent-amp-tornado"><span class="toc-number">4.</span> <span class="toc-text">tornado vs. (gevent&tornado)</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/02/21/2017-02-21-ssdb和redis比较/" class="archive-article-date">
-  	<time datetime="2017-02-21T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-02-21</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/02/21/2017-02-21-ssdb和redis比较/">ssdb</a>
-    </h1>
-  
+        
+    </div>
+</aside>
 
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">golang</a>
-        		</li>
-      		
-		</ul>
-	</div>
 
-          
+  
+  <!-- UY BEGIN -->
+<div id="uyan_frame" ></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2147812"></script>
+<!-- UY END -->
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
   
-    </div></section>
+  
   
 
-    
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="extend next" rel="next" href="/archives/page/2/">Next &raquo;</a>
-    </nav>
+  
+
+  
+
   
 
 
@@ -582,8 +395,8 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

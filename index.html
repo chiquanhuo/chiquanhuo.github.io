@@ -152,181 +152,62 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-2016-11-11-redis_req_limit" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-2017-09-14-golang调用python" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/11/03/2016-11-11-redis_req_limit/">Redis频次控制</a>
+      <a class="article-title" href="/2017/09/14/2017-09-14-golang调用python/">Golang调用Python</a>
     </h1>
   
 
+
         
-        <a href="/2016/11/03/2016-11-11-redis_req_limit/" class="archive-article-date">
-  	<time datetime="2016-11-03T15:24:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-11-03</time>
+        <a href="/2017/09/14/2017-09-14-golang调用python/" class="archive-article-date">
+  	<time datetime="2017-09-14T13:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-14</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>最近做项目需要实现一个频次控制的功能，具体要求类似是限制一个ip在1分钟内最多请求10次。使用redis来控制请求速率是比较好的方法。</p>
-<h2 id="官网资料"><a href="#官网资料" class="headerlink" title="官网资料"></a>官网资料</h2><p><a href="http://redis.io/commands/INCR#pattern-rate-limiter" target="_blank" rel="external">官网</a> 中提到的第一种方法：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">FUNCTION LIMIT_API_CALL(ip):</div><div class="line">    keyname = ip</div><div class="line">    current = GET(keyname)</div><div class="line">    IF current != NULL AND current &gt; 10 THEN</div><div class="line">        ERROR "too many requests per second"</div><div class="line">    ELSE</div><div class="line">        MULTI</div><div class="line">            INCR(keyname,1)</div><div class="line">            EXPIRE(keyname,60)</div><div class="line">        EXEC</div><div class="line">        PERFORM_API_CALL()</div><div class="line">END</div></pre></td></tr></table></figure>
-<p>这是一种简单快捷的方法对一个ip请求频率的控制，但是这里我们可以发现并不是我们所需要的一个ip一分钟内最多请求10次，而是当ip请求到达10次，我们把这个key锁定，并设置ttl为1分钟。</p>
-        
-          <a class="article-more-a" href="/2016/11/03/2016-11-11-redis_req_limit/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016/11/03/2016-11-11-redis_req_limit/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-mac-lnmp" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/11/03/mac-lnmp/">mac搭建LNMP(linux+nginx+mysql+php)环境</a>
-    </h1>
-  
-
-        
-        <a href="/2016/11/03/mac-lnmp/" class="archive-article-date">
-  	<time datetime="2016-11-03T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-11-03</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>​       因为本人工作环境是linux的LNMP, 最近心血来潮想在mac上面也搭一个这样的环境，因此就有下面的操作，以下操作是在osx 10.11.6下进行的。</p>
-<h2 id="安装homebrew"><a href="#安装homebrew" class="headerlink" title="安装homebrew"></a>安装homebrew</h2><p>总所周知，在mac上面开发的，一般都会用到homebrew，这个工具就是类似ubuntu下的apt-get的操作。<br>首先先在appstore下载安装xcode和xcode-select，然后使用homebrew官网的安装命令，进行安装homebrew。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ruby -e <span class="string">"<span class="variable">$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)</span>"</span></div></pre></td></tr></table></figure>
-<p>之后使用<code>brew doctor</code>检查brew是否安装成功。检查成功后就可以使用<code>brew install FORMULA</code>安装所需要的工具。</p>
-        
-          <a class="article-more-a" href="/2016/11/03/mac-lnmp/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016/11/03/mac-lnmp/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-ad-pacing" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/10/28/ad-pacing/">Ad-Pacing 均匀出量总结</a>
-    </h1>
-  
-
-        
-        <a href="/2016/10/28/ad-pacing/" class="archive-article-date">
-  	<time datetime="2016-10-28T01:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-10-28</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>​       大部分广告经常面临一个问题，广告上线后瞬间就产生大量的曝光，推广计划瞬间达到每天的下量而不得不暂停推广。最近我通过改造平台的均匀出量功能对广告曝光速度进行实时控制，进而使得广告当天的消耗曲线跟平台消耗曲线相符。<br>​       在实现均匀出量功能时，需要考虑到的因素有广告主的广告推广日限量，前一段时段广告消耗速度，消耗量，广告推广的时间段，平台大盘流量预估等。</p>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>之前均匀出量的方案比较粗暴，其公式是</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Q = (S + Z) / Y</div></pre></td></tr></table></figure>
-<ul>
-<li>S值为根据上一个时间段投放比例求得这个时间段计划推广量</li>
-<li>Z值为上一个时间段的余量</li>
-<li>Y值为预估的该时间段最大出量推广量</li>
-<li>Q值为用户每小时请求广告的频率</li>
+        <ul>
+<li>content<br>{:toc}</li>
 </ul>
-<p>上面的公式存在比较多的问题：</p>
+<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><ul>
+<li>Python 一个适用于机器学习的语言</li>
+<li>Golang 一个适用于服务端开发的语言</li>
+<li>目前在数据挖掘和建模中，使用最多的语言是Python。大数据时代，绝大部分使用Golang语言应对高并发请求的场景。在这个背景下，Golang+Python的需求应运而生。</li>
+</ul>
+<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><ul>
+<li>Python 提供<code>C-API</code> , 而Go通过<code>cgo</code> 与c语言交互。因此，通过Go调用libpython实现调用Python的功能。</li>
+<li>目前市场上使用最多的轮子是 <a href="https://github.com/sbinet/go-python" target="_blank" rel="external">sbinet/go-python</a></li>
+</ul>
+<h1 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h1><ul>
+<li>首先写一个Python脚本</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python</span></div><div class="line"><span class="comment"># -*- coding: utf-8 -*-</span></div><div class="line"><span class="keyword">import</span> sys</div><div class="line"><span class="keyword">import</span> json</div><div class="line">reload(sys)</div><div class="line">sys.setdefaultencoding(<span class="string">'utf-8'</span>)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">(arvg)</span>:</span></div><div class="line">  <span class="keyword">print</span> arvg</div><div class="line">  res = &#123;</div><div class="line">      <span class="string">'price'</span>: <span class="number">0.01</span>,</div><div class="line">      <span class="string">'name'</span>: <span class="string">"test"</span>,</div><div class="line">  &#125;</div><div class="line">  final = json.dumps(res)</div><div class="line">  <span class="keyword">return</span> final</div></pre></td></tr></table></figure>
 <ul>
-<li><p>这几个变量都是通过配置文件固定的，导致每个同等级的广告出量的预估都一样，但是每个广告的优先级却不一样的情况下，其出量速度是不同的。举个例子，广告A和广告B的计划推广量都是200，但是广告A是游戏，广告B是应用，广告A的优先级比广告B高，正常来说用户获取这两个广告的概率一样，但是点击并安装激活广告A的概率可能比B的高，就会导致A已经放完量，B却没放完。</p>
+<li>Go调用Python</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> main</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">	<span class="string">"fmt"</span></div><div class="line">  	<span class="string">"github.com/sbinet/go-python"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="keyword">type</span> Test <span class="keyword">struct</span> &#123;</div><div class="line">	Str2Py <span class="function"><span class="keyword">func</span><span class="params">(<span class="keyword">string</span>)</span>*<span class="title">python</span>.<span class="title">PyObject</span></span></div><div class="line"><span class="function">  	<span class="title">Py2Str</span> <span class="title">func</span><span class="params">(*python.PyObject)</span><span class="title">string</span></span></div><div class="line"><span class="function">&#125;</span></div><div class="line"><span class="function"></span></div><div class="line"><span class="function"><span class="title">func</span> <span class="title">NewTest</span><span class="params">()</span> *<span class="title">Test</span></span> &#123;</div><div class="line">  	err := python.Initialize()</div><div class="line">  	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</div><div class="line">      	<span class="built_in">panic</span>(err.Error())</div><div class="line">  	&#125;</div><div class="line">  	test := &amp;Test &#123;</div><div class="line">      	Str2Py: python.PyString_FromString,</div><div class="line">      	Py2Str: python.PyString_AsString,</div><div class="line">  	&#125;</div><div class="line">  	<span class="keyword">return</span> test</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="params">(test *Test)</span><span class="title">ImportModule</span><span class="params">(dir, name <span class="keyword">string</span>)</span> *<span class="title">python</span>.<span class="title">PyObject</span></span> &#123;</div><div class="line">  	module := python.PyImport_ImportModule(<span class="string">"sys"</span>)</div><div class="line">  	path := module.GetAttrStrng(<span class="string">"path"</span>)</div><div class="line">  	python.PyList_Insert(path, <span class="number">0</span>, test.Str2Py(dir))</div><div class="line">  	<span class="keyword">return</span> python.PyImport_ImportModule(name)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">  	test := NewTest()</div><div class="line">  	module := test.ImportModel(<span class="string">"/home/tmp/test"</span>, <span class="string">"test"</span>)</div><div class="line">  	f := module.GetAttrString(<span class="string">"test"</span>)</div><div class="line">  	argv := python.PyTuple_New(<span class="number">1</span>)</div><div class="line"> 	python.PyTuple_SetItem(a, <span class="number">0</span>, test.Str2Py(<span class="string">"test"</span>))</div><div class="line">  	res := f.Call(argv, python.Py_None)</div><div class="line">  	fmt.Println(test.Py2Str(res))</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><p>output</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">test</div><div class="line">&#123;"price": 0.01, "name": "test"&#125;</div></pre></td></tr></table></figure>
 </li>
-<li><p>如果上一个时间段的余量全部放到下一个时间段放，下一个时间段计划放的量会有一个陡增，效果与我们的目标不符。</p>
+<li><p>整个执行的过程是：</p>
+<ul>
+<li>首先将python脚本的路径添加到sys.path</li>
+<li>go 调用PyImport_ImportModule 把sys.path 导入</li>
+<li>使用GetAttrString 根据属性名获取对象属性</li>
+<li>使用call 调用python函数</li>
+<li>PyString_AsString python字符串转为go字符串 </li>
+</ul>
 </li>
-<li><p>广告的消耗是指对广告主结算的量，而不是请求数，一个用户能请求到广告，就应该让用户继续完成这个广告。所以这条公式并没有直接限制广告的请求量。</p>
-        
-          <a class="article-more-a" href="/2016/10/28/ad-pacing/#more">more >></a>
-        
+</ul>
+
       
 
       
@@ -334,11 +215,22 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Golang python</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2016/10/28/ad-pacing/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/09/14/2017-09-14-golang调用python/">展开全文 >></a>
         </p>
       
 
@@ -368,6 +260,1161 @@
 
 
   
+    <article id="post-2017-09-08-zeppelin便捷转化crontab" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/08/2017-09-08-zeppelin便捷转化crontab/">Zeppelin便捷转化Crontab</a>
+    </h1>
+  
+
+
+        
+        <a href="/2017/09/08/2017-09-08-zeppelin便捷转化crontab/" class="archive-article-date">
+  	<time datetime="2017-09-08T13:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>content<br>{:toc}</li>
+</ul>
+<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>目前大家使用EMR最方便的方式是Zeppelin，但是有些任务需要重复使用Crontab执行。然而编写EMR STEP比较麻烦。所以这里需要使Zeppelin上的程序更好的转变为crontab，降低开发成本，提高开发效率。</p>
+<p>理想中的流程是：</p>
+<p><img src="!--￼3--" alt="流程"></p>
+<ol>
+<li>在zeppelin 上试验好sql</li>
+<li>如果需要使用%pyspark 来运行sql，则把note保存为py文件，不需要添加额外，直接复制粘贴成py文件，放在 crontabs/xxx.py</li>
+<li>xxx.py 的首行加入变量指定执行频率和时间，如：  EMR_CRONTAB = “<em> </em>/2 <em> </em> *”</li>
+<li>crontab每小时执行项目一次，项目根据xxx.py设置的 EMR_CRONTAB 决定是否需要上传job</li>
+<li>因为是多个job一起提交到emr集群，所以提交的结果肯定是 “成功”, 具体需要到日志里面查看自己对应的job是否有报错</li>
+</ol>
+<h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><p>这个需求需要考虑的点是：</p>
+<ol>
+<li>支持Zeppelin中默认定义好的spark sc 等变量</li>
+<li>动态加载并执行xxx.py</li>
+<li>解析 EMR_CRONTAB 与当前时间比较，判断 xxx.py 是否可执行</li>
+</ol>
+<p><img src="!--￼4--" alt="项目流程"></p>
+<h1 id="方案"><a href="#方案" class="headerlink" title="方案"></a>方案</h1><ul>
+<li>遍历某个目录下的py脚本，使用compile动态加载，使用exec执行py脚本</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_file</span><span class="params">(path, l)</span>:</span></div><div class="line">  	<span class="string">"""遍历某个目录下的py脚本，使用compile动态加载，使用exec执行py脚本"""</span></div><div class="line">    files = os.listdir(path)</div><div class="line">    now = int(time.time())</div><div class="line">    <span class="keyword">for</span> f <span class="keyword">in</span> files:</div><div class="line">        <span class="keyword">if</span> f != <span class="string">"library.zip"</span>:</div><div class="line">            <span class="keyword">continue</span></div><div class="line">        npath = path + <span class="string">'/'</span> + f</div><div class="line">        z = zipfile.ZipFile(npath, <span class="string">'r'</span>)</div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            <span class="keyword">for</span> filename <span class="keyword">in</span> z.namelist():</div><div class="line">                <span class="keyword">if</span> <span class="string">'crontabs/'</span> <span class="keyword">in</span> filename:</div><div class="line">                    res = <span class="keyword">False</span></div><div class="line">                    b = z.read(filename)</div><div class="line">                    lines = b.split(<span class="string">"\n"</span>)</div><div class="line">                    <span class="keyword">for</span> line <span class="keyword">in</span> lines:</div><div class="line">                        <span class="keyword">if</span> <span class="string">'EMR_CRONTAB'</span> <span class="keyword">in</span> line:</div><div class="line">                            <span class="keyword">if</span> cron.is_exec(line.strip(), now):</div><div class="line">                                res = <span class="keyword">True</span></div><div class="line">                    <span class="keyword">if</span> res:</div><div class="line">                        <span class="keyword">try</span>:</div><div class="line">                            code = <span class="string">"# -*- coding: utf-8 -*-\n"</span> + b</div><div class="line">                            exec_code = compile(code, <span class="string">''</span>, <span class="string">'exec'</span>)</div><div class="line">                        <span class="keyword">except</span> Exception, e:</div><div class="line">                            logging.info(e)</div><div class="line">                           	<span class="keyword">continue</span></div><div class="line">                        l.append(exec_code)</div><div class="line">        <span class="keyword">finally</span>:</div><div class="line">          	z.close()</div><div class="line">    <span class="keyword">return</span></div><div class="line">  </div><div class="line">  </div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">exec</span><span class="params">()</span>:</span></div><div class="line">  	<span class="string">"""执行crontab"""</span></div><div class="line">	get_file(path, code_list)</div><div class="line">    <span class="keyword">for</span> c <span class="keyword">in</span> code_list:</div><div class="line">      	<span class="keyword">try</span>:</div><div class="line">          	<span class="keyword">exec</span> i</div><div class="line">        <span class="keyword">except</span> Exception, e:</div><div class="line">          	logging.info(e)</div><div class="line">            <span class="keyword">continue</span></div></pre></td></tr></table></figure>
+<ul>
+<li>解析crontab格式，与目前时间比较，判断是否可执行</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python</span></div><div class="line"><span class="comment"># -*- coding: utf-8 -*-</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> re</div><div class="line"><span class="keyword">import</span> time</div><div class="line"></div><div class="line">PATTERN = &#123;</div><div class="line">    <span class="string">'number'</span>: re.compile(<span class="string">r'^[0-9]+$'</span>),</div><div class="line">    <span class="string">'num_list'</span>: re.compile(<span class="string">r'^[0-9]+([,][0-9]+)+$'</span>),</div><div class="line">    <span class="string">'star'</span>: re.compile(<span class="string">r'\*$'</span>),</div><div class="line">    <span class="string">'star_num'</span>: re.compile(<span class="string">r'^\*\/[0-9]+$'</span>),</div><div class="line">    <span class="string">'range'</span>: re.compile(<span class="string">r'^[0-9]+[\-][0-9]+$'</span>),</div><div class="line">    <span class="string">'range_num'</span>: re.compile(<span class="string">r'^[0-9]+[\-][0-9]+[\/][0-9]+$'</span>),</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse_crontab</span><span class="params">(crontab)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line"><span class="string">    解析EMR_CRONTAB</span></div><div class="line"><span class="string">    :param crontab:</span></div><div class="line"><span class="string">    :return:</span></div><div class="line"><span class="string">    """</span></div><div class="line">    final = []</div><div class="line">    time_list = ((<span class="number">0</span>, <span class="number">59</span>), (<span class="number">1</span>, <span class="number">23</span>), (<span class="number">1</span>, <span class="number">31</span>), (<span class="number">1</span>, <span class="number">12</span>), (<span class="number">0</span>, <span class="number">6</span>))</div><div class="line">    cl = crontab.split(<span class="string">'"'</span>)</div><div class="line"></div><div class="line">    <span class="keyword">if</span> len(cl) != <span class="number">3</span>:</div><div class="line">        <span class="keyword">return</span> final</div><div class="line">    crontab_str = cl[<span class="number">1</span>]</div><div class="line">    clist = crontab_str.split(<span class="string">' '</span>)</div><div class="line">    <span class="keyword">if</span> len(clist) != <span class="number">5</span>:</div><div class="line">        <span class="keyword">return</span> final</div><div class="line"></div><div class="line">    i = <span class="number">0</span></div><div class="line">    <span class="keyword">for</span> c <span class="keyword">in</span> clist:</div><div class="line">        res = parse_str(c, time_list[i][<span class="number">0</span>], time_list[i][<span class="number">1</span>])</div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> res:</div><div class="line">            res = []</div><div class="line">        <span class="keyword">if</span> i == <span class="number">0</span>:</div><div class="line">          	res = range(<span class="number">0</span>, <span class="number">60</span>)</div><div class="line">        final.append(res)</div><div class="line">        i += <span class="number">1</span></div><div class="line">    <span class="keyword">return</span> final</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse_str</span><span class="params">(cstr, cmin, cmax)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line"><span class="string">    解析crontab</span></div><div class="line"><span class="string">    :param cstr:</span></div><div class="line"><span class="string">    :param cmin:</span></div><div class="line"><span class="string">    :param cmax:</span></div><div class="line"><span class="string">    :return:</span></div><div class="line"><span class="string">    """</span></div><div class="line">    res = []</div><div class="line">    cstr = cstr.strip()</div><div class="line">    <span class="keyword">for</span> k, v <span class="keyword">in</span> PATTERN.items():</div><div class="line">        <span class="keyword">if</span> match_str(v, cstr):</div><div class="line">            <span class="keyword">if</span> k == <span class="string">'star'</span>:</div><div class="line">                res = handle_star(cstr, cmin, cmax)</div><div class="line">            <span class="keyword">elif</span> k == <span class="string">'star_num'</span>:</div><div class="line">                res = handle_starnum(cstr, cmin, cmax)</div><div class="line">            <span class="keyword">elif</span> k == <span class="string">'range'</span>:</div><div class="line">                res = handle_range(cstr, cmin, cmax)</div><div class="line">            <span class="keyword">elif</span> k == <span class="string">'range_num'</span>:</div><div class="line">                res = handle_rangenum(cstr, cmin, cmax)</div><div class="line">        	<span class="keyword">elif</span> k == <span class="string">'number'</span>:</div><div class="line">              	res = handle_num(cstr, cmin, cmax)</div><div class="line">           	<span class="keyword">elif</span> k == <span class="string">'num_list'</span>:</div><div class="line">              	res = handle_nlist(cstr, cmin, cmax)</div><div class="line">        <span class="keyword">if</span> len(res) &gt; <span class="number">0</span>:</div><div class="line">            <span class="keyword">break</span></div><div class="line">    <span class="keyword">return</span> res</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">match_str</span><span class="params">(pattern, origin)</span>:</span></div><div class="line">    result = re.match(pattern, origin)</div><div class="line">    <span class="keyword">if</span> result:</div><div class="line">        <span class="keyword">return</span> <span class="keyword">True</span></div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        <span class="keyword">return</span> <span class="keyword">False</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">handle_num</span><span class="params">(val, cmin, cmax)</span>:</span></div><div class="line">    <span class="string">"""1"""</span></div><div class="line">    res = []</div><div class="line">    val = int(val)</div><div class="line">    <span class="keyword">if</span> val &gt;= cmin <span class="keyword">and</span> val &lt;= cmax:</div><div class="line">        res.append(val)</div><div class="line">    <span class="keyword">return</span> res</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">handle_nlist</span><span class="params">(val, cmin, cmax)</span>:</span></div><div class="line">    <span class="string">"""1,2,3,4"""</span></div><div class="line">    res = []</div><div class="line">    vlist = val.split(<span class="string">','</span>)</div><div class="line">    <span class="keyword">for</span> v <span class="keyword">in</span> vlist:</div><div class="line">        v = int(v)</div><div class="line">        <span class="keyword">if</span> v &gt;= cmin <span class="keyword">and</span> v &lt;= cmax:</div><div class="line">            res.append(v)</div><div class="line">    <span class="keyword">return</span> res</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">handle_star</span><span class="params">(val, cmin, cmax)</span>:</span></div><div class="line">    <span class="string">"""*"""</span></div><div class="line">    res = []</div><div class="line">    <span class="keyword">if</span> val == <span class="string">'*'</span>:</div><div class="line">        i = cmin</div><div class="line">        <span class="keyword">while</span> i &lt;= cmax:</div><div class="line">            res.append(i)</div><div class="line">            i += <span class="number">1</span></div><div class="line">    <span class="keyword">return</span> res</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">handle_starnum</span><span class="params">(val, cmin, cmax)</span>:</span></div><div class="line">    <span class="string">"""*/2"""</span></div><div class="line">    res = []</div><div class="line">    vlist = val.split(<span class="string">'/'</span>)</div><div class="line">    <span class="keyword">if</span> len(vlist) != <span class="number">2</span>:</div><div class="line">        <span class="keyword">return</span> res</div><div class="line"></div><div class="line">    num = vstep = int(vlist[<span class="number">1</span>])</div><div class="line">    <span class="keyword">if</span> num &lt; <span class="number">1</span>:</div><div class="line">        <span class="keyword">return</span> res</div><div class="line"></div><div class="line">    <span class="keyword">while</span> num &lt;= cmax:</div><div class="line">        res.append(num)</div><div class="line">        num += vstep</div><div class="line">    <span class="keyword">return</span> res</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">handle_range</span><span class="params">(val, cmin, cmax)</span>:</span></div><div class="line">    <span class="string">"""0-10"""</span></div><div class="line">    res = []</div><div class="line">    vlist = val.split(<span class="string">'-'</span>)</div><div class="line">    <span class="keyword">if</span> len(vlist) != <span class="number">2</span>:</div><div class="line">        <span class="keyword">return</span> res</div><div class="line"></div><div class="line">    num = v_min = int(vlist[<span class="number">0</span>])</div><div class="line">    v_max = int(vlist[<span class="number">1</span>])</div><div class="line">    <span class="keyword">if</span> v_min &lt; <span class="number">0</span>:</div><div class="line">        <span class="keyword">return</span> res</div><div class="line"></div><div class="line">    <span class="keyword">while</span> num &lt;= v_max <span class="keyword">and</span> num &lt;= cmax:</div><div class="line">        res.append(num)</div><div class="line">        num += <span class="number">1</span></div><div class="line">    <span class="keyword">return</span> res</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">handle_rangenum</span><span class="params">(val, cmin, cmax)</span>:</span></div><div class="line">    <span class="string">"""0-10/2"""</span></div><div class="line">    res = []</div><div class="line">    vlist = val.split(<span class="string">'/'</span>)</div><div class="line">    <span class="keyword">if</span> len(vlist) != <span class="number">2</span>:</div><div class="line">        <span class="keyword">return</span> res</div><div class="line">    vrange = vlist[<span class="number">0</span>]</div><div class="line">    vstep = int(vlist[<span class="number">1</span>])</div><div class="line">    vrange_list = vrange.split(<span class="string">'-'</span>)</div><div class="line">    <span class="keyword">if</span> len(vrange_list) != <span class="number">2</span>:</div><div class="line">        <span class="keyword">return</span> res</div><div class="line"></div><div class="line">    num = v_min = int(vrange_list[<span class="number">0</span>])</div><div class="line">    v_max = int(vrange_list[<span class="number">1</span>])</div><div class="line">    <span class="keyword">if</span> v_min &lt; <span class="number">0</span> <span class="keyword">or</span> vstep &lt; <span class="number">1</span>:</div><div class="line">        <span class="keyword">return</span> res</div><div class="line"></div><div class="line">    <span class="keyword">while</span> num &lt;= v_max <span class="keyword">and</span> num &lt;= cmax:</div><div class="line">        res.append(num)</div><div class="line">        num += vstep</div><div class="line">    <span class="keyword">return</span> res</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">is_exec</span><span class="params">(crontab_str, now)</span>:</span></div><div class="line">    <span class="string">"""判断目前时间是否需要执行"""</span></div><div class="line">    final = <span class="keyword">True</span></div><div class="line">    res = parse_crontab(crontab_str)</div><div class="line">    <span class="keyword">if</span> len(res) == <span class="number">0</span>:</div><div class="line">        <span class="keyword">return</span> <span class="keyword">False</span></div><div class="line"></div><div class="line">    timestamp = time.localtime(now)</div><div class="line">    timelist = [timestamp.tm_min, timestamp.tm_hour, timestamp.tm_mday, timestamp.tm_mon, timestamp.tm_wday]</div><div class="line">    i = <span class="number">0</span></div><div class="line">    <span class="keyword">for</span> t <span class="keyword">in</span> timelist:</div><div class="line">        <span class="keyword">if</span> t <span class="keyword">not</span> <span class="keyword">in</span> res[i]:</div><div class="line">            final = <span class="keyword">False</span></div><div class="line">            <span class="keyword">break</span></div><div class="line">        i += <span class="number">1</span></div><div class="line">    <span class="keyword">return</span> final</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    t = int(time.time())</div><div class="line">    <span class="keyword">if</span> is_exec(<span class="string">'EMR_CRONTAB = "* */2 * * *"'</span>, t):</div><div class="line">        <span class="keyword">print</span> <span class="string">"test ok"</span></div></pre></td></tr></table></figure>
+<ul>
+<li>exec.sh</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"></div><div class="line">usage()</div><div class="line">&#123;</div><div class="line">cat &lt;&lt;HELP</div><div class="line">usage: ./exec.sh [-f filename | -c cluster | -j job_name | -r receiver ]</div><div class="line">Options:</div><div class="line">-f : filname need to execute <span class="keyword">in</span> emr</div><div class="line">-c : cluster you want to use</div><div class="line">-j : job_name you want to decide</div><div class="line">-r : receiver can get a email from emr when <span class="built_in">jobs</span> succeed</div><div class="line">HELP</div><div class="line"><span class="built_in">exit</span> 0</div><div class="line">&#125;</div><div class="line"></div><div class="line">a=<span class="string">""</span></div><div class="line"><span class="keyword">while</span> <span class="built_in">getopts</span> <span class="string">"f:c:r:j:h"</span> opt</div><div class="line"><span class="keyword">do</span></div><div class="line">    <span class="keyword">case</span> <span class="variable">$opt</span> <span class="keyword">in</span></div><div class="line">        f)</div><div class="line">            a=<span class="string">"<span class="variable">$a</span> -f <span class="variable">$OPTARG</span>"</span>;;</div><div class="line">        c)</div><div class="line">            a=<span class="string">"<span class="variable">$a</span> -c <span class="variable">$OPTARG</span>"</span>;;</div><div class="line">        r)</div><div class="line">            a=<span class="string">"<span class="variable">$a</span> -r <span class="variable">$OPTARG</span>"</span>;;</div><div class="line">        j)</div><div class="line">            a=<span class="string">"<span class="variable">$a</span> -j <span class="variable">$OPTARG</span>"</span>;;</div><div class="line">        h)</div><div class="line">            usage</div><div class="line">            <span class="built_in">exit</span> 0;;</div><div class="line">        ?)</div><div class="line">            usage</div><div class="line">            <span class="built_in">exit</span> 1;;</div><div class="line">    <span class="keyword">esac</span></div><div class="line"><span class="keyword">done</span></div></pre></td></tr></table></figure>
+<ul>
+<li><p>如何使用这个项目：</p>
+<p>命令行执行：./exec.sh</p>
+<ul>
+<li>usage: ./exec.sh [-f filename | -c cluster | -j job_name | -r receiver ]</li>
+<li>Options:</li>
+<li>-f : filname need to execute in emr 需要执行的脚本</li>
+<li>-c : cluster you want to use 选择要执行的集群 (default: EMR)</li>
+<li>-j : job_name you want to decide (default: 需要执行的脚本)</li>
+<li>-r : receiver can get an email from emr when jobs succeed</li>
+</ul>
+</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">crontab python 动态生成函数</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/09/08/2017-09-08-zeppelin便捷转化crontab/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-2017-08-15-golang笔记-并发" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/08/15/2017-08-15-golang笔记-并发/">golang 并发使用</a>
+    </h1>
+  
+
+
+        
+        <a href="/2017/08/15/2017-08-15-golang笔记-并发/" class="archive-article-date">
+  	<time datetime="2017-08-15T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>content<br>{:toc}</li>
+</ul>
+<h1 id="Goroutine"><a href="#Goroutine" class="headerlink" title="Goroutine"></a>Goroutine</h1><p>Golang 提供了极其简单的方式支持并发操作。Golang通过<code>go</code> 关键字可以简单地启动一个协程实现<code>goroutine</code> 功能。</p>
+<p>Goroutine 有以下特性：</p>
+<ol>
+<li>协作式调度</li>
+<li>“无锁”的优点只在单线程下有效，如果$GOMAXPROCS &gt; 1且需加锁保护数据时，效率会变慢</li>
+<li>封装了异步IO</li>
+<li>需同步访问共享内存</li>
+</ol>
+<p>一个简单的<code>goroutine</code>例子：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> main</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">	<span class="string">"fmt"</span></div><div class="line">  	<span class="string">"time"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">say</span><span class="params">(s <span class="keyword">string</span>)</span></span> &#123;</div><div class="line">  <span class="keyword">for</span> i := <span class="number">0</span>； i &lt; <span class="number">5</span>; i++ &#123;</div><div class="line">    time.Sleep(<span class="number">100</span> * time.Millisecond)</div><div class="line">    fmt.Println(s)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">  <span class="keyword">go</span> say(<span class="string">"world"</span>)</div><div class="line">  say(<span class="string">"hello"</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>以上例子存在一些问题：</p>
+<ol>
+<li>无法控制并发</li>
+<li>只适用于不需要立即得到处理结果的情景</li>
+</ol>
+<h1 id="Channel"><a href="#Channel" class="headerlink" title="Channel"></a>Channel</h1><p>如果同一个时间段内请求数很多，每一个请求都启动一个goroutine，资源的消耗就不可控。解决方法是使用<code>channel</code>.</p>
+<p>Channel: </p>
+<ol>
+<li>用于同步并发运行的函数，并通过传递指定类型的值来进行通信</li>
+<li><code>&lt;-</code>预算符的位置决定channel的读或写操作</li>
+</ol>
+<p>一个简单的使用例子：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">     message := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">string</span>) <span class="comment">// no buffer</span></div><div class="line">     count := <span class="number">3</span></div><div class="line"></div><div class="line">     <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</div><div class="line">          <span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= count; i++ &#123;</div><div class="line">               fmt.Println(<span class="string">"send message"</span>)</div><div class="line">               message &lt;- fmt.Sprintf(<span class="string">"message %d"</span>, i)</div><div class="line">          &#125;</div><div class="line">     &#125;()</div><div class="line"></div><div class="line">     time.Sleep(time.Second * <span class="number">3</span>)</div><div class="line"></div><div class="line">     <span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= count; i++ &#123;</div><div class="line">          fmt.Println(&lt;-message)</div><div class="line">     &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>以上例子，虽然控制了系统的并发，但是channel没有buffer，因此是同步执行的channel。该程序，在没有buffer的channel下，需要在发送者和接收者都完成任务后才执行结束，这种做法会导致buffer block。</p>
+<p>为了避免阻塞，我们需要为channel提供buffer。异步的例子如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">     message := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">string</span>，<span class="number">2</span>) <span class="comment">// 2 buffer</span></div><div class="line">     count := <span class="number">3</span></div><div class="line"></div><div class="line">     <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</div><div class="line">          <span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= count; i++ &#123;</div><div class="line">               fmt.Println(<span class="string">"send message"</span>)</div><div class="line">               message &lt;- fmt.Sprintf(<span class="string">"message %d"</span>, i)</div><div class="line">          &#125;</div><div class="line">          <span class="built_in">close</span>(message) <span class="comment">// close后，读取操作不会被阻塞</span></div><div class="line">     &#125;()</div><div class="line"></div><div class="line">     time.Sleep(time.Second * <span class="number">3</span>)</div><div class="line"></div><div class="line">     <span class="comment">// 可用range expression替换，但需要close channel </span></div><div class="line">     <span class="keyword">for</span> msg := <span class="keyword">range</span> message &#123;</div><div class="line">     	  fmt.Println(msg)</div><div class="line">	 &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>以上例子，通过改变channel的容量，控制系统的吞吐量。</p>
+<h1 id="Deadlock"><a href="#Deadlock" class="headerlink" title="Deadlock"></a>Deadlock</h1><figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">     c := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)</div><div class="line">     c &lt;- <span class="number">1</span>    <span class="comment">// write to a channel</span></div><div class="line">     val := &lt;-c <span class="comment">// read from a channel</span></div><div class="line">     fmt.Println(val)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>运行上面程序会抛出error，这个error为<code>deadlock</code>. </p>
+<p>Deadlock: 两个<code>goroutine</code>互相等待对方执行，但双方都没有执行的情况。</p>
+<p>一个接收器已经做好准备接收数据时，写入操作才会成功；但是以上例子，写入操作阻塞了整个程序。</p>
+<h1 id="Select"><a href="#Select" class="headerlink" title="Select"></a>Select</h1><p>在现实项目中，我们会需要更多的channel来支持功能，并且希望读取到的数据越快越好；Select能很好地支持这种情况。 </p>
+<p>Select:</p>
+<ol>
+<li>跟switch类似，但一般用于监听io操作。</li>
+<li>使用select实现timeout机制</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">func main() &#123;</div><div class="line">     message := make(chan string，2) // 2 buffer</div><div class="line">     count := 3</div><div class="line"></div><div class="line">     go func() &#123;</div><div class="line">          for i := 1; i &lt;= count; i++ &#123;</div><div class="line">               fmt.Println(&quot;send message&quot;)</div><div class="line">               message &lt;- fmt.Sprintf(&quot;message %d&quot;, i)</div><div class="line">          &#125;</div><div class="line">          close(message) // close后，读取操作不会被阻塞</div><div class="line">     &#125;()</div><div class="line"></div><div class="line">     // timeout 机制</div><div class="line">	 select &#123;</div><div class="line">	 case &lt;-time.After(time.Millisecond * 20):</div><div class="line">	 	return</div><div class="line">	 case &lt;-message:</div><div class="line">	 	for msg := range message &#123;</div><div class="line">     	  fmt.Println(msg)</div><div class="line">		&#125;  </div><div class="line">     default:</div><div class="line">        // 带有default</div><div class="line">	 &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>总结：</p>
+<p>golang 的优势是出色的处理并发的能力，因此我们对<code>goroutine</code>的理解非常重要。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">并发简析</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/08/15/2017-08-15-golang笔记-并发/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-2017-07-12-HTTP反向代理初识" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/07/12/2017-07-12-HTTP反向代理初识/">HTTP反向代理初识</a>
+    </h1>
+  
+
+
+        
+        <a href="/2017/07/12/2017-07-12-HTTP反向代理初识/" class="archive-article-date">
+  	<time datetime="2017-07-12T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-12</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>content<br>{:toc}</li>
+</ul>
+<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>最近把一个服务从PHP迁移到Go版本；但是对外接口的处理依然由PHP处理，然后内部实时请求Go这个服务并获取对应的数据。此服务需要可用性非常高，必须保证数据零丢失。</p>
+<p>一开始通过Go服务写数据，为了保证数据不丢失，打算采用<code>redis队列</code>来处理数据。但是存在一些问题：</p>
+<ul>
+<li>服务长时间挂掉，大量数据堆积队列</li>
+<li>并不能实时写入数据，需要根据服务的消费速度来决定写入时间；会导致有部分数据在需要读的情况下，还没被写入</li>
+<li>redis 挂掉，数据会丢失</li>
+</ul>
+<p>后续，通过查看<code>nginx</code>和<code>haproxy</code> 资料了解到HTTP反向代理方案可比较好地支持该服务的需求，带来比较高的可用性。</p>
+<h1 id="反向代理"><a href="#反向代理" class="headerlink" title="反向代理"></a>反向代理</h1><p>HTTP 反向代理：客户端向反向代理中已命名好的接口发送普通请求，在多个内网服务器环境下，反向代理将判断向哪个内网服务器转交请求，并将获得的内容返回给客户端。</p>
+<p>目前由两种通用的工具：nginx，haproxy</p>
+<p>HTTP反向代理优势：</p>
+<ul>
+<li>负载均衡</li>
+<li>可出错重试，某个内网服务器挂掉后，可把请求转移到其他服务器</li>
+</ul>
+<p><img src="!--￼0--" alt="http"></p>
+<p>因此暂时考虑到2个方案：</p>
+<ol>
+<li>nginx上配置端口，直接转发到每个内网服务器的端口</li>
+<li>haproxy上配置端口，直接转发到每个内网服务器的端口</li>
+</ol>
+<h1 id="nginx"><a href="#nginx" class="headerlink" title="nginx"></a>nginx</h1><p>nginx 里面有以下参数可解决上面的问题</p>
+<ul>
+<li>max_fails：允许请求失败的次数默认为1.当超过最大次数时，返回<code>proxy_next_upstream</code> 模块定义的错误</li>
+<li>fail_timeout：<code>max_fails</code>次失败后，暂停的时间</li>
+<li>proxy_next_upstream：出现故障时，返回的状态码</li>
+<li>proxy_next_upstream_tries: 出现故障后 重试次数</li>
+</ul>
+<p>nginx 的负载均衡常用的有3个方式</p>
+<ol>
+<li>轮询： 按时间顺序逐一分配到不同服务器</li>
+<li>weight：根据权值分配流量</li>
+<li>ip hash: 每个访问固定到一个服务器</li>
+</ol>
+<h1 id="haproxy"><a href="#haproxy" class="headerlink" title="haproxy"></a>haproxy</h1><p>haproxy 是一个简单的代理软件，稳定性好，支持负载均衡，出错重试等机制。一般使用场景是mysql集群环境。</p>
+<p>haproxy 不支持keep-alive</p>
+<p>haproxy有以下参数来支持良好的特性</p>
+<ol>
+<li>retries: n次链接失败认为服务不可用</li>
+<li>mode：处理的类型，默认为<code>http</code></li>
+<li>balance：负载均衡算法</li>
+<li>server：内网服务器ip 127.0.0.1:80 weight 100 check </li>
+</ol>
+<h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><ol>
+<li>服务使用supervisor启动</li>
+<li>6台服务器重启测试<ol>
+<li>一次性重启</li>
+<li>一台一台重启，2台间隔10s</li>
+</ol>
+</li>
+</ol>
+<p>实验结果：</p>
+<ol>
+<li>方案1和方案2都会出现几个error</li>
+<li>当长时间stop的时候，haproxy 如果 <code>retries</code> 设置 3，则必有3个error</li>
+<li>nginx的处理可以动态扩容，而haproxy不可</li>
+</ol>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">nginx和haproxy</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/07/12/2017-07-12-HTTP反向代理初识/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-2017-05-22-初识Spark" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/05/22/2017-05-22-初识Spark/">初识Spark</a>
+    </h1>
+  
+
+
+        
+        <a href="/2017/05/22/2017-05-22-初识Spark/" class="archive-article-date">
+  	<time datetime="2017-05-22T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>content<br>{:toc}</li>
+</ul>
+<h1 id="《Spark快速大数据分析》摘录"><a href="#《Spark快速大数据分析》摘录" class="headerlink" title="《Spark快速大数据分析》摘录"></a>《Spark快速大数据分析》摘录</h1><p>我最近阅读了一本《Spark快速大数据分析》，里面的内容非常适合刚开始学习Spark或者利用这本书作为查阅的同学。</p>
+<p>这里摘抄了一些内容，方便日后查看。</p>
+<ol>
+<li><p>Spark 是一个通过内存中计算达到快速处理数据，且基于传统的Hadoop，扩展了MapReduce，适用于不同的分布式平台的场景的一个工具。</p>
+<ul>
+<li>使用内存存储中间结果</li>
+<li>每列一个对象来记录，Hadoop 是每行一个对象</li>
+</ul>
+</li>
+<li><p>Spark 包含多个组件，如图</p>
+</li>
+</ol>
+<p><img src="!--￼1--" alt="Spark"></p>
+<ul>
+<li>Spark Core 执行任务调度，内存管理等。</li>
+<li>Spark SQL 是一个操作结构化数据的库</li>
+<li>Spark Streaming 支持实时数据进行计算</li>
+<li>集群管理器 支持多个节点运算</li>
+<li>Spark 支持多种格式的输入输出</li>
+</ul>
+<ol>
+<li><p>RDD (弹性分布式数据集)：</p>
+<ul>
+<li>对分布式数据和计算的基本抽象</li>
+<li>一个不可变的分布式对象集合</li>
+<li>创建方法：<ul>
+<li>读取外部数据集 (textFile())</li>
+<li>驱动器程序里分发驱动器程序中的对象集合(list, set)</li>
+</ul>
+</li>
+<li>两种操作:<ul>
+<li>转化操作, 返回新的RDD</li>
+<li>行动操作</li>
+<li>Spark是惰性计算，只有第一次在一个行动操作中用到时，才会被计算</li>
+<li>可把数据缓存，<code>RDD.perisist()</code></li>
+</ul>
+</li>
+<li><code>pipe()</code> 任意语言实现部分逻辑</li>
+</ul>
+</li>
+<li><p>pairRDD (键值对RDD)</p>
+<ul>
+<li><code>map()</code>: RDD 转为 pairRDD</li>
+<li>支持RDD的操作</li>
+<li>控制数据分布，减少网络传输，可提高性能</li>
+</ul>
+</li>
+<li><p>Spark是由一个驱动器程序来发起集群上的并行操作。</p>
+<ul>
+<li>SparkContext 访问Spark</li>
+<li>有SparkContext 才能建RDD</li>
+<li>指责：<ul>
+<li>把用户程序转为任务(最小工作单元)</li>
+<li>执行器节点调度任务<ul>
+<li>运行任务</li>
+<li>提供内存式存储</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>开销大的操作</p>
+<ul>
+<li>涉及混洗操作，开销会变大;需遍历2个RDD<ul>
+<li>distinct()</li>
+<li>intersection()</li>
+<li>union()</li>
+</ul>
+</li>
+<li>collect() 获取所有数据操作</li>
+</ul>
+</li>
+<li><p>两种类型的共享变量：</p>
+<ul>
+<li>累加器： 聚合信息<ul>
+<li>行为操作中使用，只会修改一次应用</li>
+<li>转化操作中，不止一次更新</li>
+</ul>
+</li>
+<li>广播变量: 分发较大的对象</li>
+</ul>
+</li>
+<li><p>Spark SQL</p>
+<ul>
+<li>SchemaRDD 是存放Row对象的RD，每个Row代表一行记录</li>
+</ul>
+</li>
+<li><p>注意点：</p>
+<ul>
+<li><code>lambda</code> 或者 <code>=&gt;</code> 定义内联函数</li>
+<li><code>spark-core</code> 标记为provided， 需用 <code>assembly</code> 打包应用行为</li>
+</ul>
+</li>
+</ol>
+<h1 id="Spark-实践"><a href="#Spark-实践" class="headerlink" title="Spark 实践"></a>Spark 实践</h1><ol>
+<li><p>Spark 安装：</p>
+<ul>
+<li>从官网下载安装包，如：spark-2.1.1-bin-hadoop2.7.tgz版，然后 tar vxzf spark-2.1.1-bin-hadoop2.7.tgz。</li>
+<li>将Spark路径添加到path中：修改~/.bashrc，添加一行”export PATH=$PATH:/my/path/spark-2.1.1-bin-hadoop2.7/bin”；source ~/.bashrc使其生效。</li>
+<li>命令使用<code>pyspark</code> 或者 <code>spark-submit xxx.py</code> 使用Spark</li>
+</ul>
+</li>
+<li><p>上手练习：</p>
+<ul>
+<li>从日志文件中统计出感兴趣用户的地域信息，包括国家，省份，城市</li>
+<li>对每个用户算出出现次数最多的国家，省份，城市名</li>
+<li>每个用户用idfa（iOS用户）或者imei（Android用户）来标识。用户标识时优先级为idfa &gt; imei </li>
+</ul>
+<ul>
+<li>日志格式是<code>&amp;ifa=&amp;ei=355546055518396&amp;country=CN&amp;prv=云南&amp;cty=昆明&amp;tc=联通</code></li>
+<li>日志文件为<code>mini_test.log</code></li>
+<li>感兴趣的用户文件为<code>mini_test_user.txt</code></li>
+</ul>
+</li>
+<li><p>以下是实现练习的代码</p>
+</li>
+</ol>
+<p><a href="http://spark.apache.org/docs/latest/api/python/pyspark.html" target="_blank" rel="external">http://spark.apache.org/docs/latest/api/python/pyspark.html</a> 这里有每个函数的详细用法介绍。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/env python</div><div class="line"># -*- coding: utf-8 -*-</div><div class="line"></div><div class="line">from pyspark import SparkConf, SparkContext</div><div class="line">from pyspark.sql import Row</div><div class="line">import re</div><div class="line">import json</div><div class="line"></div><div class="line">import sys</div><div class="line">reload(sys)</div><div class="line">sys.setdefaultencoding("utf8")</div><div class="line"></div><div class="line"></div><div class="line">def main():</div><div class="line">    ＃ 初始化Spark，建立对象</div><div class="line">    conf = SparkConf().setMaster("local").setAppName("My app")</div><div class="line">    sc = SparkContext(conf=conf)</div><div class="line"></div><div class="line">    ＃ 从外部获取RDD</div><div class="line">    lines = sc.textFile("~/Downloads/mini_test.log").map(parse_log_line).cache()</div><div class="line">    users = sc.textFile("~/Downloads/mini_test_user.txt").map(parse_user).cache()</div><div class="line"></div><div class="line">    # 通过map函数生成pairRDD</div><div class="line">    userData = users.map(lambda row: (row[0], ''))</div><div class="line">    # print userData.collect()</div><div class="line">    data = lines.map(lambda row: (row[0], row))</div><div class="line">    </div><div class="line">    # 可用groupByKey,聚合相同键的pairRDD,但是输出的是iterator,这里要实现后面的逻辑对于目前来说比较困难</div><div class="line">    #res = data.groupByKey().map(lambda row: (row[0],list(row)))</div><div class="line">    </div><div class="line">    # 使用 combineByKey 可获取自己想要的pairRDD,可操作性高</div><div class="line">    res = data.combineByKey(createCombiner, merge, mergeVal)</div><div class="line">    </div><div class="line">    # reduceByKey value为数值是效果比较好</div><div class="line">    # Output will be partitioned with numPartitions partitions, or the default parallelism level if numPartitions is not specified.</div><div class="line">    #res = data.reduceByKey(reduceCount)</div><div class="line">    final = res.map(formatline).map(lambda row: (row[0], row[1]))</div><div class="line"></div><div class="line">    ＃ join 聚合两个pairRDD 并使用map生成新的pairRDD</div><div class="line">    res1 = final.join(userData).map(lambda row: (row[1][0]))</div><div class="line">    res1.saveAsTextFile("~/data/spark/testrdd/")</div><div class="line">    </div><div class="line"></div><div class="line">def formatline(x):</div><div class="line">    country_list = []</div><div class="line">    prv_list = []</div><div class="line">    city_list = []</div><div class="line">    country = ""</div><div class="line">    prv = ""</div><div class="line">    city = ""</div><div class="line">    count_country = 0</div><div class="line">    count_prv = 0</div><div class="line">    count_city = 0</div><div class="line">    data_dict = x[1]</div><div class="line">    for key in data_dict:</div><div class="line">        if len(key.split("|")) &gt; 1:</div><div class="line">            temp = key.split("|")[1]</div><div class="line">        else :</div><div class="line">            temp = ""</div><div class="line">        if 'country' in key:</div><div class="line">            if data_dict[key] &gt; count_country:</div><div class="line">                count_country = data_dict[key]</div><div class="line">                country = key.split("|")[1]</div><div class="line">            country_list.append(temp + ":" + str(data_dict[key]))</div><div class="line"></div><div class="line">        if 'prv' in key:</div><div class="line">            if data_dict[key] &gt; count_prv:</div><div class="line">                count_prv = data_dict[key]</div><div class="line">                prv = temp</div><div class="line">            prv_list.append(temp + ":" + str(data_dict[key]))</div><div class="line"></div><div class="line">        if 'cty' in key:</div><div class="line">            if data_dict[key] &gt; count_city:</div><div class="line">                count_city = data_dict[key]</div><div class="line">                city = temp</div><div class="line">            city_list.append(temp + ":" + str(data_dict[key]))</div><div class="line">    data = x[0] + "\t" + country + "\t" + prv + "\t" + city + "\t" + "|".join(country_list) + "\t" + "|".join(prv_list) + "\t" + "|".join(city_list)</div><div class="line">    return [x[0], data]</div><div class="line"></div><div class="line">def createCombiner(x):</div><div class="line">    data = &#123;</div><div class="line">            x[1]: 1,</div><div class="line">            x[2]: 1,</div><div class="line">            x[3]: 1,</div><div class="line">    &#125;</div><div class="line">    return data</div><div class="line"></div><div class="line">def merge(x, y):</div><div class="line">    for key in y:</div><div class="line">        if key in x:</div><div class="line">            temp = x[key]</div><div class="line">            temp += 1</div><div class="line">            x[key] = temp</div><div class="line">        else:</div><div class="line">            x[key] = 1</div><div class="line">    return x</div><div class="line"></div><div class="line">def mergeVal(x, y):</div><div class="line">    for key in y:</div><div class="line">        if key in x:</div><div class="line">            temp = x[key]</div><div class="line">            temp += y[key]</div><div class="line">            x[key] = temp</div><div class="line">        else:</div><div class="line">            temp = y[key]</div><div class="line">            x[key] = temp</div><div class="line">    return x</div><div class="line"></div><div class="line">def parse_log_line(logline):</div><div class="line">    ifa_match = re.compile(r'ifa=(.*?)&amp;')</div><div class="line">    ei_match = re.compile(r'ei=(.*?)&amp;')</div><div class="line">    country_match = re.compile(r'country=(.*?)&amp;')</div><div class="line">    prv_match = re.compile(r'prv=(.*?)&amp;')</div><div class="line">    city_match = re.compile(r'cty=(.*?)&amp;')</div><div class="line"></div><div class="line">    _ifa = ifa_match.search(logline)</div><div class="line">    ifa  = _ifa.group(1)</div><div class="line">    _ei = ei_match.search(logline)</div><div class="line">    ei = _ei.group(1)</div><div class="line"></div><div class="line">    device = ""</div><div class="line">    if ifa != "":</div><div class="line">        device = ifa</div><div class="line">    elif ei != "":</div><div class="line">        device = ei</div><div class="line">    _country = country_match.search(logline)</div><div class="line">    country = ""</div><div class="line">    if _country:</div><div class="line">        country = _country.group(1)</div><div class="line">    _prv = prv_match.search(logline)</div><div class="line">    prv = ""</div><div class="line">    if _prv:</div><div class="line">        prv = _prv.group(1)</div><div class="line">    city = ""</div><div class="line">    _city = city_match.search(logline)</div><div class="line">    if _city:</div><div class="line">        city = _city.group(1)</div><div class="line"></div><div class="line">    return [</div><div class="line">        device,</div><div class="line">        'country|' + country,</div><div class="line">        'prv|' + json.loads(json.dumps(prv)),</div><div class="line">        'cty|' + json.loads(json.dumps(city)),</div><div class="line">    ]</div><div class="line"></div><div class="line"></div><div class="line">def parse_user(line):</div><div class="line">    device = ""</div><div class="line">    if "ifa=" in line:</div><div class="line">        if len(line.split("=")) &gt; 1:</div><div class="line">            device = line.split("=")[1]</div><div class="line">    if device == "" and "ei=" in line:</div><div class="line">        if len(line.split("=")) &gt; 1:</div><div class="line">            device = line.split("=")[1]</div><div class="line"></div><div class="line">    return [</div><div class="line">        device,</div><div class="line">    ]</div><div class="line"></div><div class="line"></div><div class="line">if __name__ == "__main__":</div><div class="line">    main()</div></pre></td></tr></table></figure>
+<ol>
+<li><code>combineByKey(createCombiner, mergeValue, mergeCombiners)</code> 作用是使RDD[(K, V)]转化为RDD[(K, C)]; V 和 C 的类型可以不一样。<br>由3个参数构成：<ul>
+<li>createCombiner() 创建键对应的累加器的初始值，每个分区第一次出现各个键时发生。</li>
+<li>mergeValue() 如果遇到之前的键，触发此函数，进行合并</li>
+<li>mergeCombiners() 对各个分区的结果合并</li>
+</ul>
+</li>
+</ol>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/05/22/2017-05-22-初识Spark/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-2017-05-16-Protobuf" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/05/15/2017-05-16-Protobuf/">Protobuf</a>
+    </h1>
+  
+
+
+        
+        <a href="/2017/05/15/2017-05-16-Protobuf/" class="archive-article-date">
+  	<time datetime="2017-05-15T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>content<br>{:toc}</li>
+</ul>
+<h1 id="Protobuf-简介"><a href="#Protobuf-简介" class="headerlink" title="Protobuf 简介"></a>Protobuf 简介</h1><ul>
+<li>最近公司需要使用Protobuf进行接口之前的交互和数据存储管理，所以学习了下Protobuf。</li>
+<li>protobuf的官网：<a href="https://developers.google.com/protocol-buffers/" target="_blank" rel="external">https://developers.google.com/protocol-buffers/</a><ul>
+<li>从官网中，我们知道protobuf是google开发一种语言数据标准，用于RPC系统和持续数据存储系统。</li>
+<li>是一个非常高效的结构化数据存储格式。</li>
+<li>支持多种语言处理(python, c++, php, go)</li>
+</ul>
+</li>
+</ul>
+<h1 id="Proto3-与-Proto2"><a href="#Proto3-与-Proto2" class="headerlink" title="Proto3 与 Proto2"></a>Proto3 与 Proto2</h1><p>Proto目前已经更新到3x. Proto3与Proto2存在一些区别。</p>
+<ul>
+<li><p>Proto文件需要添加语法标记，不然会报没有定义proto版本 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">+ Proto3 中 optional 和 required 标记都去掉了，只保留repeated 标记</div><div class="line">+ Proto3支持map格式，```map&lt;key_type, value_type&gt; map_field = N</div></pre></td></tr></table></figure></p>
+</li>
+<li><p>因为proto2中序列化的default和反序列化的default描述存在不一致问题，Proto3 把 default 字段去掉了</p>
+</li>
+<li>Proto3中 enum 默认值必须为0</li>
+</ul>
+<h1 id="Protobuf-PHP"><a href="#Protobuf-PHP" class="headerlink" title="Protobuf PHP"></a>Protobuf PHP</h1><p>项目是使用php7，目前支持php7的protobuf库比较少，这里有一个是支持php7的库</p>
+<p>安装步骤：</p>
+<ul>
+<li>git clone <a href="https://github.com/serggp/php-protobuf" target="_blank" rel="external">https://github.com/serggp/php-protobuf</a></li>
+<li>phpize7.0</li>
+<li>./configure –with-php-config=/usr/bin/php-config7.0</li>
+<li>sudo make &amp;&amp; sudo make install</li>
+<li>echo “extension=protobuf.so” &gt;&gt; /etc/php/7.0/mods-available/protobuf.ini</li>
+<li>ln -s /etc/php/7.0/mods-available/protobuf.ini /etc/php/7.0/fpm/conf.d/protobuf.ini</li>
+<li>ln -s /etc/php/7.0/mods-available/protobuf.ini /etc/php/7.0/cli/conf.d/protobuf.ini</li>
+</ul>
+<ul>
+<li>这里值得注意的是如果php使用protoc 3.2.0是只支持proto3 并不支持 proto2；为了支持proto2，我们需要使用protoc 3.0.0</li>
+</ul>
+<p>使用方法，在<a href="https://github.com/serggp/php-protobuf里面有介绍" target="_blank" rel="external">https://github.com/serggp/php-protobuf里面有介绍</a></p>
+<ol>
+<li><p>proto file <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">```</div><div class="line">syntax = &quot;proto2&quot;;</div><div class="line">message Data</div><div class="line">&#123;</div><div class="line">    required int32 id = 1;</div><div class="line">    optional string name = 2;</div><div class="line">    repeated float score = 3;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+</li>
+<li><p>把proto编译成php文件<br>php /your_path/protoc-gen-php.php test.proto</p>
+</li>
+</ol>
+<ol>
+<li>调用proto</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">require_once &apos;test.php&apos;;</div><div class="line">$test = new Data();</div><div class="line">$test-&gt;setId(1);</div><div class="line"></div><div class="line">$str = $test-&gt;serializeToString();</div></pre></td></tr></table></figure>
+<p>但是我们发现serializeToString()会触发<code>Segment Failed</code>,因此使用Golang调用Protobuf会比PHP好。</p>
+<h1 id="Protobuf-Golang"><a href="#Protobuf-Golang" class="headerlink" title="Protobuf Golang"></a>Protobuf Golang</h1><p>Golang 直接使用proto的官方库来生成Go的代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">protoc --gogofast_out=. *.proto</div></pre></td></tr></table></figure></p>
+<p>Go 使用</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> main</div><div class="line"></div><div class="line"><span class="keyword">import</span>(</div><div class="line">        <span class="string">"github.com/golang/protobuf/proto"</span></div><div class="line">        <span class="string">"fmt"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">        test := &amp;Data&#123;</div><div class="line">             Id: <span class="number">1</span>,</div><div class="line">             Name: <span class="string">"test"</span>, </div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        data, err := proto.Marshal(test)</div><div class="line">        <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</div><div class="line">                fmt.Println(err.Error())</div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在Go使用proto库，编码后的值为二进制，如果需要联网交互，可HTTP Header 为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Content-Type: application/octet-stream</div></pre></td></tr></table></figure></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/Protobuf//" class="article-tag-list-link color4">Protobuf</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/05/15/2017-05-16-Protobuf/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-2017-04-20-验证码总结" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/20/2017-04-20-验证码总结/">captcha</a>
+    </h1>
+  
+
+
+        
+        <a href="/2017/04/20/2017-04-20-验证码总结/" class="archive-article-date">
+  	<time datetime="2017-04-20T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>content<br>{:toc}</li>
+</ul>
+<h1 id="验证码"><a href="#验证码" class="headerlink" title="验证码"></a>验证码</h1><ul>
+<li>验证码对于经常上网的人不会陌生。特别是在注册新账号，确认交易时，他们会频繁出现，需要我们输入正确的验证码。那么这个看上去与我们正在操作的事情不相关的验证码到底有什么作用呢？</li>
+<li>首先2002年，验证码的提出者路易斯·冯·安(Luis von Ahn)指出向请求的发起方提出问题，能正确回答的则为人类，不能的则为机器。根据这个说明，验证码是可以区分人类和机器的，也就是说CAPTCHA提出的问题要容易被人类解答，并且让机器无法解答。</li>
+<li>在互联网中，特别是淘宝之类的电商，我们会发现刷量流量越发严重，加入验证码流程是可以一定程度上提高刷量成本，去掉一部分机器行为。</li>
+</ul>
+<h1 id="dchest-captcha"><a href="#dchest-captcha" class="headerlink" title="dchest/captcha"></a>dchest/captcha</h1><ul>
+<li>基于这个问题，为了快速实现验证码流程，我们使用了 <a href="https://github.com/dchest/captcha" target="_blank" rel="external">https://github.com/dchest/captcha</a> 来生成验证码。<ul>
+<li>可自定义验证码长度</li>
+<li>生成的图片不需要额外的硬盘存储，因使用OCR生成PNG.</li>
+<li>使用伪随机噪声生成原理，增加图片识别难度</li>
+<li>使用本地cache，可reload验证码<br>= 通过hash生成随机数作为验证码</li>
+</ul>
+</li>
+</ul>
+<h1 id="改后的captcha"><a href="#改后的captcha" class="headerlink" title="改后的captcha"></a>改后的captcha</h1><ul>
+<li>基于dchest/captcha, 我把他的存储工具改为redis，可支持多机器并发请求。</li>
+<li>对每个验证码加入失效时间，因为dchest／captcha的实效时间是基于达到一定数量的验证码后，再计算失效时间，这个会导致很多验证码长时间都存在。</li>
+<li><a href="https://github.com/chiquanhuo/ckcaptcha" target="_blank" rel="external">代码地址</a></li>
+</ul>
+<h1 id="captcha流程图和时序图"><a href="#captcha流程图和时序图" class="headerlink" title="captcha流程图和时序图"></a>captcha流程图和时序图</h1><p><img src="!--￼0--" alt="captcha流程图"></p>
+<p><img src="!--￼1--" alt="captcha时序图"></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/验证码//" class="article-tag-list-link color4">验证码</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/04/20/2017-04-20-验证码总结/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-2017-03-15-tornado与gevent" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/29/2017-03-15-tornado与gevent/">gevent</a>
+    </h1>
+  
+
+
+        
+        <a href="/2017/03/29/2017-03-15-tornado与gevent/" class="archive-article-date">
+  	<time datetime="2017-03-29T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-29</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>content<br>{:toc}</li>
+</ul>
+<h1 id="协程和线程"><a href="#协程和线程" class="headerlink" title="协程和线程"></a>协程和线程</h1><ul>
+<li><p>协程：共享堆，不共享栈，协程由程序员在协程的代码里显示调度；是编译器级的</p>
+</li>
+<li><p>线程：拥有自己独立的栈和共享的堆，共享堆，不共享栈，线程由操作系统调度； 是操作系统级的</p>
+</li>
+<li><p>区别：协程避免了无意义的调度，由此可以提高性能，但也因此，程序员必须自己承担调度的责任；同时，s协程也失去了标准线程使用多CPU的能力。</p>
+</li>
+</ul>
+<h1 id="Tornado"><a href="#Tornado" class="headerlink" title="Tornado"></a>Tornado</h1><ul>
+<li>tornado 是一个python的框架，直接内嵌了http服务器，本身时单线程的异步网络程序。tornado拥有无阻塞一步的特性。一般的程序，在执行阶段若遇到I/O事件，整个进程会被阻塞，直到事件结束，程序才能继续执行；但是tornado的核心是事件驱动和对应的回调函数组成，即当I/O事件的发生，则绑定一个callback，程序继续执行其他事件，等之前的I/O事件之行完后，调用callback即可。</li>
+<li>tornado 核心模块是ioloop 和 iostream。ioloop类似while循环对事件进行循环；iostream为无阻塞的套接字。</li>
+</ul>
+<p>只用tornado如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/env python</div><div class="line"># encoding: utf-8</div><div class="line"></div><div class="line">import tornado.ioloop</div><div class="line">import tornado.web</div><div class="line">import requests</div><div class="line">from tornado.concurrent import run_on_executor</div><div class="line">from concurrent.futures import ThreadPoolExecutor</div><div class="line">import redis</div><div class="line"></div><div class="line">URL = &quot;http://www.baidu.com&quot;</div><div class="line"></div><div class="line">I = 0</div><div class="line"></div><div class="line">class MainHandler(tornado.web.RequestHandler):</div><div class="line">    executor = ThreadPoolExecutor(max_workers=4)</div><div class="line">    @tornado.web.asynchronous</div><div class="line">    @tornado.gen.coroutine</div><div class="line">    def get(self):</div><div class="line">        global I</div><div class="line">        I += 1 </div><div class="line">        n = I</div><div class="line">        print &quot;=&gt; %s&quot; % n</div><div class="line">        n = yield self.on_response(URL, n)</div><div class="line">        print &quot;=&gt; %s&quot; % n</div><div class="line">        self.write(&quot;Done %s&quot; % n)</div><div class="line"></div><div class="line">    @run_on_executor</div><div class="line">    def on_response(self, url, i):</div><div class="line">    requests.get(url)</div><div class="line">        return i</div><div class="line"></div><div class="line">handler = tornado.web.Application([(r&quot;/&quot;, MainHandler)],)</div><div class="line"></div><div class="line">if __name__ == &quot;__main__&quot;:</div><div class="line">    handler.listen(18010)</div><div class="line">    tornado.ioloop.IOLoop.instance().start()</div></pre></td></tr></table></figure></p>
+<h1 id="gevent"><a href="#gevent" class="headerlink" title="gevent"></a>gevent</h1><ul>
+<li>gevent是一个基于greenlet的Python的并发框架，以协程greenlet为核心，使用了epoll事件监听机制以及诸多其他优化而变得高效。</li>
+<li>因为是基于协程的框架，适合在替代线程的场景使用</li>
+<li>供了一个monkey类，可以将现有基于Python线程直接转化为greenlet，相当于打了补丁。</li>
+</ul>
+<p>在tornado基础上加入gevent, 因为url 请求baidu时，被ban掉了，现在用redis操作模拟请求url</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/env python</div><div class="line"># encoding: utf-8</div><div class="line"></div><div class="line">import tornado.ioloop</div><div class="line">import tornado.web</div><div class="line">import requests</div><div class="line">from tornado.concurrent import run_on_executor</div><div class="line">from concurrent.futures import ThreadPoolExecutor</div><div class="line">from gevent import monkey</div><div class="line">import gevent</div><div class="line">import functools</div><div class="line"></div><div class="line">from tornado.concurrent import Future</div><div class="line"></div><div class="line">monkey.patch_all()</div><div class="line"></div><div class="line">import redis</div><div class="line"></div><div class="line">I = 0</div><div class="line"></div><div class="line">def gfuture(func):</div><div class="line">@functools.wraps(func)</div><div class="line">    def f(*args, **kwargs):</div><div class="line">        loop = tornado.ioloop.IOLoop.current()</div><div class="line">        future = Future()</div><div class="line"></div><div class="line">        def call_method():</div><div class="line">            try:</div><div class="line">                result = func(*args, **kwargs)</div><div class="line">                loop.add_callback(functools.partial(future.set_result, result))</div><div class="line">            except Exception, e:</div><div class="line">                loop.add_callback(functools.partial(future.set_exception, e))</div><div class="line">        gevent.spawn(call_method)</div><div class="line">        return future</div><div class="line">    return f</div><div class="line"></div><div class="line">class MainHandler(tornado.web.RequestHandler):</div><div class="line">    @tornado.web.asynchronous</div><div class="line">    @tornado.gen.coroutine</div><div class="line">    def get(self):</div><div class="line">        global I</div><div class="line">        I += 1 </div><div class="line">        n = I</div><div class="line">        n = yield self.on_response(n)</div><div class="line">        self.write(&quot;Donw %s&quot; % n)</div><div class="line"></div><div class="line">    @gfuture</div><div class="line">    def on_response(self, i):</div><div class="line">        pool = redis.ConnectionPool(host=&quot;127.0.0.1&quot;, port=6379)</div><div class="line">        r = redis.Redis(connection_pool=pool)</div><div class="line">        r.set(&quot;test&quot;, i)</div><div class="line">        return i</div><div class="line"></div><div class="line">handler = tornado.web.Application([(r&quot;/&quot;, MainHandler)],)</div><div class="line"></div><div class="line">if __name__ == &quot;__main__&quot;:</div><div class="line">    handler.listen(18010)</div><div class="line">    tornado.ioloop.IOLoop.instance().start()</div></pre></td></tr></table></figure>
+<h1 id="tornado-vs-gevent-amp-tornado"><a href="#tornado-vs-gevent-amp-tornado" class="headerlink" title="tornado vs. (gevent&amp;tornado)"></a>tornado vs. (gevent&amp;tornado)</h1><p>使用上面的代码作为server，使用apachebenchmark 工具进行并发测试，所得的结果如下</p>
+<p><img src="!--￼2--" alt="tornado&amp;gevent"></p>
+<p>从上面可得，gevent处理并发的能力比tornado强。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">gevent</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/03/29/2017-03-15-tornado与gevent/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-2017-03-13-AES学习" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/13/2017-03-13-AES学习/">AES</a>
+    </h1>
+  
+
+
+        
+        <a href="/2017/03/13/2017-03-13-AES学习/" class="archive-article-date">
+  	<time datetime="2017-03-13T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-13</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>content<br>{:toc}</li>
+</ul>
+<h1 id="DES-3DES-AES"><a href="#DES-3DES-AES" class="headerlink" title="DES/3DES/AES"></a>DES/3DES/AES</h1><p>DES/3DES/AES 都是对称加密算法。</p>
+<ul>
+<li><p>DES: </p>
+<ul>
+<li>目前的数据加密标准，适用于适用于加密大量数据的场合.</li>
+<li>密钥为64位.</li>
+<li>DES加密过程为：C=Ek1(P)</li>
+</ul>
+</li>
+<li><p>3DES: </p>
+<ul>
+<li>是基于DES，对一块数据用三个不同的密钥进行三次加密，强度更高。</li>
+<li>密钥为3*64位</li>
+<li>3DES加密过程为：C=Ek3(Dk2(Ek1(P)))</li>
+</ul>
+</li>
+<li><p>AES(Advanced Encryption Standard):</p>
+<ul>
+<li>高级加密标准，是下一代的加密算法标准，速度快，安全级别高.</li>
+<li>密钥支持128，192 和 256位,并且用128位（16字节）分组加密和解密数据。(迭代，对称密钥分组的密码)</li>
+<li>加密过程使用了 SubBytes（字节替代）、ShiftRows（行移位）、MixColumns（列混淆）、AddRoundKey(轮密钥加)。</li>
+</ul>
+</li>
+</ul>
+<h1 id="AES-工作模式"><a href="#AES-工作模式" class="headerlink" title="AES 工作模式"></a>AES 工作模式</h1><p>AES共有ECB、CBC、CFB、OFB、CTR五种模式.</p>
+<ul>
+<li>ECB: <ul>
+<li>将整个明文分成若干段相同的小段，然后对每一小段进行加密.</li>
+<li>优点：简单快速，利于并行加解密</li>
+<li>缺点：同明文输出同密文，可能导致明文攻击。</li>
+</ul>
+</li>
+<li>CBC:<ul>
+<li>将明文切分成若干小段，每一小段与初始块或者上一段的密文段进行异或运算后，再与密钥进行加密。</li>
+<li>优点：相同明文不同密文，不会明文攻击</li>
+<li>缺点：一个明文错误影响多个结果。</li>
+</ul>
+</li>
+<li>CFB:<ul>
+<li>能够将块密文转换为流密文,同一明文不同密文</li>
+<li>优点：流密文 安全性高</li>
+<li>缺点：串行运算，一个明文错误影响多个结果。</li>
+</ul>
+</li>
+<li>OFB:<ul>
+<li>与CFB类似，初始块加密后的高n位作为下一次加解密的后补位</li>
+<li>优点：流密文 安全性高</li>
+<li>缺点：串行运算，一个明文错误影响多个结果。</li>
+</ul>
+</li>
+<li>CTR:<ul>
+<li>用密钥对输入的计数器加密，然后同明文异或得到密文。</li>
+<li>优点：采用了流密钥方式加解密，适合于并行运算</li>
+<li>缺点：明文攻击</li>
+</ul>
+</li>
+</ul>
+<h1 id="php调用AES-ECB-pkcs5padding"><a href="#php调用AES-ECB-pkcs5padding" class="headerlink" title="php调用AES/ECB/pkcs5padding"></a>php调用AES/ECB/pkcs5padding</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">// 加密</div><div class="line">function aesEcb128Encrypt($input, $key) &#123;</div><div class="line">    $size = mcrypt_get_block_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_ECB);</div><div class="line">    $input = pkcs5Pad($input, $size);</div><div class="line"></div><div class="line">    $td = mcrypt_module_open(MCRYPT_RIJNDAEL_128, &apos;&apos;, MCRYPT_MODE_ECB, &apos;&apos;);</div><div class="line">    $iv = mcrypt_create_iv (mcrypt_enc_get_iv_size($td), MCRYPT_RAND);</div><div class="line">    mcrypt_generic_init($td, $key, $iv);</div><div class="line">    $data = mcrypt_generic($td, $input);</div><div class="line">    mcrypt_generic_deinit($td);</div><div class="line">    mcrypt_module_close($td);</div><div class="line">    $data = base64_encode($data);</div><div class="line">    return $data;</div><div class="line">&#125;</div><div class="line"></div><div class="line">function pkcs5Pad ($text, $blocksize) &#123;</div><div class="line">    $pad = $blocksize - (strlen($text) % $blocksize);</div><div class="line">    return $text . str_repeat(chr($pad), $pad);</div><div class="line">&#125;</div><div class="line"></div><div class="line">function pkcs5Unpad($text) &#123;</div><div class="line">    $pad = ord($text&#123;strlen($text)-1&#125;);</div><div class="line">    if ($pad &gt; strlen($text)) &#123;</div><div class="line">        return false;</div><div class="line">    &#125;</div><div class="line">    if (strspn($text, chr($pad), strlen($text) - $pad) != $pad) &#123;</div><div class="line">        return false;</div><div class="line">    &#125;</div><div class="line">    return substr($text, 0, -1 * $pad);</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 解密</div><div class="line">function aesEcb128Decrypt($str, $key) &#123;</div><div class="line">    $decrypted = mcrypt_decrypt(</div><div class="line">        MCRYPT_RIJNDAEL_128,</div><div class="line">        $key,</div><div class="line">        base64_decode($str),</div><div class="line">        MCRYPT_MODE_ECB</div><div class="line">    );</div><div class="line">    return pkcs5Unpad($decrypted);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="python调用AES-ECB-pkcs5padding"><a href="#python调用AES-ECB-pkcs5padding" class="headerlink" title="python调用AES/ECB/pkcs5padding"></a>python调用AES/ECB/pkcs5padding</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"># -*- coding=utf-8-*-</div><div class="line"></div><div class="line">from Crypto.Cipher import AES</div><div class="line">import base64</div><div class="line"></div><div class="line">def encrypt(data, key):</div><div class="line">    cipher = AES.new(key, AES.MODE_ECB)</div><div class="line">    x = AES.block_size - (len(data) % AES.block_size)</div><div class="line">    if x != 0:</div><div class="line">        data = data + chr(x)*x</div><div class="line">        msg = cipher.encrypt(data)</div><div class="line">        msg = base64.b64encode(msg)</div><div class="line">    return msg</div><div class="line"></div><div class="line">def decrypt(data, key):</div><div class="line">    cipher = AES.new(key, AES.MODE_ECB)</div><div class="line">    decryptByts = base64.b64decode(data)</div><div class="line">    msg = cipher.decrypt(decryptByts)</div><div class="line">    paddingLen = ord(msg[len(msg)-1])</div><div class="line">    return msg[0:-paddingLen]</div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">AES加解密</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/03/13/2017-03-13-AES学习/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-2017-02-21-ssdb和redis比较" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/02/21/2017-02-21-ssdb和redis比较/">ssdb</a>
+    </h1>
+  
+
+
+        
+        <a href="/2017/02/21/2017-02-21-ssdb和redis比较/" class="archive-article-date">
+  	<time datetime="2017-02-21T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-02-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>content<br>{:toc}</li>
+</ul>
+<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>因为项目中有使用到ssdb，今天发现sentry有报连不上ssdb的错误；于是想了解下ssdb，以及对比下ssdb跟redis的区别。</p>
+<h1 id="ssdb-简介"><a href="#ssdb-简介" class="headerlink" title="ssdb 简介"></a>ssdb 简介</h1><ul>
+<li>首先ssdb的官网是这个 <a href="http://ssdb.io/zh_cn/" target="_blank" rel="external">http://ssdb.io/zh_cn/</a></li>
+<li>使用google开源的leveldb引擎作为底层的存储引擎</li>
+<li>redis是内存nosql数据库，而ssdb能将数据存储在硬盘中</li>
+<li>ssdb和redis兼容，ssdb的数据结构与redis的数据结构差不多，在改源码的基础上更换存储引擎就可以</li>
+<li>适用于写多读少的场景</li>
+</ul>
+<h1 id="ssdb-vs-redis"><a href="#ssdb-vs-redis" class="headerlink" title="ssdb vs. redis"></a>ssdb vs. redis</h1><p>ssdb 使用了自带的ssdb-bench; redis 使用了自带的redis-benchmark<br>环境都是10000 requests，50 clients。</p>
+<table>
+<thead>
+<tr>
+<th>options</th>
+<th>time</th>
+<th>qps</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ssdb-set</td>
+<td>0.264s</td>
+<td>37867 </td>
+</tr>
+<tr>
+<td>redis-set</td>
+<td>0.07s</td>
+<td>140449</td>
+</tr>
+<tr>
+<td>ssdb-get</td>
+<td>0.159s</td>
+<td>62933 </td>
+</tr>
+<tr>
+<td>redis-get</td>
+<td>0.07s</td>
+<td>139664</td>
+</tr>
+</tbody>
+</table>
+<p>从上面的比较来看，redis的效果是比ssdb好。但是ssdb要比redis便宜，而且并不是全部使用内存，所以在实时性不强的情景，而且希望数据持久完整，使用ssdb是一个不错的选择，即使ssdb崩溃，写入的数据都是可以保证完整的。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">golang</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/02/21/2017-02-21-ssdb和redis比较/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+    </nav>
   
 
 
@@ -430,6 +1477,7 @@ MathJax.Hub.Queue(function() {
 </script>
 
 
+
     
 <div class="tools-col" q-class="show:isShow,hide:isShow|isFalse" q-on="click:stop(e)">
   <div class="tools-nav header-menu">
@@ -480,6 +1528,46 @@ MathJax.Hub.Queue(function() {
             <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
           </label>
           <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">docker总结</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">xhprof</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">golang</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">AES加解密</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">gevent</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Spark</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">nginx和haproxy</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">并发简析</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">crontab python 动态生成函数</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Golang python</a>
+              </li>
             
             <div class="clearfix"></div>
           </ul>

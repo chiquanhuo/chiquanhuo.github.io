@@ -6,15 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives | Forster&#39;s Blog</title>
+  <title>PHP性能测试工具－xhprof | Forster&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Forster&#39;s Blog">
-<meta property="og:url" content="http://yoursite.com/archives/index.html">
+  <meta name="description" content="content{:toc}  xhprof 介绍xhprof是一个分层PHP性能分析工具。它报告函数级别的请求次数和各种指标，包括阻塞时间，CPU时间和内存使用情况。我们可以很清晰地从xhprof得到系统中存在哪些性能消耗大的函数，以便进行优化，是测试php代码的性能的利器。 xhprof 使用Git 仓库php5 的安装 12345678910111213141516//绘图sudo apt-">
+<meta name="keywords" content="xhprof">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP性能测试工具－xhprof">
+<meta property="og:url" content="http://yoursite.com/2016/12/29/2016-12-29-xhprof/index.html">
 <meta property="og:site_name" content="Forster&#39;s Blog">
+<meta property="og:description" content="content{:toc}  xhprof 介绍xhprof是一个分层PHP性能分析工具。它报告函数级别的请求次数和各种指标，包括阻塞时间，CPU时间和内存使用情况。我们可以很清晰地从xhprof得到系统中存在哪些性能消耗大的函数，以便进行优化，是测试php代码的性能的利器。 xhprof 使用Git 仓库php5 的安装 12345678910111213141516//绘图sudo apt-">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2016-12-30T14:02:55.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Forster&#39;s Blog">
+<meta name="twitter:title" content="PHP性能测试工具－xhprof">
+<meta name="twitter:description" content="content{:toc}  xhprof 介绍xhprof是一个分层PHP性能分析工具。它报告函数级别的请求次数和各种指标，包括阻塞时间，CPU时间和内存使用情况。我们可以很清晰地从xhprof得到系统中存在哪些性能消耗大的函数，以便进行优化，是测试php代码的性能的利器。 xhprof 使用Git 仓库php5 的安装 12345678910111213141516//绘图sudo apt-">
   
     <link rel="alternative" href="/atom.xml" title="Forster&#39;s Blog" type="application/atom+xml">
   
@@ -150,415 +155,210 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-2016-12-29-xhprof" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      PHP性能测试工具－xhprof
+    </h1>
+  
+
+
+        
+        <a href="/2016/12/29/2016-12-29-xhprof/" class="archive-article-date">
+  	<time datetime="2016-12-29T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-29</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>content<br>{:toc}</li>
+</ul>
+<h1 id="xhprof-介绍"><a href="#xhprof-介绍" class="headerlink" title="xhprof 介绍"></a>xhprof 介绍</h1><p>xhprof是一个分层PHP性能分析工具。它报告函数级别的请求次数和各种指标，包括阻塞时间，CPU时间和内存使用情况。我们可以很清晰地从xhprof得到系统中存在哪些性能消耗大的函数，以便进行优化，是测试php代码的性能的利器。</p>
+<h1 id="xhprof-使用"><a href="#xhprof-使用" class="headerlink" title="xhprof 使用"></a>xhprof 使用</h1><p><a href="https://github.com/phacility/xhprof" target="_blank" rel="external">Git 仓库</a><br>php5 的安装</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">//绘图</div><div class="line">sudo apt-get install graphviz </div><div class="line"></div><div class="line">git clone https://github.com/phacility/xhprof.git</div><div class="line"></div><div class="line">cd xhprof/extension</div><div class="line">phpize</div><div class="line">./configure</div><div class="line">make &amp;&amp; sudo make install</div><div class="line"></div><div class="line">//编辑 /etc/php5/fpm/conf.d/xhprof.ini</div><div class="line">extension=xhprof.so</div><div class="line">xhprof.output_dir=/tmp</div><div class="line"></div><div class="line">//重启php-fpm</div><div class="line">sudo service php5-fpm restart</div></pre></td></tr></table></figure>
+<p>php7 的安装</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">//绘图</div><div class="line">sudo apt-get install graphviz </div><div class="line"></div><div class="line">git clone https://github.com/longxinH/xhprof</div><div class="line"></div><div class="line">cd xhprof/extension</div><div class="line">/usr/bin/phpize7.0</div><div class="line">./configure --with-php-config=/usr/bin/php-config7.0</div><div class="line">make &amp;&amp; sudo make install</div><div class="line"></div><div class="line">//编辑 /etc/php/7.0/fpm/conf.d/xhprof.ini</div><div class="line">extension=xhprof.so</div><div class="line">xhprof.output_dir=/tmp</div><div class="line"></div><div class="line">//重启php-fpm</div><div class="line">sudo service php7.0-fpm restart</div></pre></td></tr></table></figure>
+<p>使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">function testXhprof()&#123;</div><div class="line">    $ch = curl_init();</div><div class="line">    curl_setopt($ch, CURLOPT_URL, &quot;http://www.baidu.com&quot;);</div><div class="line">    curl_setopt($ch, CURLOPT_HEADER, false);</div><div class="line">    $result=curl_exec($ch);</div><div class="line">    curl_close($ch);</div><div class="line">&#125;</div><div class="line"></div><div class="line">xhprof_enable();</div><div class="line">testXhprof();</div><div class="line">$xhprof_data = xhprof_disable();</div><div class="line">echo &quot;done-----&quot;;</div><div class="line"></div><div class="line">$XHPROF_ROOT = realpath(dirname(__FILE__) .&apos;/&apos;);</div><div class="line">include_once $XHPROF_ROOT . &quot;/xhprof/xhprof_lib/utils/xhprof_lib.php&quot;;</div><div class="line">include_once $XHPROF_ROOT . &quot;/xhprof/xhprof_lib/utils/xhprof_runs.php&quot;;</div><div class="line">$xhprof_runs = new XHProfRuns_Default();</div><div class="line">$run_id = $xhprof_runs-&gt;save_run($xhprof_data, &quot;xhprof&quot;);</div><div class="line">echo $run_id; //输出的id</div><div class="line">?&gt;</div></pre></td></tr></table></figure>
+<p>打开本地连接 则可以查看刚刚运行代码的性能如何。 <figure class="highlight plain"><figcaption><span>这里列出了需要测试性能的id，点击id则可清晰查看性能。</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">页面看到的表格即为分析内容，提供的数据为：</div></pre></td></tr></table></figure></p>
+<p>Calls：函数的调用次数<br>Incl. Wall Time (microsec) ：包含内部函数花费的时间，单位微秒<br>Excl. Wall Time (microsec)：不包含内部函数花费的时间，单位微秒及所占百分比(%)</p>
+<p>Incl.：为 Including 包含的简写<br>Excl.：为 Excluding 不包含的简写<br>Wall Time：挂钟时间即任务花费的时间<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">![分析页面](&#123;&#123; &apos;/styles/images/xhprof/xhprof1.png&apos; | prepend: site.baseurl  &#125;&#125;)</div><div class="line"></div><div class="line">也可以点击页面上面的[View Full Callgraph] ，红色地方是值得我们关注的耗时点。</div><div class="line"></div><div class="line">![分析图片](&#123;&#123; &apos;/styles/images/xhprof/xhprof2.png&apos; | prepend: site.baseurl  &#125;&#125;)</div><div class="line"></div><div class="line"></div><div class="line">xhprof 随机调用方法</div><div class="line">====================================</div><div class="line">线上代码一般有很多请求，不会每个请求都屌用一次xhprof测试性能，所以我们可以随机调用查看代码的性能如何。</div></pre></td></tr></table></figure></p>
+<p>&lt;?<br>function getXhprof($rate=1) {<br>    if (rand(1, $rate) == 1) {<br>        xhprof_enable();<br>        register_shutdown_function(‘shutdown’);<br>    }<br>}</p>
+<p>function shutdown () {<br>    $xhprof_data = xhprof_disable();<br>    $XHPROF_ROOT = realpath(dirname(<strong>FILE</strong>) .’/‘);<br>    include_once $XHPROF_ROOT . “/xhprof/xhprof_lib/utils/xhprof_lib.php”;<br>    include_once $XHPROF_ROOT . “/xhprof/xhprof_lib/utils/xhprof_runs.php”;<br>    $xhprof_runs = new XHProfRuns_Default();<br>    $run_id = $xhprof_runs-&gt;save_run($xhprof_data, “xhprof”);<br>}<br>?&gt;<br>```</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>今晚加鸡腿<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/09/14/2017-09-14-golang调用python/" class="archive-article-date">
-  	<time datetime="2017-09-14T13:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-14</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/09/14/2017-09-14-golang调用python/">Golang调用Python</a>
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Golang python</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">xhprof</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2016/12/29/2016-12-29-xhprof/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/09/08/2017-09-08-zeppelin便捷转化crontab/" class="archive-article-date">
-  	<time datetime="2017-09-08T13:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-08</time>
-</a>
+<nav id="article-nav">
+  
+    <a href="/2017/01/14/2017-01-14-golang改造/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/12/17/2016-12-17-docker/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">docker简介</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/09/08/2017-09-08-zeppelin便捷转化crontab/">Zeppelin便捷转化Crontab</a>
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">crontab python 动态生成函数</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#xhprof-介绍"><span class="toc-number">1.</span> <span class="toc-text">xhprof 介绍</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#xhprof-使用"><span class="toc-number">2.</span> <span class="toc-text">xhprof 使用</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+        
+    </div>
+</aside>
+
+
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/08/15/2017-08-15-golang笔记-并发/" class="archive-article-date">
-  	<time datetime="2017-08-15T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-15</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/08/15/2017-08-15-golang笔记-并发/">golang 并发使用</a>
-    </h1>
-  
+  <!-- UY BEGIN -->
+<div id="uyan_frame" ></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2147812"></script>
+<!-- UY END -->
 
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">并发简析</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/07/12/2017-07-12-HTTP反向代理初识/" class="archive-article-date">
-  	<time datetime="2017-07-12T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-12</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/07/12/2017-07-12-HTTP反向代理初识/">HTTP反向代理初识</a>
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">nginx和haproxy</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/05/22/2017-05-22-初识Spark/" class="archive-article-date">
-  	<time datetime="2017-05-22T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-22</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/05/22/2017-05-22-初识Spark/">初识Spark</a>
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spark</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/05/15/2017-05-16-Protobuf/" class="archive-article-date">
-  	<time datetime="2017-05-15T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-15</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/05/15/2017-05-16-Protobuf/">Protobuf</a>
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Protobuf//" class="article-tag-list-link color4">Protobuf</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/04/20/2017-04-20-验证码总结/" class="archive-article-date">
-  	<time datetime="2017-04-20T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-20</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/04/20/2017-04-20-验证码总结/">captcha</a>
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/验证码//" class="article-tag-list-link color4">验证码</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/03/29/2017-03-15-tornado与gevent/" class="archive-article-date">
-  	<time datetime="2017-03-29T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-29</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/03/29/2017-03-15-tornado与gevent/">gevent</a>
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">gevent</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/03/13/2017-03-13-AES学习/" class="archive-article-date">
-  	<time datetime="2017-03-13T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-13</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/03/13/2017-03-13-AES学习/">AES</a>
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">AES加解密</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/02/21/2017-02-21-ssdb和redis比较/" class="archive-article-date">
-  	<time datetime="2017-02-21T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-02-21</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/02/21/2017-02-21-ssdb和redis比较/">ssdb</a>
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">golang</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
   
-    </div></section>
+  
   
 
-    
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="extend next" rel="next" href="/archives/page/2/">Next &raquo;</a>
-    </nav>
+  
+
+  
+
   
 
 
@@ -582,8 +382,8 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
