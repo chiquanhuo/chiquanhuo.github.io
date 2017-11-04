@@ -6,22 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>gevent | Forster&#39;s Blog</title>
+  <title>tornado与gevent | Forster&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="content{:toc}  协程和线程 协程：共享堆，不共享栈，协程由程序员在协程的代码里显示调度；是编译器级的  线程：拥有自己独立的栈和共享的堆，共享堆，不共享栈，线程由操作系统调度； 是操作系统级的  区别：协程避免了无意义的调度，由此可以提高性能，但也因此，程序员必须自己承担调度的责任；同时，s协程也失去了标准线程使用多CPU的能力。   Tornado tornado 是一个pyth">
-<meta name="keywords" content="gevent">
+  <meta name="description" content="协程和线程 协程：共享堆，不共享栈，协程由程序员在协程的代码里显示调度；是编译器级的  线程：拥有自己独立的栈和共享的堆，共享堆，不共享栈，线程由操作系统调度； 是操作系统级的  区别：协程避免了无意义的调度，由此可以提高性能，但也因此，程序员必须自己承担调度的责任；同时，s协程也失去了标准线程使用多CPU的能力。">
+<meta name="keywords" content="gevent,python">
 <meta property="og:type" content="article">
-<meta property="og:title" content="gevent">
+<meta property="og:title" content="tornado与gevent">
 <meta property="og:url" content="http://yoursite.com/2017/03/29/2017-03-15-tornado与gevent/index.html">
 <meta property="og:site_name" content="Forster&#39;s Blog">
-<meta property="og:description" content="content{:toc}  协程和线程 协程：共享堆，不共享栈，协程由程序员在协程的代码里显示调度；是编译器级的  线程：拥有自己独立的栈和共享的堆，共享堆，不共享栈，线程由操作系统调度； 是操作系统级的  区别：协程避免了无意义的调度，由此可以提高性能，但也因此，程序员必须自己承担调度的责任；同时，s协程也失去了标准线程使用多CPU的能力。   Tornado tornado 是一个pyth">
+<meta property="og:description" content="协程和线程 协程：共享堆，不共享栈，协程由程序员在协程的代码里显示调度；是编译器级的  线程：拥有自己独立的栈和共享的堆，共享堆，不共享栈，线程由操作系统调度； 是操作系统级的  区别：协程避免了无意义的调度，由此可以提高性能，但也因此，程序员必须自己承担调度的责任；同时，s协程也失去了标准线程使用多CPU的能力。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/2017/03/29/2017-03-15-tornado与gevent/!--￼2--">
-<meta property="og:updated_time" content="2017-07-13T01:49:05.000Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/tornado/tornado_gevent.png">
+<meta property="og:updated_time" content="2017-11-04T15:44:29.096Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="gevent">
-<meta name="twitter:description" content="content{:toc}  协程和线程 协程：共享堆，不共享栈，协程由程序员在协程的代码里显示调度；是编译器级的  线程：拥有自己独立的栈和共享的堆，共享堆，不共享栈，线程由操作系统调度； 是操作系统级的  区别：协程避免了无意义的调度，由此可以提高性能，但也因此，程序员必须自己承担调度的责任；同时，s协程也失去了标准线程使用多CPU的能力。   Tornado tornado 是一个pyth">
-<meta name="twitter:image" content="http://yoursite.com/2017/03/29/2017-03-15-tornado与gevent/!--￼2--">
+<meta name="twitter:title" content="tornado与gevent">
+<meta name="twitter:description" content="协程和线程 协程：共享堆，不共享栈，协程由程序员在协程的代码里显示调度；是编译器级的  线程：拥有自己独立的栈和共享的堆，共享堆，不共享栈，线程由操作系统调度； 是操作系统级的  区别：协程避免了无意义的调度，由此可以提高性能，但也因此，程序员必须自己承担调度的责任；同时，s协程也失去了标准线程使用多CPU的能力。">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/tornado/tornado_gevent.png">
   
     <link rel="alternative" href="/atom.xml" title="Forster&#39;s Blog" type="application/atom+xml">
   
@@ -164,7 +164,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      gevent
+      tornado与gevent
     </h1>
   
 
@@ -178,10 +178,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <ul>
-<li>content<br>{:toc}</li>
-</ul>
-<h1 id="协程和线程"><a href="#协程和线程" class="headerlink" title="协程和线程"></a>协程和线程</h1><ul>
+        <h2 id="协程和线程"><a href="#协程和线程" class="headerlink" title="协程和线程"></a>协程和线程</h2><ul>
 <li><p>协程：共享堆，不共享栈，协程由程序员在协程的代码里显示调度；是编译器级的</p>
 </li>
 <li><p>线程：拥有自己独立的栈和共享的堆，共享堆，不共享栈，线程由操作系统调度； 是操作系统级的</p>
@@ -189,20 +186,21 @@
 <li><p>区别：协程避免了无意义的调度，由此可以提高性能，但也因此，程序员必须自己承担调度的责任；同时，s协程也失去了标准线程使用多CPU的能力。</p>
 </li>
 </ul>
-<h1 id="Tornado"><a href="#Tornado" class="headerlink" title="Tornado"></a>Tornado</h1><ul>
+<a id="more"></a>
+<h2 id="Tornado"><a href="#Tornado" class="headerlink" title="Tornado"></a>Tornado</h2><ul>
 <li>tornado 是一个python的框架，直接内嵌了http服务器，本身时单线程的异步网络程序。tornado拥有无阻塞一步的特性。一般的程序，在执行阶段若遇到I/O事件，整个进程会被阻塞，直到事件结束，程序才能继续执行；但是tornado的核心是事件驱动和对应的回调函数组成，即当I/O事件的发生，则绑定一个callback，程序继续执行其他事件，等之前的I/O事件之行完后，调用callback即可。</li>
 <li>tornado 核心模块是ioloop 和 iostream。ioloop类似while循环对事件进行循环；iostream为无阻塞的套接字。</li>
 </ul>
-<p>只用tornado如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/env python</div><div class="line"># encoding: utf-8</div><div class="line"></div><div class="line">import tornado.ioloop</div><div class="line">import tornado.web</div><div class="line">import requests</div><div class="line">from tornado.concurrent import run_on_executor</div><div class="line">from concurrent.futures import ThreadPoolExecutor</div><div class="line">import redis</div><div class="line"></div><div class="line">URL = &quot;http://www.baidu.com&quot;</div><div class="line"></div><div class="line">I = 0</div><div class="line"></div><div class="line">class MainHandler(tornado.web.RequestHandler):</div><div class="line">    executor = ThreadPoolExecutor(max_workers=4)</div><div class="line">    @tornado.web.asynchronous</div><div class="line">    @tornado.gen.coroutine</div><div class="line">    def get(self):</div><div class="line">        global I</div><div class="line">        I += 1 </div><div class="line">        n = I</div><div class="line">        print &quot;=&gt; %s&quot; % n</div><div class="line">        n = yield self.on_response(URL, n)</div><div class="line">        print &quot;=&gt; %s&quot; % n</div><div class="line">        self.write(&quot;Done %s&quot; % n)</div><div class="line"></div><div class="line">    @run_on_executor</div><div class="line">    def on_response(self, url, i):</div><div class="line">    requests.get(url)</div><div class="line">        return i</div><div class="line"></div><div class="line">handler = tornado.web.Application([(r&quot;/&quot;, MainHandler)],)</div><div class="line"></div><div class="line">if __name__ == &quot;__main__&quot;:</div><div class="line">    handler.listen(18010)</div><div class="line">    tornado.ioloop.IOLoop.instance().start()</div></pre></td></tr></table></figure></p>
-<h1 id="gevent"><a href="#gevent" class="headerlink" title="gevent"></a>gevent</h1><ul>
+<p>只用tornado如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python</span></div><div class="line"><span class="comment"># encoding: utf-8</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> tornado.ioloop</div><div class="line"><span class="keyword">import</span> tornado.web</div><div class="line"><span class="keyword">import</span> requests</div><div class="line"><span class="keyword">from</span> tornado.concurrent <span class="keyword">import</span> run_on_executor</div><div class="line"><span class="keyword">from</span> concurrent.futures <span class="keyword">import</span> ThreadPoolExecutor</div><div class="line"><span class="keyword">import</span> redis</div><div class="line"></div><div class="line">URL = <span class="string">"http://www.baidu.com"</span></div><div class="line"></div><div class="line">I = <span class="number">0</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MainHandler</span><span class="params">(tornado.web.RequestHandler)</span>:</span></div><div class="line">    executor = ThreadPoolExecutor(max_workers=<span class="number">4</span>)</div><div class="line"><span class="meta">    @tornado.web.asynchronous</span></div><div class="line"><span class="meta">    @tornado.gen.coroutine</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="keyword">global</span> I</div><div class="line">        I += <span class="number">1</span> </div><div class="line">        n = I</div><div class="line">        <span class="keyword">print</span> <span class="string">"=&gt; %s"</span> % n</div><div class="line">        n = <span class="keyword">yield</span> self.on_response(URL, n)</div><div class="line">        <span class="keyword">print</span> <span class="string">"=&gt; %s"</span> % n</div><div class="line">        self.write(<span class="string">"Done %s"</span> % n)</div><div class="line"></div><div class="line"><span class="meta">    @run_on_executor</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">on_response</span><span class="params">(self, url, i)</span>:</span></div><div class="line">    requests.get(url)</div><div class="line">        <span class="keyword">return</span> i</div><div class="line"></div><div class="line">handler = tornado.web.Application([(<span class="string">r"/"</span>, MainHandler)],)</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</div><div class="line">    handler.listen(<span class="number">18010</span>)</div><div class="line">    tornado.ioloop.IOLoop.instance().start()</div></pre></td></tr></table></figure></p>
+<h2 id="gevent"><a href="#gevent" class="headerlink" title="gevent"></a>gevent</h2><ul>
 <li>gevent是一个基于greenlet的Python的并发框架，以协程greenlet为核心，使用了epoll事件监听机制以及诸多其他优化而变得高效。</li>
 <li>因为是基于协程的框架，适合在替代线程的场景使用</li>
 <li>供了一个monkey类，可以将现有基于Python线程直接转化为greenlet，相当于打了补丁。</li>
 </ul>
 <p>在tornado基础上加入gevent, 因为url 请求baidu时，被ban掉了，现在用redis操作模拟请求url</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/env python</div><div class="line"># encoding: utf-8</div><div class="line"></div><div class="line">import tornado.ioloop</div><div class="line">import tornado.web</div><div class="line">import requests</div><div class="line">from tornado.concurrent import run_on_executor</div><div class="line">from concurrent.futures import ThreadPoolExecutor</div><div class="line">from gevent import monkey</div><div class="line">import gevent</div><div class="line">import functools</div><div class="line"></div><div class="line">from tornado.concurrent import Future</div><div class="line"></div><div class="line">monkey.patch_all()</div><div class="line"></div><div class="line">import redis</div><div class="line"></div><div class="line">I = 0</div><div class="line"></div><div class="line">def gfuture(func):</div><div class="line">@functools.wraps(func)</div><div class="line">    def f(*args, **kwargs):</div><div class="line">        loop = tornado.ioloop.IOLoop.current()</div><div class="line">        future = Future()</div><div class="line"></div><div class="line">        def call_method():</div><div class="line">            try:</div><div class="line">                result = func(*args, **kwargs)</div><div class="line">                loop.add_callback(functools.partial(future.set_result, result))</div><div class="line">            except Exception, e:</div><div class="line">                loop.add_callback(functools.partial(future.set_exception, e))</div><div class="line">        gevent.spawn(call_method)</div><div class="line">        return future</div><div class="line">    return f</div><div class="line"></div><div class="line">class MainHandler(tornado.web.RequestHandler):</div><div class="line">    @tornado.web.asynchronous</div><div class="line">    @tornado.gen.coroutine</div><div class="line">    def get(self):</div><div class="line">        global I</div><div class="line">        I += 1 </div><div class="line">        n = I</div><div class="line">        n = yield self.on_response(n)</div><div class="line">        self.write(&quot;Donw %s&quot; % n)</div><div class="line"></div><div class="line">    @gfuture</div><div class="line">    def on_response(self, i):</div><div class="line">        pool = redis.ConnectionPool(host=&quot;127.0.0.1&quot;, port=6379)</div><div class="line">        r = redis.Redis(connection_pool=pool)</div><div class="line">        r.set(&quot;test&quot;, i)</div><div class="line">        return i</div><div class="line"></div><div class="line">handler = tornado.web.Application([(r&quot;/&quot;, MainHandler)],)</div><div class="line"></div><div class="line">if __name__ == &quot;__main__&quot;:</div><div class="line">    handler.listen(18010)</div><div class="line">    tornado.ioloop.IOLoop.instance().start()</div></pre></td></tr></table></figure>
-<h1 id="tornado-vs-gevent-amp-tornado"><a href="#tornado-vs-gevent-amp-tornado" class="headerlink" title="tornado vs. (gevent&amp;tornado)"></a>tornado vs. (gevent&amp;tornado)</h1><p>使用上面的代码作为server，使用apachebenchmark 工具进行并发测试，所得的结果如下</p>
-<p><img src="!--￼2--" alt="tornado&amp;gevent"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python</span></div><div class="line"><span class="comment"># encoding: utf-8</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> tornado.ioloop</div><div class="line"><span class="keyword">import</span> tornado.web</div><div class="line"><span class="keyword">import</span> requests</div><div class="line"><span class="keyword">from</span> tornado.concurrent <span class="keyword">import</span> run_on_executor</div><div class="line"><span class="keyword">from</span> concurrent.futures <span class="keyword">import</span> ThreadPoolExecutor</div><div class="line"><span class="keyword">from</span> gevent <span class="keyword">import</span> monkey</div><div class="line"><span class="keyword">import</span> gevent</div><div class="line"><span class="keyword">import</span> functools</div><div class="line"></div><div class="line"><span class="keyword">from</span> tornado.concurrent <span class="keyword">import</span> Future</div><div class="line"></div><div class="line">monkey.patch_all()</div><div class="line"></div><div class="line"><span class="keyword">import</span> redis</div><div class="line"></div><div class="line">I = <span class="number">0</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">gfuture</span><span class="params">(func)</span>:</span></div><div class="line"><span class="meta">@functools.wraps(func)</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">(*args, **kwargs)</span>:</span></div><div class="line">        loop = tornado.ioloop.IOLoop.current()</div><div class="line">        future = Future()</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">def</span> <span class="title">call_method</span><span class="params">()</span>:</span></div><div class="line">            <span class="keyword">try</span>:</div><div class="line">                result = func(*args, **kwargs)</div><div class="line">                loop.add_callback(functools.partial(future.set_result, result))</div><div class="line">            <span class="keyword">except</span> Exception, e:</div><div class="line">                loop.add_callback(functools.partial(future.set_exception, e))</div><div class="line">        gevent.spawn(call_method)</div><div class="line">        <span class="keyword">return</span> future</div><div class="line">    <span class="keyword">return</span> f</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MainHandler</span><span class="params">(tornado.web.RequestHandler)</span>:</span></div><div class="line"><span class="meta">    @tornado.web.asynchronous</span></div><div class="line"><span class="meta">    @tornado.gen.coroutine</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="keyword">global</span> I</div><div class="line">        I += <span class="number">1</span> </div><div class="line">        n = I</div><div class="line">        n = <span class="keyword">yield</span> self.on_response(n)</div><div class="line">        self.write(<span class="string">"Donw %s"</span> % n)</div><div class="line"></div><div class="line"><span class="meta">    @gfuture</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">on_response</span><span class="params">(self, i)</span>:</span></div><div class="line">        pool = redis.ConnectionPool(host=<span class="string">"127.0.0.1"</span>, port=<span class="number">6379</span>)</div><div class="line">        r = redis.Redis(connection_pool=pool)</div><div class="line">        r.set(<span class="string">"test"</span>, i)</div><div class="line">        <span class="keyword">return</span> i</div><div class="line"></div><div class="line">handler = tornado.web.Application([(<span class="string">r"/"</span>, MainHandler)],)</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</div><div class="line">    handler.listen(<span class="number">18010</span>)</div><div class="line">    tornado.ioloop.IOLoop.instance().start()</div></pre></td></tr></table></figure>
+<h2 id="tornado-vs-gevent-amp-tornado"><a href="#tornado-vs-gevent-amp-tornado" class="headerlink" title="tornado vs. (gevent&amp;tornado)"></a>tornado vs. (gevent&amp;tornado)</h2><p>使用上面的代码作为server，使用apachebenchmark 工具进行并发测试，所得的结果如下</p>
+<p><img src="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/tornado/tornado_gevent.png" alt="tornado&amp;gevent"></p>
 <p>从上面可得，gevent处理并发的能力比tornado强。</p>
 
       
@@ -239,6 +237,10 @@
 			 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">gevent</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">python</a>
         		</li>
       		
 		</ul>
@@ -312,14 +314,14 @@
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          captcha
+          captcha验证码总结
         
       </div>
     </a>
   
   
     <a href="/2017/03/13/2017-03-13-AES学习/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">AES</div>
+      <div class="article-nav-title">AES学习</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -346,7 +348,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#协程和线程"><span class="toc-number">1.</span> <span class="toc-text">协程和线程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Tornado"><span class="toc-number">2.</span> <span class="toc-text">Tornado</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#gevent"><span class="toc-number">3.</span> <span class="toc-text">gevent</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#tornado-vs-gevent-amp-tornado"><span class="toc-number">4.</span> <span class="toc-text">tornado vs. (gevent&tornado)</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#协程和线程"><span class="toc-number">1.</span> <span class="toc-text">协程和线程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Tornado"><span class="toc-number">2.</span> <span class="toc-text">Tornado</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gevent"><span class="toc-number">3.</span> <span class="toc-text">gevent</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tornado-vs-gevent-amp-tornado"><span class="toc-number">4.</span> <span class="toc-text">tornado vs. (gevent&tornado)</span></a></li></ol>
                     </div>
                 </span>
             </div>
@@ -487,7 +489,23 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">docker总结</a>
+                <a href="javascript:void(0)" class="js-tag color2">pacing</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">LNMP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">redis</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">celery</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">docker</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -495,11 +513,27 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">golang</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">AES加解密</a>
+                <a href="javascript:void(0)" class="js-tag color2">Golang</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">ssdb</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">AES</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">DES</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -507,23 +541,31 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">验证码</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Protobuf</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Spark</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">nginx和haproxy</a>
+                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">并发简析</a>
+                <a href="javascript:void(0)" class="js-tag color3">haproxy</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">crontab python 动态生成函数</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Golang python</a>
+                <a href="javascript:void(0)" class="js-tag color3">crontab</a>
               </li>
             
             <div class="clearfix"></div>

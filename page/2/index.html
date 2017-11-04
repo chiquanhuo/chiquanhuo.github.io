@@ -155,86 +155,28 @@
     <article id="post-2017-02-17-redigo与redis.v5比较" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/02/17/2017-02-17-redigo与redis.v5比较/">redigo与redis.v5比较</a>
+    </h1>
+  
+
+
+        
+        <a href="/2017/02/17/2017-02-17-redigo与redis.v5比较/" class="archive-article-date">
+  	<time datetime="2017-02-17T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-02-17</time>
+</a>
+        
+      </header>
+    
     <div class="article-entry" itemprop="articleBody">
       
-        <ul>
-<li>content<br>{:toc}</li>
-</ul>
-<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>看到golang有两个redis库，不知道执行效率上面哪个包比较好。于是在本地环境使用benchmark测试了下，得到的结果并不是redis.v5上面给出的结果。只能说每个库的执行效率上的差别并不是那么明显，而且redis.v5反而比较差，也不知道是不是代码有问题还是我的本地环境有问题。</p>
-<h1 id="redis-v5"><a href="#redis-v5" class="headerlink" title="redis.v5"></a>redis.v5</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">package redis_test</div><div class="line"></div><div class="line">import (</div><div class="line">    &quot;bytes&quot;</div><div class="line">    &quot;gopkg.in/redis.v5&quot;</div><div class="line">    &quot;testing&quot;</div><div class="line">    &quot;time&quot;</div><div class="line">)</div><div class="line"></div><div class="line">func BenchmarkRedis(b *testing.B) &#123;</div><div class="line">    client := redis.NewClient(&amp;redis.Options&#123;</div><div class="line">        Addr: &quot;:6379&quot;,</div><div class="line">        PoolSize: 100,</div><div class="line">    &#125;)</div><div class="line">    defer client.Close()</div><div class="line">    value := string(bytes.Repeat([]byte[&apos;1&apos;], 64))</div><div class="line">    b.ResetTimer()</div><div class="line">    b.RunParallel(func(pb *testing.PB) &#123;</div><div class="line">        for pb.Next() &#123;</div><div class="line">            if err := client.Set(&quot;key&quot;, value, 0).Err(); err != nil &#123;</div><div class="line">                b.Fatal(err)</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h1 id="redigo"><a href="#redigo" class="headerlink" title="redigo"></a>redigo</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">package redis_test</div><div class="line"></div><div class="line">import (</div><div class="line">    &quot;bytes&quot;</div><div class="line">    &quot;github.com/garyburd/redigo/redis&quot;</div><div class="line">    &quot;testing&quot;</div><div class="line">)</div><div class="line"></div><div class="line">func BenchmarkRedis(b *testing.B) &#123;</div><div class="line">    pool := &amp;redis.Pool&#123;</div><div class="line">        MaxActive: 100,</div><div class="line">        Dial: func() (redis.Conn, error) &#123;</div><div class="line">            return redis.Dial(&quot;tcp&quot;, &quot;:6379&quot;)</div><div class="line">        &#125;,</div><div class="line">    &#125;</div><div class="line">    value := string(bytes.Repeat([]byte[&apos;1&apos;], 64))</div><div class="line">    b.ResetTimer()</div><div class="line">    b.RunParallel(func(pb *testing.PB) &#123;</div><div class="line">        conn := pool.Get()</div><div class="line">        for pb.Next() &#123;</div><div class="line">            _, err := conn.Do(&quot;SET&quot;, &quot;key&quot;, value)</div><div class="line">            if err != nil &#123;</div><div class="line">                b.Fatal(err)</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">go test --bench=BenchmarkRedis --benchmem</div></pre></td></tr></table></figure>
-<h1 id="效率的比较"><a href="#效率的比较" class="headerlink" title="效率的比较"></a>效率的比较</h1><table>
-<thead>
-<tr>
-<th>test</th>
-<th>times</th>
-<th>ns/op</th>
-<th>B/op</th>
-<th>allocs/op</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>redigo100conns10kb</td>
-<td>50000</td>
-<td>28945 ns/op</td>
-<td>88 B/op</td>
-<td>4 allocs/op</td>
-</tr>
-<tr>
-<td>redigo10conns10kb</td>
-<td>50000</td>
-<td>30157 ns/op</td>
-<td>88 B/op</td>
-<td>4 allocs/op</td>
-</tr>
-<tr>
-<td>redigo100conns1kb</td>
-<td>100000</td>
-<td>17102 ns/op</td>
-<td>88 B/op</td>
-<td>4 allocs/op</td>
-</tr>
-<tr>
-<td>redigo10conns1kb</td>
-<td>100000</td>
-<td>16554 ns/op</td>
-<td>88 B/op</td>
-<td>4 allocs/op</td>
-</tr>
-<tr>
-<td>goredis100conns10kb</td>
-<td>50000</td>
-<td>28163 ns/op</td>
-<td>405 B/op</td>
-<td>12 allocs/op</td>
-</tr>
-<tr>
-<td>goredis10conns10kb</td>
-<td>50000</td>
-<td>27837 ns/op</td>
-<td>405 B/op</td>
-<td>12 allocs/op</td>
-</tr>
-<tr>
-<td>goredis100cons1kb</td>
-<td>50000</td>
-<td>23133 ns/op</td>
-<td>405 B/op</td>
-<td>12 allocs/op</td>
-</tr>
-<tr>
-<td>goredis10conns1kb</td>
-<td>50000</td>
-<td>20482 ns/op</td>
-<td>405 B/op</td>
-<td>12 allocs/op</td>
-</tr>
-</tbody>
-</table>
-<p>分别设置缓存池为100和10，写入1kb或者10kb的数据，得到上面的结果，可以看出效率上面差距都不是很大，很多时候是redigo的效率比较好。</p>
-
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>看到golang有两个redis库，不知道执行效率上面哪个包比较好。于是在本地环境使用benchmark测试了下，得到的结果并不是redis.v5上面给出的结果。只能说每个库的执行效率上的差别并不是那么明显，而且redis.v5反而比较差，也不知道是不是代码有问题还是我的本地环境有问题。</p>
+        
+          <a class="article-more-a" href="/2017/02/17/2017-02-17-redigo与redis.v5比较/#more">more >></a>
+        
       
 
       
@@ -246,6 +188,10 @@
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">redis</a>
+        		</li>
+      		 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">golang</a>
         		</li>
@@ -290,23 +236,30 @@
     <article id="post-2017-02-09-golang正则表达式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/02/09/2017-02-09-golang正则表达式/">Golang正则表达式</a>
+    </h1>
+  
+
+
+        
+        <a href="/2017/02/09/2017-02-09-golang正则表达式/" class="archive-article-date">
+  	<time datetime="2017-02-09T13:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-02-09</time>
+</a>
+        
+      </header>
+    
     <div class="article-entry" itemprop="articleBody">
       
-        <ul>
-<li>content<br>{:toc}</li>
-</ul>
-<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>原有的项目从php改为golang实现，提高响应时间，减少负载。其中需要通过使用正则表达规则判断字符串是否有连续重复字符。</p>
-<h1 id="php"><a href="#php" class="headerlink" title="php"></a>php</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">$str = &quot;000000&quot;;</div><div class="line">if (preg_match(&apos;/^(.)\1*$&apos;), $str) &#123;</div><div class="line">    echo true;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>原有的项目从php改为golang实现，提高响应时间，减少负载。其中需要通过使用正则表达规则判断字符串是否有连续重复字符。</p>
+<h2 id="php"><a href="#php" class="headerlink" title="php"></a>php</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">$str = <span class="string">"000000"</span>;</div><div class="line"><span class="keyword">if</span> (preg_match(<span class="string">'/^(.)\1*$'</span>), $str) &#123;</div><div class="line">    <span class="keyword">echo</span> <span class="keyword">true</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>此处返回true，因为php的正则表达是支持回溯判断的，所以这个pattern判断是有效的。</p>
-<h1 id="golang"><a href="#golang" class="headerlink" title="golang "></a>golang </h1><p>因为投放服务器都投放了各个产品，其它产品的请求量一天就达到了4000万，本产品只达到50万，所以把该产品更改为golang投放，投放服务器的负载并没有明显变化。</p>
-<p>一开始我选用了regexp包进行正则表达判断，这个引擎速度非常快且线程安全，但是发现这个regexp并不使用回溯法，不支持反向引用。因为regexp不用回溯，所以能够保证线性的执行时间O(n),而回溯法引擎很容易达到指数之行执行时间O(2^n)。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">package main</div><div class="line"></div><div class="line">import (</div><div class="line">    &quot;fmt&quot;</div><div class="line">    &quot;regexp&quot;</div><div class="line">)</div><div class="line"></div><div class="line">func main() &#123;</div><div class="line">    str := &quot;00000&quot;</div><div class="line">    pattern := `^(.)\1*$`</div><div class="line">    matched, _ := regexp.MatchString(pattern, str)</div><div class="line">    if matched &#123;</div><div class="line">        fmt.Println(&quot;ok&quot;)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>这里写的得不到我们想要的</p>
-<p>然后发现有个rubex包能支持回溯查询,但需要安装系统库<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure></p>
-<p>package main</p>
-<p>import (<br>    “fmt”<br>    “github.com/moovweb/rubex”<br>)</p>
-<p>func main() {<br>    str := “00000”<br>    pattern := <code>^(.)\1*$</code><br>    matched, _ := regexp.MatchString(pattern, str)<br>    if matched {<br>        fmt.Println(“ok”)<br>    }<br>}<br>```<br>这里的结果即为我们需要的。</p>
-
+        
+          <a class="article-more-a" href="/2017/02/09/2017-02-09-golang正则表达式/#more">more >></a>
+        
       
 
       
@@ -362,25 +315,31 @@
     <article id="post-2017-01-14-golang改造" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/14/2017-01-14-golang改造/">Golang改造</a>
+    </h1>
+  
+
+
+        
+        <a href="/2017/01/14/2017-01-14-golang改造/" class="archive-article-date">
+  	<time datetime="2017-01-14T01:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-01-14</time>
+</a>
+        
+      </header>
+    
     <div class="article-entry" itemprop="articleBody">
       
-        <ul>
-<li>content<br>{:toc}</li>
-</ul>
-<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>17年1月，有个广告项目从php7编写改用golang编写。取得的效果比较良好。</p>
-<h1 id="响应时间"><a href="#响应时间" class="headerlink" title="响应时间"></a>响应时间</h1><p>请求的响应时间明显降低，以下是响应时间比较。</p>
-<p><img src="!--￼0--" alt="请求时间"></p>
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>17年1月，有个广告项目从php7编写改用golang编写。取得的效果比较良好。</p>
+<h2 id="响应时间"><a href="#响应时间" class="headerlink" title="响应时间"></a>响应时间</h2><p>请求的响应时间明显降低，以下是响应时间比较。</p>
+<p><img src="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/golang/req.png" alt="请求时间"></p>
 <p>从图片看出，请求响应从原来18ms 到现在的6ms，响应时间降低了66.7%</p>
-<h1 id="负载"><a href="#负载" class="headerlink" title="负载"></a>负载</h1><p>因为投放服务器都投放了各个产品，其它产品的请求量一天就达到了4000万，本产品只达到50万，所以把该产品更改为golang投放，投放服务器的负载并没有明显变化。</p>
-<h1 id="关键点"><a href="#关键点" class="headerlink" title="关键点"></a>关键点</h1><ul>
-<li>使用golang1.7 版本，经检测，从原来golang1.5升级到golang1.7后，响应时间可以减少大概1ms。</li>
-<li>使用golang改写最明显的优势在于通过mysql的二进制日志，获取mysql被修改的数据，进行实时更新广告数据，并把广告数据以map的形式存在缓存中，当用户请求时，产品只需要从缓存中获取数据，而不用直接对mysql操作。php7写的逻辑是使用自身缓存但是并不能保存大量的数据，所以每隔一段时间仍然需要直接从mysql获取数据。golang的方法大量减少了对mysql的io，响应时间明显降低。</li>
-<li>golang的条件过滤规则方法都是封装成独立的方法，如果不同接口要使用特定的条件过滤只需要从基础类中调用对应的方法而不影响其他接口。</li>
-<li>产品的排序是排位值排序，每个广告对应每个媒介都有特定的排位值；用户请求到的广告，广告进行排序，需要从mysql+redis组合遍历所有的广告找到对应的媒介的排位值才能排序；新的是通过mysql的二进制日志通知，把排位值的信息保存到特定的缓存中。每次用户请求广告只需要从缓存中获取相应的排位值信息进行排序，省去了大量的mysql和redis请求。</li>
-<li>旧的防刷代码使用了大量的smembers，hgetall方法，需要使用redis的数据结构有list，set，string；每个数据结构都以cid+ad+aid作为key存储，因此用户请求一次接口，需要请求redis的次数为count(ad)。<br>新的防刷代码使用mget方法，存储的数据是被msgpack压缩成string的数组；每个数据结构都以cid+aid作为key存储，因此可以把相关的广告数据从redis一次性全部拿出来，再进行操作判断，用户请求一次需要访问redis的次数为1。</li>
-<li>调整条件过滤方法调用位置，需要实时请求redis或者mysql的方法放到调用的最后面，可以减少一部分不必要的qps。比如一个广告虽然有预算，但是这个广告不定投国外的，此时一个海外的用户请求广告，按照以前的逻辑是先找预算，预算通过再匹配定投条件；新的投放逻辑是先匹配定投条件，再去找预算，可以节省不必要的请求缓存。</li>
-</ul>
-
+        
+          <a class="article-more-a" href="/2017/01/14/2017-01-14-golang改造/#more">more >></a>
+        
       
 
       
@@ -454,22 +413,21 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <ul>
-<li>content<br>{:toc}</li>
-</ul>
-<h1 id="xhprof-介绍"><a href="#xhprof-介绍" class="headerlink" title="xhprof 介绍"></a>xhprof 介绍</h1><p>xhprof是一个分层PHP性能分析工具。它报告函数级别的请求次数和各种指标，包括阻塞时间，CPU时间和内存使用情况。我们可以很清晰地从xhprof得到系统中存在哪些性能消耗大的函数，以便进行优化，是测试php代码的性能的利器。</p>
-<h1 id="xhprof-使用"><a href="#xhprof-使用" class="headerlink" title="xhprof 使用"></a>xhprof 使用</h1><p><a href="https://github.com/phacility/xhprof" target="_blank" rel="external">Git 仓库</a><br>php5 的安装</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">//绘图</div><div class="line">sudo apt-get install graphviz </div><div class="line"></div><div class="line">git clone https://github.com/phacility/xhprof.git</div><div class="line"></div><div class="line">cd xhprof/extension</div><div class="line">phpize</div><div class="line">./configure</div><div class="line">make &amp;&amp; sudo make install</div><div class="line"></div><div class="line">//编辑 /etc/php5/fpm/conf.d/xhprof.ini</div><div class="line">extension=xhprof.so</div><div class="line">xhprof.output_dir=/tmp</div><div class="line"></div><div class="line">//重启php-fpm</div><div class="line">sudo service php5-fpm restart</div></pre></td></tr></table></figure>
+        <h2 id="xhprof-介绍"><a href="#xhprof-介绍" class="headerlink" title="xhprof 介绍"></a>xhprof 介绍</h2><p>xhprof是一个分层PHP性能分析工具。它报告函数级别的请求次数和各种指标，包括阻塞时间，CPU时间和内存使用情况。我们可以很清晰地从xhprof得到系统中存在哪些性能消耗大的函数，以便进行优化，是测试php代码的性能的利器。</p>
+<h2 id="xhprof-使用"><a href="#xhprof-使用" class="headerlink" title="xhprof 使用"></a>xhprof 使用</h2><p><a href="https://github.com/phacility/xhprof" target="_blank" rel="external">Git 仓库</a><br>php5 的安装</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">//绘图</div><div class="line">sudo apt-get install graphviz </div><div class="line"></div><div class="line">git <span class="built_in">clone</span> https://github.com/phacility/xhprof.git</div><div class="line"></div><div class="line"><span class="built_in">cd</span> xhprof/extension</div><div class="line">phpize</div><div class="line">./configure</div><div class="line">make &amp;&amp; sudo make install</div><div class="line"></div><div class="line">//编辑 /etc/php5/fpm/conf.d/xhprof.ini</div><div class="line">extension=xhprof.so</div><div class="line">xhprof.output_dir=/tmp</div><div class="line"></div><div class="line">//重启php-fpm</div><div class="line">sudo service php5-fpm restart</div></pre></td></tr></table></figure>
 <p>php7 的安装</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">//绘图</div><div class="line">sudo apt-get install graphviz </div><div class="line"></div><div class="line">git clone https://github.com/longxinH/xhprof</div><div class="line"></div><div class="line">cd xhprof/extension</div><div class="line">/usr/bin/phpize7.0</div><div class="line">./configure --with-php-config=/usr/bin/php-config7.0</div><div class="line">make &amp;&amp; sudo make install</div><div class="line"></div><div class="line">//编辑 /etc/php/7.0/fpm/conf.d/xhprof.ini</div><div class="line">extension=xhprof.so</div><div class="line">xhprof.output_dir=/tmp</div><div class="line"></div><div class="line">//重启php-fpm</div><div class="line">sudo service php7.0-fpm restart</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">//绘图</div><div class="line">sudo apt-get install graphviz </div><div class="line"></div><div class="line">git <span class="built_in">clone</span> https://github.com/longxinH/xhprof</div><div class="line"></div><div class="line"><span class="built_in">cd</span> xhprof/extension</div><div class="line">/usr/bin/phpize7.0</div><div class="line">./configure --with-php-config=/usr/bin/php-config7.0</div><div class="line">make &amp;&amp; sudo make install</div><div class="line"></div><div class="line">//编辑 /etc/php/7.0/fpm/conf.d/xhprof.ini</div><div class="line">extension=xhprof.so</div><div class="line">xhprof.output_dir=/tmp</div><div class="line"></div><div class="line">//重启php-fpm</div><div class="line">sudo service php7.0-fpm restart</div></pre></td></tr></table></figure>
 <p>使用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">function testXhprof()&#123;</div><div class="line">    $ch = curl_init();</div><div class="line">    curl_setopt($ch, CURLOPT_URL, &quot;http://www.baidu.com&quot;);</div><div class="line">    curl_setopt($ch, CURLOPT_HEADER, false);</div><div class="line">    $result=curl_exec($ch);</div><div class="line">    curl_close($ch);</div><div class="line">&#125;</div><div class="line"></div><div class="line">xhprof_enable();</div><div class="line">testXhprof();</div><div class="line">$xhprof_data = xhprof_disable();</div><div class="line">echo &quot;done-----&quot;;</div><div class="line"></div><div class="line">$XHPROF_ROOT = realpath(dirname(__FILE__) .&apos;/&apos;);</div><div class="line">include_once $XHPROF_ROOT . &quot;/xhprof/xhprof_lib/utils/xhprof_lib.php&quot;;</div><div class="line">include_once $XHPROF_ROOT . &quot;/xhprof/xhprof_lib/utils/xhprof_runs.php&quot;;</div><div class="line">$xhprof_runs = new XHProfRuns_Default();</div><div class="line">$run_id = $xhprof_runs-&gt;save_run($xhprof_data, &quot;xhprof&quot;);</div><div class="line">echo $run_id; //输出的id</div><div class="line">?&gt;</div></pre></td></tr></table></figure>
-<p>打开本地连接 则可以查看刚刚运行代码的性能如何。 <figure class="highlight plain"><figcaption><span>这里列出了需要测试性能的id，点击id则可清晰查看性能。</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">页面看到的表格即为分析内容，提供的数据为：</div></pre></td></tr></table></figure></p>
-<p>Calls：函数的调用次数<br>Incl. Wall Time (microsec) ：包含内部函数花费的时间，单位微秒<br>Excl. Wall Time (microsec)：不包含内部函数花费的时间，单位微秒及所占百分比(%)</p>
-<p>Incl.：为 Including 包含的简写<br>Excl.：为 Excluding 不包含的简写<br>Wall Time：挂钟时间即任务花费的时间<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">![分析页面](&#123;&#123; &apos;/styles/images/xhprof/xhprof1.png&apos; | prepend: site.baseurl  &#125;&#125;)</div><div class="line"></div><div class="line">也可以点击页面上面的[View Full Callgraph] ，红色地方是值得我们关注的耗时点。</div><div class="line"></div><div class="line">![分析图片](&#123;&#123; &apos;/styles/images/xhprof/xhprof2.png&apos; | prepend: site.baseurl  &#125;&#125;)</div><div class="line"></div><div class="line"></div><div class="line">xhprof 随机调用方法</div><div class="line">====================================</div><div class="line">线上代码一般有很多请求，不会每个请求都屌用一次xhprof测试性能，所以我们可以随机调用查看代码的性能如何。</div></pre></td></tr></table></figure></p>
-<p>&lt;?<br>function getXhprof($rate=1) {<br>    if (rand(1, $rate) == 1) {<br>        xhprof_enable();<br>        register_shutdown_function(‘shutdown’);<br>    }<br>}</p>
-<p>function shutdown () {<br>    $xhprof_data = xhprof_disable();<br>    $XHPROF_ROOT = realpath(dirname(<strong>FILE</strong>) .’/‘);<br>    include_once $XHPROF_ROOT . “/xhprof/xhprof_lib/utils/xhprof_lib.php”;<br>    include_once $XHPROF_ROOT . “/xhprof/xhprof_lib/utils/xhprof_runs.php”;<br>    $xhprof_runs = new XHProfRuns_Default();<br>    $run_id = $xhprof_runs-&gt;save_run($xhprof_data, “xhprof”);<br>}<br>?&gt;<br>```</p>
-
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">testXhprof</span><span class="params">()</span></span>&#123;</div><div class="line">    $ch = curl_init();</div><div class="line">    curl_setopt($ch, CURLOPT_URL, <span class="string">"http://www.baidu.com"</span>);</div><div class="line">    curl_setopt($ch, CURLOPT_HEADER, <span class="keyword">false</span>);</div><div class="line">    $result=curl_exec($ch);</div><div class="line">    curl_close($ch);</div><div class="line">&#125;</div><div class="line"></div><div class="line">xhprof_enable();</div><div class="line">testXhprof();</div><div class="line">$xhprof_data = xhprof_disable();</div><div class="line"><span class="keyword">echo</span> <span class="string">"done-----"</span>;</div><div class="line"></div><div class="line">$XHPROF_ROOT = realpath(dirname(<span class="keyword">__FILE__</span>) .<span class="string">'/'</span>);</div><div class="line"><span class="keyword">include_once</span> $XHPROF_ROOT . <span class="string">"/xhprof/xhprof_lib/utils/xhprof_lib.php"</span>;</div><div class="line"><span class="keyword">include_once</span> $XHPROF_ROOT . <span class="string">"/xhprof/xhprof_lib/utils/xhprof_runs.php"</span>;</div><div class="line">$xhprof_runs = <span class="keyword">new</span> XHProfRuns_Default();</div><div class="line">$run_id = $xhprof_runs-&gt;save_run($xhprof_data, <span class="string">"xhprof"</span>);</div><div class="line"><span class="keyword">echo</span> $run_id; <span class="comment">//输出的id</span></div><div class="line"><span class="meta">?&gt;</span></div></pre></td></tr></table></figure>
+<p>打开本地连接 则可以查看刚刚运行代码的性能如何。 <code>http://127.0.0.1/xhprof_html/index.php</code> 这里列出了需要测试性能的id，点击id则可清晰查看性能。</p>
+<p>页面看到的表格即为分析内容，提供的数据为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Calls：函数的调用次数</div><div class="line">Incl. Wall Time (microsec) ：包含内部函数花费的时间，单位微秒</div><div class="line">Excl. Wall Time (microsec)：不包含内部函数花费的时间，单位微秒及所占百分比(%)</div><div class="line"></div><div class="line">Incl.：为 Including 包含的简写</div><div class="line">Excl.：为 Excluding 不包含的简写</div><div class="line">Wall Time：挂钟时间即任务花费的时间</div></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/xhprof/xhprof1.png" alt="分析页面"></p>
+<p>也可以点击页面上面的[View Full Callgraph] ，红色地方是值得我们关注的耗时点。</p>
+        
+          <a class="article-more-a" href="/2016/12/29/2016-12-29-xhprof/#more">more >></a>
+        
       
 
       
@@ -483,6 +441,10 @@
 			 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">xhprof</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP</a>
         		</li>
       		
 		</ul>
@@ -543,50 +505,16 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="Docker是什么"><a href="#Docker是什么" class="headerlink" title="Docker是什么"></a>Docker是什么</h1><p>最近阅读了下《第一本Docker书》，学习到关于docker的一些知识。Docker是一个能够把开发的应用程序部署到容器的开源引擎；它提供了一个简单，轻量的建模方式，让我们的程序能快速，高效地开发，测试到部署，上线。每个容器具有隔离性，互不影响。<br>  Docker是cs架构，其核心组件主要有：</p>
+        <h2 id="Docker是什么"><a href="#Docker是什么" class="headerlink" title="Docker是什么"></a>Docker是什么</h2><p>最近阅读了下《第一本Docker书》，学习到关于docker的一些知识。Docker是一个能够把开发的应用程序部署到容器的开源引擎；它提供了一个简单，轻量的建模方式，让我们的程序能快速，高效地开发，测试到部署，上线。每个容器具有隔离性，互不影响。<br>  Docker是cs架构，其核心组件主要有：</p>
 <ul>
 <li>Docker 客户端和服务器: 用户主要与这两个组件交互，docker会把所有工作完成并返回结果。</li>
 <li>Docker 镜像: 是容器的“源代码”, 用户基于镜像运行自己的容器。是docker生命周期的构建阶段</li>
 <li>Registry: 保存用户构建的镜像，公共registry 为docker hub。</li>
 <li>Docker 容器: docker生命周期的启动与执行阶段。</li>
 </ul>
-<p>它基于Linux容器技术（LXC），Namespace，Cgroup，UnionFS（联合文件系统）等技术,通过这些技术拥有一些特性。</p>
-<ul>
-<li>Namespace: 每个容器都有自己单独的名字空间,通过不同的命名使文件系统隔离，互不干扰。</li>
-<li>cgroup(控制组): 为每个容器分配不同的系统资源，使资源隔离。</li>
-<li>UnionFS (联合文件系统)：是一种分层、轻量级并且高性能的文件系统，它支持对 文件系统的修改作为一次提交来一层层的叠加，同时可以将不同目录挂载到同一个虚拟文件系统下；docker使用的AUFS 就是一种UnionFS.</li>
-<li>网络隔离：每个进程容器运行在自己的网络命名空间里，拥有自己的虚拟接口和IP地址 </li>
-</ul>
-<p>有几个比较重要的概念：</p>
-<ul>
-<li>Docker image：镜像是只读的，镜像中包含有需要运行的文件。镜像用来创建container，一个镜像可以运行多个container；镜像可以通过Dockerfile创建，也可以从Docker hub/registry上下载。</li>
-<li>Docker container：容器是Docker的运行组件，启动一个镜像就是一个容器，容器是一个隔离环境，多个容器之间不会相互影响，保证容器中的程序运行在一个相对安全的环境中。</li>
-</ul>
-<p>image，container，registry之间的关系：<br><img src="!--￼6--" alt="docker"></p>
-<h1 id="Docker的使用"><a href="#Docker的使用" class="headerlink" title="Docker的使用"></a>Docker的使用</h1><p>这里是在os x系统中使用boot2docker 工具安装docker。首先docker只能在64位的cpu架构的计算机和linux3.8版本以上运行。在os x中安装boot2docker 依赖<figure class="highlight plain"><figcaption><span>```Docker 客户端```。</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">1. 安装[VirutalBox下载地址](https://www.virtualbox.org/wiki/Downloads) 和 boot2docker：```brew install boot2docker</div></pre></td></tr></table></figure></p>
-<ol>
-<li><p>在 VirtualBox 里面初始化boot2docker <figure class="highlight plain"><figcaption><span>init``` 启动boot2docker ``` boot2docker up``` 能在 VirtualBox 中看到该虚拟机变成 Running 状态;</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">3. 使用 ```sudo docker -d``` 启动docker的守护进程；用命令行进入boot2docker构建docker ```boot2docker ssh</div></pre></td></tr></table></figure></p>
-</li>
-<li><p>使用Dockerfile搭建一个redis镜像和容器为例子</p>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"># Dockerfile</div><div class="line"></div><div class="line">FROM ubuntu:14.04  # 设置基本的镜像</div><div class="line">MAINTAINER zhiquan # 用来指定维护者的姓名和联系方式</div><div class="line">RUN apt-get update # 会上面指定的镜像里执行任何命令,此处为执行apt-get update</div><div class="line">RUN apt-get -yqq install redis-server redis-tools</div><div class="line">EXPOSE 6379  # 设置一个端口在运行的镜像中暴露在外</div><div class="line">ENTRYPOINT [&quot;/usr/bin/redis-server&quot;]  # 镜像在初始化时需要执行的命令，不可被重写覆盖</div><div class="line">CMD []  # 镜像运行默认参数，可被重写覆盖</div></pre></td></tr></table></figure>
-<p>还有一个<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">构建redis 镜像</div></pre></td></tr></table></figure></p>
-<p>sudo docker build -t ck/redis .<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">启动容器</div></pre></td></tr></table></figure></p>
-<p>sudo docker run -d -p 6379 –name redis ck/redis<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">查看端口</div></pre></td></tr></table></figure></p>
-<p>sudo docker port redis 6379<br>0.0.0.0:48250<br>```</p>
-<p>在boot2docker 里安装redis-tools,使用<code>redis-cli -h 127.0.0.1 -p 48250</code> 查看redis服务器是否正常。</p>
-<h1 id="Docker的常用命令"><a href="#Docker的常用命令" class="headerlink" title="Docker的常用命令"></a>Docker的常用命令</h1><ul>
-<li>docker info: 查看当前docker信息</li>
-<li>docker images: 列出所有镜像(images) </li>
-<li>docker ps: 列出正在运行的(容器)containers </li>
-<li>docker pull ubuntu: 下载镜像 </li>
-<li>docker run -i -t ubuntu /bin/bash: 运行ubuntu镜像, -i:保证容器的STDIN开启了 -t: 分配一个伪tty中端。 –name: 重命名一个镜像。</li>
-<li>docker rmi $(docker images -q): 删除所有image</li>
-<li>docker rm $(docker ps -a -q):  删除所有已经停止的容器</li>
-<li>docker commit : 将container的变化作为一个新的镜像</li>
-</ul>
-
+        
+          <a class="article-more-a" href="/2016/12/17/2016-12-17-docker/#more">more >></a>
+        
       
 
       
@@ -599,7 +527,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">docker总结</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">docker</a>
         		</li>
       		
 		</ul>
@@ -610,6 +538,85 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2016/12/17/2016-12-17-docker/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-2016-11-17-celery" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/11/03/2016-11-17-celery/">任务调度利器－celery</a>
+    </h1>
+  
+
+
+        
+        <a href="/2016/11/03/2016-11-17-celery/" class="archive-article-date">
+  	<time datetime="2016-11-03T15:24:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-11-03</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>最近工作需要用到celery。于是在官网那边看了下<a href="http://docs.jinkan.org/docs/celery/" target="_blank" rel="external">文档</a></p>
+<p>celery是python开发的分布式任务调度利器，能非常便捷可靠地处理大量消息的分布式系统。<br>任务队列是一种机器间分发任务的机制，就好比以前的电报发送原理。<br>celery是用消息通信的，一般使用中间人(broker)在客户端和服务端之间传递消息。一般broker有几种：rabbitMQ, redis, mongodb等。</p>
+<p>特性基本有几个，其中我这边关心的是celery可以支持工作流，时间和速率的限制，计划任务。</p>
+        
+          <a class="article-more-a" href="/2016/11/03/2016-11-17-celery/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">celery</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2016/11/03/2016-11-17-celery/">展开全文 >></a>
         </p>
       
 
@@ -674,79 +681,22 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">redis</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2016/11/03/2016-11-11-redis_req_limit/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-2016-11-17-celery" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/11/03/2016-11-17-celery/">任务调度利器－celery</a>
-    </h1>
-  
-
-
-        
-        <a href="/2016/11/03/2016-11-17-celery/" class="archive-article-date">
-  	<time datetime="2016-11-03T15:24:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-11-03</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>最近工作需要用到celery。于是在官网那边看了下<a href="http://docs.jinkan.org/docs/celery/" target="_blank" rel="external">文档</a></p>
-<p>celery是python开发的分布式任务调度利器，能非常便捷可靠地处理大量消息的分布式系统。<br>任务队列是一种机器间分发任务的机制，就好比以前的电报发送原理。<br>celery是用消息通信的，一般使用中间人(broker)在客户端和服务端之间传递消息。一般broker有几种：rabbitMQ, redis, mongodb等。</p>
-<p>特性基本有几个，其中我这边关心的是celery可以支持工作流，时间和速率的限制，计划任务。</p>
-        
-          <a class="article-more-a" href="/2016/11/03/2016-11-17-celery/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016/11/03/2016-11-17-celery/">展开全文 >></a>
         </p>
       
 
@@ -811,6 +761,17 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">LNMP</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -892,6 +853,17 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">pacing</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -1045,7 +1017,23 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">docker总结</a>
+                <a href="javascript:void(0)" class="js-tag color2">pacing</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">LNMP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">redis</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">celery</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">docker</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1053,11 +1041,27 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">golang</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">AES加解密</a>
+                <a href="javascript:void(0)" class="js-tag color2">Golang</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">ssdb</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">AES</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">DES</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1065,23 +1069,31 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">验证码</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Protobuf</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Spark</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">nginx和haproxy</a>
+                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">并发简析</a>
+                <a href="javascript:void(0)" class="js-tag color3">haproxy</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">crontab python 动态生成函数</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Golang python</a>
+                <a href="javascript:void(0)" class="js-tag color3">crontab</a>
               </li>
             
             <div class="clearfix"></div>

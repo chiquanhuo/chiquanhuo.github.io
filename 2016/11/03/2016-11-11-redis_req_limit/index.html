@@ -9,13 +9,14 @@
   <title>Redis频次控制 | Forster&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="背景最近做项目需要实现一个频次控制的功能，具体要求类似是限制一个ip在1分钟内最多请求10次。使用redis来控制请求速率是比较好的方法。 官网资料官网 中提到的第一种方法： 123456789101112FUNCTION LIMIT_API_CALL(ip):    keyname = ip    current = GET(keyname)    IF current != NULL AND">
+<meta name="keywords" content="redis">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Redis频次控制">
 <meta property="og:url" content="http://yoursite.com/2016/11/03/2016-11-11-redis_req_limit/index.html">
 <meta property="og:site_name" content="Forster&#39;s Blog">
 <meta property="og:description" content="背景最近做项目需要实现一个频次控制的功能，具体要求类似是限制一个ip在1分钟内最多请求10次。使用redis来控制请求速率是比较好的方法。 官网资料官网 中提到的第一种方法： 123456789101112FUNCTION LIMIT_API_CALL(ip):    keyname = ip    current = GET(keyname)    IF current != NULL AND">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-11-01T16:12:34.514Z">
+<meta property="og:updated_time" content="2017-11-04T15:43:21.224Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis频次控制">
 <meta name="twitter:description" content="背景最近做项目需要实现一个频次控制的功能，具体要求类似是限制一个ip在1分钟内最多请求10次。使用redis来控制请求速率是比较好的方法。 官网资料官网 中提到的第一种方法： 123456789101112FUNCTION LIMIT_API_CALL(ip):    keyname = ip    current = GET(keyname)    IF current != NULL AND">
@@ -263,6 +264,17 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">redis</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -327,18 +339,18 @@
   
 <nav id="article-nav">
   
-    <a href="/2016/12/17/2016-12-17-docker/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2016/11/03/2016-11-17-celery/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          docker简介
+          任务调度利器－celery
         
       </div>
     </a>
   
   
-    <a href="/2016/11/03/2016-11-17-celery/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">任务调度利器－celery</div>
+    <a href="/2016/11/03/2016-11-03-mac-lnmp/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">mac搭建LNMP(linux+nginx+mysql+php)环境</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -506,7 +518,23 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">docker总结</a>
+                <a href="javascript:void(0)" class="js-tag color2">pacing</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">LNMP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">redis</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">celery</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">docker</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -514,11 +542,27 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">golang</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">AES加解密</a>
+                <a href="javascript:void(0)" class="js-tag color2">Golang</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">ssdb</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">AES</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">DES</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -526,23 +570,31 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">验证码</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Protobuf</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Spark</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">nginx和haproxy</a>
+                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">并发简析</a>
+                <a href="javascript:void(0)" class="js-tag color3">haproxy</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">crontab python 动态生成函数</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Golang python</a>
+                <a href="javascript:void(0)" class="js-tag color3">crontab</a>
               </li>
             
             <div class="clearfix"></div>

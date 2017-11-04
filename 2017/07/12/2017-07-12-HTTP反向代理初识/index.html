@@ -8,20 +8,20 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>HTTP反向代理初识 | Forster&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="content{:toc}  背景最近把一个服务从PHP迁移到Go版本；但是对外接口的处理依然由PHP处理，然后内部实时请求Go这个服务并获取对应的数据。此服务需要可用性非常高，必须保证数据零丢失。 一开始通过Go服务写数据，为了保证数据不丢失，打算采用redis队列来处理数据。但是存在一些问题：  服务长时间挂掉，大量数据堆积队列 并不能实时写入数据，需要根据服务的消费速度来决定写入时间；会导">
-<meta name="keywords" content="nginx和haproxy">
+  <meta name="description" content="背景最近把一个服务从PHP迁移到Go版本；但是对外接口的处理依然由PHP处理，然后内部实时请求Go这个服务并获取对应的数据。此服务需要可用性非常高，必须保证数据零丢失。 一开始通过Go服务写数据，为了保证数据不丢失，打算采用redis队列来处理数据。但是存在一些问题：  服务长时间挂掉，大量数据堆积队列 并不能实时写入数据，需要根据服务的消费速度来决定写入时间；会导致有部分数据在需要读的情况下，还">
+<meta name="keywords" content="nginx,haproxy">
 <meta property="og:type" content="article">
 <meta property="og:title" content="HTTP反向代理初识">
 <meta property="og:url" content="http://yoursite.com/2017/07/12/2017-07-12-HTTP反向代理初识/index.html">
 <meta property="og:site_name" content="Forster&#39;s Blog">
-<meta property="og:description" content="content{:toc}  背景最近把一个服务从PHP迁移到Go版本；但是对外接口的处理依然由PHP处理，然后内部实时请求Go这个服务并获取对应的数据。此服务需要可用性非常高，必须保证数据零丢失。 一开始通过Go服务写数据，为了保证数据不丢失，打算采用redis队列来处理数据。但是存在一些问题：  服务长时间挂掉，大量数据堆积队列 并不能实时写入数据，需要根据服务的消费速度来决定写入时间；会导">
+<meta property="og:description" content="背景最近把一个服务从PHP迁移到Go版本；但是对外接口的处理依然由PHP处理，然后内部实时请求Go这个服务并获取对应的数据。此服务需要可用性非常高，必须保证数据零丢失。 一开始通过Go服务写数据，为了保证数据不丢失，打算采用redis队列来处理数据。但是存在一些问题：  服务长时间挂掉，大量数据堆积队列 并不能实时写入数据，需要根据服务的消费速度来决定写入时间；会导致有部分数据在需要读的情况下，还">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/2017/07/12/2017-07-12-HTTP反向代理初识/!--￼0--">
-<meta property="og:updated_time" content="2017-07-12T13:23:55.000Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/proxy/http.png">
+<meta property="og:updated_time" content="2017-11-04T15:44:10.697Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HTTP反向代理初识">
-<meta name="twitter:description" content="content{:toc}  背景最近把一个服务从PHP迁移到Go版本；但是对外接口的处理依然由PHP处理，然后内部实时请求Go这个服务并获取对应的数据。此服务需要可用性非常高，必须保证数据零丢失。 一开始通过Go服务写数据，为了保证数据不丢失，打算采用redis队列来处理数据。但是存在一些问题：  服务长时间挂掉，大量数据堆积队列 并不能实时写入数据，需要根据服务的消费速度来决定写入时间；会导">
-<meta name="twitter:image" content="http://yoursite.com/2017/07/12/2017-07-12-HTTP反向代理初识/!--￼0--">
+<meta name="twitter:description" content="背景最近把一个服务从PHP迁移到Go版本；但是对外接口的处理依然由PHP处理，然后内部实时请求Go这个服务并获取对应的数据。此服务需要可用性非常高，必须保证数据零丢失。 一开始通过Go服务写数据，为了保证数据不丢失，打算采用redis队列来处理数据。但是存在一些问题：  服务长时间挂掉，大量数据堆积队列 并不能实时写入数据，需要根据服务的消费速度来决定写入时间；会导致有部分数据在需要读的情况下，还">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/proxy/http.png">
   
     <link rel="alternative" href="/atom.xml" title="Forster&#39;s Blog" type="application/atom+xml">
   
@@ -178,10 +178,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <ul>
-<li>content<br>{:toc}</li>
-</ul>
-<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>最近把一个服务从PHP迁移到Go版本；但是对外接口的处理依然由PHP处理，然后内部实时请求Go这个服务并获取对应的数据。此服务需要可用性非常高，必须保证数据零丢失。</p>
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>最近把一个服务从PHP迁移到Go版本；但是对外接口的处理依然由PHP处理，然后内部实时请求Go这个服务并获取对应的数据。此服务需要可用性非常高，必须保证数据零丢失。</p>
 <p>一开始通过Go服务写数据，为了保证数据不丢失，打算采用<code>redis队列</code>来处理数据。但是存在一些问题：</p>
 <ul>
 <li>服务长时间挂掉，大量数据堆积队列</li>
@@ -189,20 +186,21 @@
 <li>redis 挂掉，数据会丢失</li>
 </ul>
 <p>后续，通过查看<code>nginx</code>和<code>haproxy</code> 资料了解到HTTP反向代理方案可比较好地支持该服务的需求，带来比较高的可用性。</p>
-<h1 id="反向代理"><a href="#反向代理" class="headerlink" title="反向代理"></a>反向代理</h1><p>HTTP 反向代理：客户端向反向代理中已命名好的接口发送普通请求，在多个内网服务器环境下，反向代理将判断向哪个内网服务器转交请求，并将获得的内容返回给客户端。</p>
+<a id="more"></a>
+<h2 id="反向代理"><a href="#反向代理" class="headerlink" title="反向代理"></a>反向代理</h2><p>HTTP 反向代理：客户端向反向代理中已命名好的接口发送普通请求，在多个内网服务器环境下，反向代理将判断向哪个内网服务器转交请求，并将获得的内容返回给客户端。</p>
 <p>目前由两种通用的工具：nginx，haproxy</p>
 <p>HTTP反向代理优势：</p>
 <ul>
 <li>负载均衡</li>
 <li>可出错重试，某个内网服务器挂掉后，可把请求转移到其他服务器</li>
 </ul>
-<p><img src="!--￼0--" alt="http"></p>
+<p><img src="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/proxy/http.png" alt="http"></p>
 <p>因此暂时考虑到2个方案：</p>
 <ol>
 <li>nginx上配置端口，直接转发到每个内网服务器的端口</li>
 <li>haproxy上配置端口，直接转发到每个内网服务器的端口</li>
 </ol>
-<h1 id="nginx"><a href="#nginx" class="headerlink" title="nginx"></a>nginx</h1><p>nginx 里面有以下参数可解决上面的问题</p>
+<h2 id="nginx"><a href="#nginx" class="headerlink" title="nginx"></a>nginx</h2><p>nginx 里面有以下参数可解决上面的问题</p>
 <ul>
 <li>max_fails：允许请求失败的次数默认为1.当超过最大次数时，返回<code>proxy_next_upstream</code> 模块定义的错误</li>
 <li>fail_timeout：<code>max_fails</code>次失败后，暂停的时间</li>
@@ -215,16 +213,18 @@
 <li>weight：根据权值分配流量</li>
 <li>ip hash: 每个访问固定到一个服务器</li>
 </ol>
-<h1 id="haproxy"><a href="#haproxy" class="headerlink" title="haproxy"></a>haproxy</h1><p>haproxy 是一个简单的代理软件，稳定性好，支持负载均衡，出错重试等机制。一般使用场景是mysql集群环境。</p>
-<p>haproxy 不支持keep-alive</p>
-<p>haproxy有以下参数来支持良好的特性</p>
-<ol>
+<h2 id="haproxy"><a href="#haproxy" class="headerlink" title="haproxy"></a>haproxy</h2><ul>
+<li>haproxy 是一个简单的代理软件，稳定性好，支持负载均衡，出错重试等机制。一般使用场景是mysql集群环境。</li>
+<li>haproxy 不支持keep-alive</li>
+<li>haproxy有以下参数来支持良好的特性<ul>
 <li>retries: n次链接失败认为服务不可用</li>
 <li>mode：处理的类型，默认为<code>http</code></li>
 <li>balance：负载均衡算法</li>
-<li>server：内网服务器ip 127.0.0.1:80 weight 100 check </li>
-</ol>
-<h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><ol>
+<li>server：内网服务器ip 127.0.0.1:80 weight 100 check</li>
+</ul>
+</li>
+</ul>
+<h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><ol>
 <li>服务使用supervisor启动</li>
 <li>6台服务器重启测试<ol>
 <li>一次性重启</li>
@@ -233,12 +233,10 @@
 </li>
 </ol>
 <p>实验结果：</p>
-<ol>
-<li>方案1和方案2都会出现几个error</li>
-<li>当长时间stop的时候，haproxy 如果 <code>retries</code> 设置 3，则必有3个error</li>
-<li>nginx的处理可以动态扩容，而haproxy不可</li>
-</ol>
-
+<pre><code>1. 方案1和方案2都会出现几个error
+2. 当长时间stop的时候，haproxy 如果 `retries` 设置 3，则必有3个error
+3. nginx的处理可以动态扩容，而haproxy不可
+</code></pre>
       
 
       
@@ -272,7 +270,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">nginx和haproxy</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">nginx</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">haproxy</a>
         		</li>
       		
 		</ul>
@@ -346,7 +348,7 @@
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          golang 并发使用
+          Golang 并发使用
         
       </div>
     </a>
@@ -380,7 +382,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#反向代理"><span class="toc-number">2.</span> <span class="toc-text">反向代理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#nginx"><span class="toc-number">3.</span> <span class="toc-text">nginx</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#haproxy"><span class="toc-number">4.</span> <span class="toc-text">haproxy</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#实验"><span class="toc-number">5.</span> <span class="toc-text">实验</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#反向代理"><span class="toc-number">2.</span> <span class="toc-text">反向代理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nginx"><span class="toc-number">3.</span> <span class="toc-text">nginx</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#haproxy"><span class="toc-number">4.</span> <span class="toc-text">haproxy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实验"><span class="toc-number">5.</span> <span class="toc-text">实验</span></a></li></ol>
                     </div>
                 </span>
             </div>
@@ -521,7 +523,23 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">docker总结</a>
+                <a href="javascript:void(0)" class="js-tag color2">pacing</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">LNMP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">redis</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">celery</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">docker</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -529,11 +547,27 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">golang</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">AES加解密</a>
+                <a href="javascript:void(0)" class="js-tag color2">Golang</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">ssdb</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">AES</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">DES</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -541,23 +575,31 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">验证码</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Protobuf</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Spark</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">nginx和haproxy</a>
+                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">并发简析</a>
+                <a href="javascript:void(0)" class="js-tag color3">haproxy</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">crontab python 动态生成函数</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Golang python</a>
+                <a href="javascript:void(0)" class="js-tag color3">crontab</a>
               </li>
             
             <div class="clearfix"></div>

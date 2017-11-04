@@ -8,18 +8,18 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>Golang调用Python | Forster&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="content{:toc}  背景 Python 一个适用于机器学习的语言 Golang 一个适用于服务端开发的语言 目前在数据挖掘和建模中，使用最多的语言是Python。大数据时代，绝大部分使用Golang语言应对高并发请求的场景。在这个背景下，Golang+Python的需求应运而生。  原理 Python 提供C-API , 而Go通过cgo 与c语言交互。因此，通过Go调用libpyth">
-<meta name="keywords" content="Golang python">
+  <meta name="description" content="背景 Python 一个适用于机器学习的语言 Golang 一个适用于服务端开发的语言 目前在数据挖掘和建模中，使用最多的语言是Python。大数据时代，绝大部分使用Golang语言应对高并发请求的场景。在这个背景下，Golang+Python的需求应运而生。  原理 Python 提供C-API , 而Go通过cgo 与c语言交互。因此，通过Go调用libpython实现调用Python的功能。">
+<meta name="keywords" content="Golang,python">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Golang调用Python">
 <meta property="og:url" content="http://yoursite.com/2017/09/14/2017-09-14-golang调用python/index.html">
 <meta property="og:site_name" content="Forster&#39;s Blog">
-<meta property="og:description" content="content{:toc}  背景 Python 一个适用于机器学习的语言 Golang 一个适用于服务端开发的语言 目前在数据挖掘和建模中，使用最多的语言是Python。大数据时代，绝大部分使用Golang语言应对高并发请求的场景。在这个背景下，Golang+Python的需求应运而生。  原理 Python 提供C-API , 而Go通过cgo 与c语言交互。因此，通过Go调用libpyth">
+<meta property="og:description" content="背景 Python 一个适用于机器学习的语言 Golang 一个适用于服务端开发的语言 目前在数据挖掘和建模中，使用最多的语言是Python。大数据时代，绝大部分使用Golang语言应对高并发请求的场景。在这个背景下，Golang+Python的需求应运而生。  原理 Python 提供C-API , 而Go通过cgo 与c语言交互。因此，通过Go调用libpython实现调用Python的功能。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-09-14T03:41:37.000Z">
+<meta property="og:updated_time" content="2017-11-04T15:43:52.786Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Golang调用Python">
-<meta name="twitter:description" content="content{:toc}  背景 Python 一个适用于机器学习的语言 Golang 一个适用于服务端开发的语言 目前在数据挖掘和建模中，使用最多的语言是Python。大数据时代，绝大部分使用Golang语言应对高并发请求的场景。在这个背景下，Golang+Python的需求应运而生。  原理 Python 提供C-API , 而Go通过cgo 与c语言交互。因此，通过Go调用libpyth">
+<meta name="twitter:description" content="背景 Python 一个适用于机器学习的语言 Golang 一个适用于服务端开发的语言 目前在数据挖掘和建模中，使用最多的语言是Python。大数据时代，绝大部分使用Golang语言应对高并发请求的场景。在这个背景下，Golang+Python的需求应运而生。  原理 Python 提供C-API , 而Go通过cgo 与c语言交互。因此，通过Go调用libpython实现调用Python的功能。">
   
     <link rel="alternative" href="/atom.xml" title="Forster&#39;s Blog" type="application/atom+xml">
   
@@ -176,19 +176,17 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <ul>
-<li>content<br>{:toc}</li>
-</ul>
-<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><ul>
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><ul>
 <li>Python 一个适用于机器学习的语言</li>
 <li>Golang 一个适用于服务端开发的语言</li>
 <li>目前在数据挖掘和建模中，使用最多的语言是Python。大数据时代，绝大部分使用Golang语言应对高并发请求的场景。在这个背景下，Golang+Python的需求应运而生。</li>
 </ul>
-<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><ul>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><ul>
 <li>Python 提供<code>C-API</code> , 而Go通过<code>cgo</code> 与c语言交互。因此，通过Go调用libpython实现调用Python的功能。</li>
 <li>目前市场上使用最多的轮子是 <a href="https://github.com/sbinet/go-python" target="_blank" rel="external">sbinet/go-python</a></li>
 </ul>
-<h1 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h1><ul>
+<a id="more"></a>
+<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><ul>
 <li>首先写一个Python脚本</li>
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python</span></div><div class="line"><span class="comment"># -*- coding: utf-8 -*-</span></div><div class="line"><span class="keyword">import</span> sys</div><div class="line"><span class="keyword">import</span> json</div><div class="line">reload(sys)</div><div class="line">sys.setdefaultencoding(<span class="string">'utf-8'</span>)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">(arvg)</span>:</span></div><div class="line">  <span class="keyword">print</span> arvg</div><div class="line">  res = &#123;</div><div class="line">      <span class="string">'price'</span>: <span class="number">0.01</span>,</div><div class="line">      <span class="string">'name'</span>: <span class="string">"test"</span>,</div><div class="line">  &#125;</div><div class="line">  final = json.dumps(res)</div><div class="line">  <span class="keyword">return</span> final</div></pre></td></tr></table></figure>
@@ -244,7 +242,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Golang python</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Golang</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">python</a>
         		</li>
       		
 		</ul>
@@ -343,7 +345,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#原理"><span class="toc-number">2.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#例子"><span class="toc-number">3.</span> <span class="toc-text">例子</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原理"><span class="toc-number">2.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#例子"><span class="toc-number">3.</span> <span class="toc-text">例子</span></a></li></ol>
                     </div>
                 </span>
             </div>
@@ -484,7 +486,23 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">docker总结</a>
+                <a href="javascript:void(0)" class="js-tag color2">pacing</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">LNMP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">redis</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">celery</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">docker</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -492,11 +510,27 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">golang</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">AES加解密</a>
+                <a href="javascript:void(0)" class="js-tag color2">Golang</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">ssdb</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">AES</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">DES</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -504,23 +538,31 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">验证码</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Protobuf</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Spark</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">nginx和haproxy</a>
+                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">并发简析</a>
+                <a href="javascript:void(0)" class="js-tag color3">haproxy</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">crontab python 动态生成函数</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Golang python</a>
+                <a href="javascript:void(0)" class="js-tag color3">crontab</a>
               </li>
             
             <div class="clearfix"></div>

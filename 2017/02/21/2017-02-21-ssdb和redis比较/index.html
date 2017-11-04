@@ -6,20 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>ssdb | Forster&#39;s Blog</title>
+  <title>ssdb与redis比较 | Forster&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="content{:toc}  背景因为项目中有使用到ssdb，今天发现sentry有报连不上ssdb的错误；于是想了解下ssdb，以及对比下ssdb跟redis的区别。 ssdb 简介 首先ssdb的官网是这个 http://ssdb.io/zh_cn/ 使用google开源的leveldb引擎作为底层的存储引擎 redis是内存nosql数据库，而ssdb能将数据存储在硬盘中 ssdb和red">
-<meta name="keywords" content="golang">
+  <meta name="description" content="背景因为项目中有使用到ssdb，今天发现sentry有报连不上ssdb的错误；于是想了解下ssdb，以及对比下ssdb跟redis的区别。 ssdb 简介 首先ssdb的官网是这个 http://ssdb.io/zh_cn/ 使用google开源的leveldb引擎作为底层的存储引擎 redis是内存nosql数据库，而ssdb能将数据存储在硬盘中 ssdb和redis兼容，ssdb的数据结构与r">
+<meta name="keywords" content="Golang,ssdb">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ssdb">
+<meta property="og:title" content="ssdb与redis比较">
 <meta property="og:url" content="http://yoursite.com/2017/02/21/2017-02-21-ssdb和redis比较/index.html">
 <meta property="og:site_name" content="Forster&#39;s Blog">
-<meta property="og:description" content="content{:toc}  背景因为项目中有使用到ssdb，今天发现sentry有报连不上ssdb的错误；于是想了解下ssdb，以及对比下ssdb跟redis的区别。 ssdb 简介 首先ssdb的官网是这个 http://ssdb.io/zh_cn/ 使用google开源的leveldb引擎作为底层的存储引擎 redis是内存nosql数据库，而ssdb能将数据存储在硬盘中 ssdb和red">
+<meta property="og:description" content="背景因为项目中有使用到ssdb，今天发现sentry有报连不上ssdb的错误；于是想了解下ssdb，以及对比下ssdb跟redis的区别。 ssdb 简介 首先ssdb的官网是这个 http://ssdb.io/zh_cn/ 使用google开源的leveldb引擎作为底层的存储引擎 redis是内存nosql数据库，而ssdb能将数据存储在硬盘中 ssdb和redis兼容，ssdb的数据结构与r">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-07-12T10:14:26.000Z">
+<meta property="og:updated_time" content="2017-11-04T15:44:40.210Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ssdb">
-<meta name="twitter:description" content="content{:toc}  背景因为项目中有使用到ssdb，今天发现sentry有报连不上ssdb的错误；于是想了解下ssdb，以及对比下ssdb跟redis的区别。 ssdb 简介 首先ssdb的官网是这个 http://ssdb.io/zh_cn/ 使用google开源的leveldb引擎作为底层的存储引擎 redis是内存nosql数据库，而ssdb能将数据存储在硬盘中 ssdb和red">
+<meta name="twitter:title" content="ssdb与redis比较">
+<meta name="twitter:description" content="背景因为项目中有使用到ssdb，今天发现sentry有报连不上ssdb的错误；于是想了解下ssdb，以及对比下ssdb跟redis的区别。 ssdb 简介 首先ssdb的官网是这个 http://ssdb.io/zh_cn/ 使用google开源的leveldb引擎作为底层的存储引擎 redis是内存nosql数据库，而ssdb能将数据存储在硬盘中 ssdb和redis兼容，ssdb的数据结构与r">
   
     <link rel="alternative" href="/atom.xml" title="Forster&#39;s Blog" type="application/atom+xml">
   
@@ -162,7 +162,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      ssdb
+      ssdb与redis比较
     </h1>
   
 
@@ -176,18 +176,16 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <ul>
-<li>content<br>{:toc}</li>
-</ul>
-<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>因为项目中有使用到ssdb，今天发现sentry有报连不上ssdb的错误；于是想了解下ssdb，以及对比下ssdb跟redis的区别。</p>
-<h1 id="ssdb-简介"><a href="#ssdb-简介" class="headerlink" title="ssdb 简介"></a>ssdb 简介</h1><ul>
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>因为项目中有使用到ssdb，今天发现sentry有报连不上ssdb的错误；于是想了解下ssdb，以及对比下ssdb跟redis的区别。</p>
+<h2 id="ssdb-简介"><a href="#ssdb-简介" class="headerlink" title="ssdb 简介"></a>ssdb 简介</h2><ul>
 <li>首先ssdb的官网是这个 <a href="http://ssdb.io/zh_cn/" target="_blank" rel="external">http://ssdb.io/zh_cn/</a></li>
 <li>使用google开源的leveldb引擎作为底层的存储引擎</li>
 <li>redis是内存nosql数据库，而ssdb能将数据存储在硬盘中</li>
 <li>ssdb和redis兼容，ssdb的数据结构与redis的数据结构差不多，在改源码的基础上更换存储引擎就可以</li>
 <li>适用于写多读少的场景</li>
 </ul>
-<h1 id="ssdb-vs-redis"><a href="#ssdb-vs-redis" class="headerlink" title="ssdb vs. redis"></a>ssdb vs. redis</h1><p>ssdb 使用了自带的ssdb-bench; redis 使用了自带的redis-benchmark<br>环境都是10000 requests，50 clients。</p>
+<a id="more"></a>
+<h2 id="ssdb-vs-redis"><a href="#ssdb-vs-redis" class="headerlink" title="ssdb vs. redis"></a>ssdb vs. redis</h2><p>ssdb 使用了自带的ssdb-bench; redis 使用了自带的redis-benchmark<br>环境都是10000 requests，50 clients。</p>
 <table>
 <thead>
 <tr>
@@ -254,7 +252,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">golang</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Golang</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">ssdb</a>
         		</li>
       		
 		</ul>
@@ -328,14 +330,14 @@
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          AES
+          AES学习
         
       </div>
     </a>
   
   
     <a href="/2017/02/17/2017-02-17-redigo与redis.v5比较/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title"></div>
+      <div class="article-nav-title">redigo与redis.v5比较</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -362,7 +364,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ssdb-简介"><span class="toc-number">2.</span> <span class="toc-text">ssdb 简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ssdb-vs-redis"><span class="toc-number">3.</span> <span class="toc-text">ssdb vs. redis</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ssdb-简介"><span class="toc-number">2.</span> <span class="toc-text">ssdb 简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ssdb-vs-redis"><span class="toc-number">3.</span> <span class="toc-text">ssdb vs. redis</span></a></li></ol>
                     </div>
                 </span>
             </div>
@@ -503,7 +505,23 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">docker总结</a>
+                <a href="javascript:void(0)" class="js-tag color2">pacing</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">LNMP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">redis</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">celery</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">docker</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -511,11 +529,27 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">golang</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">AES加解密</a>
+                <a href="javascript:void(0)" class="js-tag color2">Golang</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">ssdb</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">AES</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">DES</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -523,23 +557,31 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">验证码</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Protobuf</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Spark</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">nginx和haproxy</a>
+                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">并发简析</a>
+                <a href="javascript:void(0)" class="js-tag color3">haproxy</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">crontab python 动态生成函数</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Golang python</a>
+                <a href="javascript:void(0)" class="js-tag color3">crontab</a>
               </li>
             
             <div class="clearfix"></div>
