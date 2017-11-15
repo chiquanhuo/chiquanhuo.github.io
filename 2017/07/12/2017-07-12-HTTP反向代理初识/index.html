@@ -5,14 +5,14 @@
   
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <link rel="dns-prefetch" href="http://yoursite.com">
+  <link rel="dns-prefetch" href="http://www.forster.site">
   <title>HTTP反向代理初识 | Forster&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="背景最近把一个服务从PHP迁移到Go版本；但是对外接口的处理依然由PHP处理，然后内部实时请求Go这个服务并获取对应的数据。此服务需要可用性非常高，必须保证数据零丢失。 一开始通过Go服务写数据，为了保证数据不丢失，打算采用redis队列来处理数据。但是存在一些问题：  服务长时间挂掉，大量数据堆积队列 并不能实时写入数据，需要根据服务的消费速度来决定写入时间；会导致有部分数据在需要读的情况下，还">
 <meta name="keywords" content="nginx,haproxy">
 <meta property="og:type" content="article">
 <meta property="og:title" content="HTTP反向代理初识">
-<meta property="og:url" content="http://yoursite.com/2017/07/12/2017-07-12-HTTP反向代理初识/index.html">
+<meta property="og:url" content="http://www.forster.site/2017/07/12/2017-07-12-HTTP反向代理初识/index.html">
 <meta property="og:site_name" content="Forster&#39;s Blog">
 <meta property="og:description" content="背景最近把一个服务从PHP迁移到Go版本；但是对外接口的处理依然由PHP处理，然后内部实时请求Go这个服务并获取对应的数据。此服务需要可用性非常高，必须保证数据零丢失。 一开始通过Go服务写数据，为了保证数据不丢失，打算采用redis队列来处理数据。但是存在一些问题：  服务长时间挂掉，大量数据堆积队列 并不能实时写入数据，需要根据服务的消费速度来决定写入时间；会导致有部分数据在需要读的情况下，还">
 <meta property="og:locale" content="zh-CN">
@@ -308,7 +308,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2017/07/12/2017-07-12-HTTP反向代理初识/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://www.forster.site/2017/07/12/2017-07-12-HTTP反向代理初识/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -504,7 +504,7 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">celery</a>
+                <a href="javascript:void(0)" class="js-tag color2">pacing</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -516,10 +516,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">pacing</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">xhprof</a>
               </li>
              
@@ -528,11 +524,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">golang</a>
+                <a href="javascript:void(0)" class="js-tag color2">celery</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">docker</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">golang</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -564,11 +564,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Spark</a>
+                <a href="javascript:void(0)" class="js-tag color4">Protobuf</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Protobuf</a>
+                <a href="javascript:void(0)" class="js-tag color1">Spark</a>
               </li>
              
               <li class="article-tag-list-item">

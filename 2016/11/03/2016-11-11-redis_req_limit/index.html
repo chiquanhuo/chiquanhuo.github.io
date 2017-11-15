@@ -5,14 +5,14 @@
   
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <link rel="dns-prefetch" href="http://yoursite.com">
+  <link rel="dns-prefetch" href="http://www.forster.site">
   <title>Redis频次控制 | Forster&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="背景最近做项目需要实现一个频次控制的功能，具体要求类似是限制一个ip在1分钟内最多请求10次。使用redis来控制请求速率是比较好的方法。 官网资料官网 中提到的第一种方法： 123456789101112FUNCTION LIMIT_API_CALL(ip):    keyname = ip    current = GET(keyname)    IF current != NULL AND">
 <meta name="keywords" content="redis">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Redis频次控制">
-<meta property="og:url" content="http://yoursite.com/2016/11/03/2016-11-11-redis_req_limit/index.html">
+<meta property="og:url" content="http://www.forster.site/2016/11/03/2016-11-11-redis_req_limit/index.html">
 <meta property="og:site_name" content="Forster&#39;s Blog">
 <meta property="og:description" content="背景最近做项目需要实现一个频次控制的功能，具体要求类似是限制一个ip在1分钟内最多请求10次。使用redis来控制请求速率是比较好的方法。 官网资料官网 中提到的第一种方法： 123456789101112FUNCTION LIMIT_API_CALL(ip):    keyname = ip    current = GET(keyname)    IF current != NULL AND">
 <meta property="og:locale" content="zh-CN">
@@ -303,7 +303,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2016/11/03/2016-11-11-redis_req_limit/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://www.forster.site/2016/11/03/2016-11-11-redis_req_limit/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -317,18 +317,18 @@
   
 <nav id="article-nav">
   
-    <a href="/2016/12/17/2016-12-17-docker/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2016/11/03/2016-11-17-celery/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          docker简介
+          任务调度利器－celery
         
       </div>
     </a>
   
   
-    <a href="/2016/11/03/2016-11-17-celery/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">任务调度利器－celery</div>
+    <a href="/2016/11/03/2016-11-03-mac-lnmp/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">mac搭建LNMP(linux+nginx+mysql+php)环境</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -499,7 +499,7 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">celery</a>
+                <a href="javascript:void(0)" class="js-tag color2">pacing</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -511,10 +511,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">pacing</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">xhprof</a>
               </li>
              
@@ -523,11 +519,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">golang</a>
+                <a href="javascript:void(0)" class="js-tag color2">celery</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">docker</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">golang</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -559,11 +559,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Spark</a>
+                <a href="javascript:void(0)" class="js-tag color4">Protobuf</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Protobuf</a>
+                <a href="javascript:void(0)" class="js-tag color1">Spark</a>
               </li>
              
               <li class="article-tag-list-item">
