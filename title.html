@@ -6,22 +6,25 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://www.forster.site">
-  <title>HTTP反向代理初识 | Forster&#39;s Blog</title>
+  <title>Ad-Pacing 均匀出量总结 | Forster&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="背景最近把一个服务从PHP迁移到Go版本；但是对外接口的处理依然由PHP处理，然后内部实时请求Go这个服务并获取对应的数据。此服务需要可用性非常高，必须保证数据零丢失。 一开始通过Go服务写数据，为了保证数据不丢失，打算采用redis队列来处理数据。但是存在一些问题：  服务长时间挂掉，大量数据堆积队列 并不能实时写入数据，需要根据服务的消费速度来决定写入时间；会导致有部分数据在需要读的情况下，还">
-<meta name="keywords" content="nginx,haproxy">
+  <meta name="description" content="大部分广告经常面临一个问题，广告上线后瞬间就产生大量的曝光，推广计划瞬间达到每天的下量而不得不暂停推广。最近我通过改造平台的均匀出量功能对广告曝光速度进行实时控制，进而使得广告当天的消耗曲线跟平台消耗曲线相符。​       在实现均匀出量功能时，需要考虑到的因素有广告主的广告推广日限量，前一段时段广告消耗速度，消耗量，广告推广的时间段，平台大盘流量预估等。 问题之前均匀出量的方案比较粗暴，其公式">
+<meta name="keywords" content="pacing">
 <meta property="og:type" content="article">
-<meta property="og:title" content="HTTP反向代理初识">
-<meta property="og:url" content="http://www.forster.site/2017/07/12/2017-07-12-HTTP反向代理初识/index.html">
+<meta property="og:title" content="Ad-Pacing 均匀出量总结">
+<meta property="og:url" content="http://www.forster.site/title.html">
 <meta property="og:site_name" content="Forster&#39;s Blog">
-<meta property="og:description" content="背景最近把一个服务从PHP迁移到Go版本；但是对外接口的处理依然由PHP处理，然后内部实时请求Go这个服务并获取对应的数据。此服务需要可用性非常高，必须保证数据零丢失。 一开始通过Go服务写数据，为了保证数据不丢失，打算采用redis队列来处理数据。但是存在一些问题：  服务长时间挂掉，大量数据堆积队列 并不能实时写入数据，需要根据服务的消费速度来决定写入时间；会导致有部分数据在需要读的情况下，还">
+<meta property="og:description" content="大部分广告经常面临一个问题，广告上线后瞬间就产生大量的曝光，推广计划瞬间达到每天的下量而不得不暂停推广。最近我通过改造平台的均匀出量功能对广告曝光速度进行实时控制，进而使得广告当天的消耗曲线跟平台消耗曲线相符。​       在实现均匀出量功能时，需要考虑到的因素有广告主的广告推广日限量，前一段时段广告消耗速度，消耗量，广告推广的时间段，平台大盘流量预估等。 问题之前均匀出量的方案比较粗暴，其公式">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/proxy/http.png">
-<meta property="og:updated_time" content="2017-11-04T15:44:10.697Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/adpacing/a_400.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/adpacing/b_400.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/adpacing/a_9000.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/adpacing/b_9000.png">
+<meta property="og:updated_time" content="2017-11-04T15:43:43.794Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="HTTP反向代理初识">
-<meta name="twitter:description" content="背景最近把一个服务从PHP迁移到Go版本；但是对外接口的处理依然由PHP处理，然后内部实时请求Go这个服务并获取对应的数据。此服务需要可用性非常高，必须保证数据零丢失。 一开始通过Go服务写数据，为了保证数据不丢失，打算采用redis队列来处理数据。但是存在一些问题：  服务长时间挂掉，大量数据堆积队列 并不能实时写入数据，需要根据服务的消费速度来决定写入时间；会导致有部分数据在需要读的情况下，还">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/proxy/http.png">
+<meta name="twitter:title" content="Ad-Pacing 均匀出量总结">
+<meta name="twitter:description" content="大部分广告经常面临一个问题，广告上线后瞬间就产生大量的曝光，推广计划瞬间达到每天的下量而不得不暂停推广。最近我通过改造平台的均匀出量功能对广告曝光速度进行实时控制，进而使得广告当天的消耗曲线跟平台消耗曲线相符。​       在实现均匀出量功能时，需要考虑到的因素有广告主的广告推广日限量，前一段时段广告消耗速度，消耗量，广告推广的时间段，平台大盘流量预估等。 问题之前均匀出量的方案比较粗暴，其公式">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/adpacing/a_400.png">
   
     <link rel="alternative" href="/atom.xml" title="Forster&#39;s Blog" type="application/atom+xml">
   
@@ -135,86 +138,95 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-2017-07-12-HTTP反向代理初识" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-2016-10-03-ad-pacing" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      HTTP反向代理初识
+      Ad-Pacing 均匀出量总结
     </h1>
   
 
 
         
-        <a href="/2017/07/12/2017-07-12-HTTP反向代理初识/" class="archive-article-date">
-  	<time datetime="2017-07-12T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-12</time>
+        <a href="/title.html" class="archive-article-date">
+  	<time datetime="2016-10-28T01:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-10-28</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>最近把一个服务从PHP迁移到Go版本；但是对外接口的处理依然由PHP处理，然后内部实时请求Go这个服务并获取对应的数据。此服务需要可用性非常高，必须保证数据零丢失。</p>
-<p>一开始通过Go服务写数据，为了保证数据不丢失，打算采用<code>redis队列</code>来处理数据。但是存在一些问题：</p>
+        <p>大部分广告经常面临一个问题，广告上线后瞬间就产生大量的曝光，推广计划瞬间达到每天的下量而不得不暂停推广。最近我通过改造平台的均匀出量功能对广告曝光速度进行实时控制，进而使得广告当天的消耗曲线跟平台消耗曲线相符。<br>​       在实现均匀出量功能时，需要考虑到的因素有广告主的广告推广日限量，前一段时段广告消耗速度，消耗量，广告推广的时间段，平台大盘流量预估等。</p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>之前均匀出量的方案比较粗暴，其公式是</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Q = (S + Z) / Y</div></pre></td></tr></table></figure>
 <ul>
-<li>服务长时间挂掉，大量数据堆积队列</li>
-<li>并不能实时写入数据，需要根据服务的消费速度来决定写入时间；会导致有部分数据在需要读的情况下，还没被写入</li>
-<li>redis 挂掉，数据会丢失</li>
+<li>S值为根据上一个时间段投放比例求得这个时间段计划推广量</li>
+<li>Z值为上一个时间段的余量</li>
+<li>Y值为预估的该时间段最大出量推广量</li>
+<li>Q值为用户每小时请求广告的频率</li>
 </ul>
-<p>后续，通过查看<code>nginx</code>和<code>haproxy</code> 资料了解到HTTP反向代理方案可比较好地支持该服务的需求，带来比较高的可用性。</p>
+<p>上面的公式存在比较多的问题：</p>
+<ul>
+<li><p>这几个变量都是通过配置文件固定的，导致每个同等级的广告出量的预估都一样，但是每个广告的优先级却不一样的情况下，其出量速度是不同的。举个例子，广告A和广告B的计划推广量都是200，但是广告A是游戏，广告B是应用，广告A的优先级比广告B高，正常来说用户获取这两个广告的概率一样，但是点击并安装激活广告A的概率可能比B的高，就会导致A已经放完量，B却没放完。</p>
+</li>
+<li><p>如果上一个时间段的余量全部放到下一个时间段放，下一个时间段计划放的量会有一个陡增，效果与我们的目标不符。</p>
+</li>
+<li><p>广告的消耗是指对广告主结算的量，而不是请求数，一个用户能请求到广告，就应该让用户继续完成这个广告。所以这条公式并没有直接限制广告的请求量。</p>
 <a id="more"></a>
-<h2 id="反向代理"><a href="#反向代理" class="headerlink" title="反向代理"></a>反向代理</h2><p>HTTP 反向代理：客户端向反向代理中已命名好的接口发送普通请求，在多个内网服务器环境下，反向代理将判断向哪个内网服务器转交请求，并将获得的内容返回给客户端。</p>
-<p>目前由两种通用的工具：nginx，haproxy</p>
-<p>HTTP反向代理优势：</p>
-<ul>
-<li>负载均衡</li>
-<li>可出错重试，某个内网服务器挂掉后，可把请求转移到其他服务器</li>
+</li>
 </ul>
-<p><img src="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/proxy/http.png" alt="http"></p>
-<p>因此暂时考虑到2个方案：</p>
-<ol>
-<li>nginx上配置端口，直接转发到每个内网服务器的端口</li>
-<li>haproxy上配置端口，直接转发到每个内网服务器的端口</li>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><ol>
+<li>首先统计前两天和上周同日对广告主有效的激活数(CPA)和请求数(REQ)，把这3天的数据算出平均数，得到当天的平台大盘的预估曲线；使用上周同日是防止节假日数据量的激增。</li>
+<li>把一天时间通过每5分钟分隔成288个时间段，每个用户在相应的广告激活一次则实时记录一次，记录一个广告在不同时间点激活的情况。</li>
+<li>一开始并没有考虑到广告的激活数跟请求数是不对等的；一个用户从请求一个广告到激活广告对应的应用是需要多个动作才完成，请求－&gt;展示-&gt;点击-&gt;下载-&gt;安装-&gt;激活. 所以一开始的公式如下：</li>
 </ol>
-<h2 id="nginx"><a href="#nginx" class="headerlink" title="nginx"></a>nginx</h2><p>nginx 里面有以下参数可解决上面的问题</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">F = (L - C) * P / SUMp</div></pre></td></tr></table></figure>
 <ul>
-<li>max_fails：允许请求失败的次数默认为1.当超过最大次数时，返回<code>proxy_next_upstream</code> 模块定义的错误</li>
-<li>fail_timeout：<code>max_fails</code>次失败后，暂停的时间</li>
-<li>proxy_next_upstream：出现故障时，返回的状态码</li>
-<li>proxy_next_upstream_tries: 出现故障后 重试次数</li>
+<li>L: 广告的限量</li>
+<li>C: 该广告当前时间段之前已经消耗的量</li>
+<li>P: 平台大盘这个时间段预估的激活数</li>
+<li>SUMp: 大盘剩余时间预估的激活数；前一个时间段的余量放到剩余的投放时间里面按照比例分配到各时间段投放</li>
+<li>F: 预估该时间段限制广告投放请求数</li>
 </ul>
-<p>nginx 的负载均衡常用的有3个方式</p>
 <ol>
-<li>轮询： 按时间顺序逐一分配到不同服务器</li>
-<li>weight：根据权值分配流量</li>
-<li>ip hash: 每个访问固定到一个服务器</li>
+<li>只限制激活数是不行的，因为请求数与激活数不对等，一个用户请求成功广告不应该不跟这个用户结算，因此我们只能限制请求，而每个用户当没有达到请求广告限制数前，都应该能获取到这个广告，而不是通过概率限制用户获取广告。因此把请求数与激活数的比例引入公式中</li>
 </ol>
-<h2 id="haproxy"><a href="#haproxy" class="headerlink" title="haproxy"></a>haproxy</h2><ul>
-<li>haproxy 是一个简单的代理软件，稳定性好，支持负载均衡，出错重试等机制。一般使用场景是mysql集群环境。</li>
-<li>haproxy 不支持keep-alive</li>
-<li>haproxy有以下参数来支持良好的特性<ul>
-<li>retries: n次链接失败认为服务不可用</li>
-<li>mode：处理的类型，默认为<code>http</code></li>
-<li>balance：负载均衡算法</li>
-<li>server：内网服务器ip 127.0.0.1:80 weight 100 check</li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">F = (L - C) * REQp / SUMp</div></pre></td></tr></table></figure>
+<ul>
+<li>REQp: 平台大盘这个时间段预估的请求数</li>
+</ul>
+<ol>
+<li>以上的工作看上去很不错，但是我们会发现只用以上的公式会出现以前方案存在的问题：每个同等级的广告出量的预估都一样。 因为每个广告都有自己的优先级，一个广告列表有多个广告，用户点击这些广告的概率会因为广告位置的不同而不同，或者因为兴趣不同而不同。因此这里引入一个不断变化的参数，使广告的出量自动调整。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">F = (L - C) * REQp / SUMp * \alpha</div></pre></td></tr></table></figure>
+<ul>
+<li>alpha : <ul>
+<li>每5分钟统计这个广告激活数与请求数的比例得出来，如果这个广告限制的请求数转化成实际的激活数达不到预估的激活数，则把 alpha 调高，超过预估值则调低；然后当广告的优先级上升，我们就会根据之前的优先级和现在的优先级做一个比例，使alpha调低，让广告不至于一下子飙上去，优先级下降同理。</li>
+<li>广告的限量比较少的话，我们会使 alpha 的上升调慢，例如本来根据现实数据计算到的 alpha 是10的，但是实际 alpha 就只上升5.</li>
+<li>当广告的激活数与限制请求数的比例不变，alpha值则不变</li>
 </ul>
 </li>
 </ul>
-<h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><ol>
-<li>服务使用supervisor启动</li>
-<li>6台服务器重启测试<ol>
-<li>一次性重启</li>
-<li>一台一台重启，2台间隔10s</li>
-</ol>
+<h2 id="存在问题"><a href="#存在问题" class="headerlink" title="存在问题"></a>存在问题</h2><ul>
+<li>每个时段用户数是不一样的，所以应该用户数也是需要自己调整的，但是因为成本问题，暂时先不考虑。</li>
+</ul>
+<h2 id="优化后的效果"><a href="#优化后的效果" class="headerlink" title="优化后的效果"></a>优化后的效果</h2><ul>
+<li><p>以前量少的广告一下子就能把量出完。如下图：</p>
+<p><img src="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/adpacing/a_400.png" alt="限量200的广告A"></p>
 </li>
-</ol>
-<p>实验结果：</p>
-<pre><code>1. 方案1和方案2都会出现几个error
-2. 当长时间stop的时候，haproxy 如果 `retries` 设置 3，则必有3个error
-3. nginx的处理可以动态扩容，而haproxy不可
-</code></pre>
+<li><p>量少的广告计划在一整天投放，到23点50分还有量可以出，如下图：</p>
+<p><img src="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/adpacing/b_400.png" alt="限量200的广告B"></p>
+</li>
+<li><p>量大的广告一天投放计划中，到了下午2点基本就消耗完了，如下图：</p>
+<p><img src="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/adpacing/a_9000.png" alt="限量8000的广告D"></p>
+</li>
+<li><p>量大的广告的曲线基本跟大盘数据相同<br><img src="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/adpacing/b_9000.png" alt="限量8000的广告D"></p>
+</li>
+</ul>
+
       
 
       
@@ -248,11 +260,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">nginx</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">haproxy</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">pacing</a>
         		</li>
       		
 		</ul>
@@ -308,7 +316,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://www.forster.site/2017/07/12/2017-07-12-HTTP反向代理初识/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://www.forster.site/title.html" alt="微信分享二维码">
     </div>
 </div>
 
@@ -322,20 +330,15 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/08/15/2017-08-15-golang笔记-并发/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/title.html" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          Golang 并发使用
+          mac搭建LNMP(linux+nginx+mysql+php)环境
         
       </div>
     </a>
   
-  
-    <a href="/2017/05/22/2017-05-22-初识Spark/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">初识Spark</div>
-      <i class="icon-circle-right"></i>
-    </a>
   
 </nav>
 
@@ -360,7 +363,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#反向代理"><span class="toc-number">2.</span> <span class="toc-text">反向代理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nginx"><span class="toc-number">3.</span> <span class="toc-text">nginx</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#haproxy"><span class="toc-number">4.</span> <span class="toc-text">haproxy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实验"><span class="toc-number">5.</span> <span class="toc-text">实验</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题"><span class="toc-number">1.</span> <span class="toc-text">问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解决方案"><span class="toc-number">2.</span> <span class="toc-text">解决方案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#存在问题"><span class="toc-number">3.</span> <span class="toc-text">存在问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#优化后的效果"><span class="toc-number">4.</span> <span class="toc-text">优化后的效果</span></a></li></ol>
                     </div>
                 </span>
             </div>
