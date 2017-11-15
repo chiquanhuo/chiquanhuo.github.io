@@ -6,15 +6,23 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://www.forster.site">
-  <title>Tag: redis | Forster&#39;s Blog</title>
+  <title>PHP性能测试工具－xhprof | Forster&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Forster&#39;s Blog">
-<meta property="og:url" content="http://www.forster.site/tags/redis/index.html">
+  <meta name="description" content="xhprof 介绍xhprof是一个分层PHP性能分析工具。它报告函数级别的请求次数和各种指标，包括阻塞时间，CPU时间和内存使用情况。我们可以很清晰地从xhprof得到系统中存在哪些性能消耗大的函数，以便进行优化，是测试php代码的性能的利器。 xhprof 使用Git 仓库php5 的安装 12345678910111213141516//绘图sudo apt-get install grap">
+<meta name="keywords" content="xhprof,PHP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP性能测试工具－xhprof">
+<meta property="og:url" content="http://www.forster.site/2016-12-29-xhprof.html">
 <meta property="og:site_name" content="Forster&#39;s Blog">
+<meta property="og:description" content="xhprof 介绍xhprof是一个分层PHP性能分析工具。它报告函数级别的请求次数和各种指标，包括阻塞时间，CPU时间和内存使用情况。我们可以很清晰地从xhprof得到系统中存在哪些性能消耗大的函数，以便进行优化，是测试php代码的性能的利器。 xhprof 使用Git 仓库php5 的安装 12345678910111213141516//绘图sudo apt-get install grap">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/xhprof/xhprof1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/xhprof/xhprof2.png">
+<meta property="og:updated_time" content="2017-11-04T15:45:09.150Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Forster&#39;s Blog">
+<meta name="twitter:title" content="PHP性能测试工具－xhprof">
+<meta name="twitter:description" content="xhprof 介绍xhprof是一个分层PHP性能分析工具。它报告函数级别的请求次数和各种指标，包括阻塞时间，CPU时间和内存使用情况。我们可以很清晰地从xhprof得到系统中存在哪些性能消耗大的函数，以便进行优化，是测试php代码的性能的利器。 xhprof 使用Git 仓库php5 的安装 12345678910111213141516//绘图sudo apt-get install grap">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/xhprof/xhprof1.png">
   
     <link rel="alternative" href="/atom.xml" title="Forster&#39;s Blog" type="application/atom+xml">
   
@@ -128,114 +136,216 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-2016-12-29-xhprof" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017-02-17-redigo与redis.v5比较.html" class="archive-article-date">
-  	<time datetime="2017-02-17T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-02-17</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017-02-17-redigo与redis.v5比较.html">redigo与redis.v5比较</a>
+    <h1 class="article-title" itemprop="name">
+      PHP性能测试工具－xhprof
     </h1>
   
 
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2016-12-29-xhprof.html" class="archive-article-date">
+  	<time datetime="2016-12-29T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-29</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="xhprof-介绍"><a href="#xhprof-介绍" class="headerlink" title="xhprof 介绍"></a>xhprof 介绍</h2><p>xhprof是一个分层PHP性能分析工具。它报告函数级别的请求次数和各种指标，包括阻塞时间，CPU时间和内存使用情况。我们可以很清晰地从xhprof得到系统中存在哪些性能消耗大的函数，以便进行优化，是测试php代码的性能的利器。</p>
+<h2 id="xhprof-使用"><a href="#xhprof-使用" class="headerlink" title="xhprof 使用"></a>xhprof 使用</h2><p><a href="https://github.com/phacility/xhprof" target="_blank" rel="external">Git 仓库</a><br>php5 的安装</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">//绘图</div><div class="line">sudo apt-get install graphviz </div><div class="line"></div><div class="line">git <span class="built_in">clone</span> https://github.com/phacility/xhprof.git</div><div class="line"></div><div class="line"><span class="built_in">cd</span> xhprof/extension</div><div class="line">phpize</div><div class="line">./configure</div><div class="line">make &amp;&amp; sudo make install</div><div class="line"></div><div class="line">//编辑 /etc/php5/fpm/conf.d/xhprof.ini</div><div class="line">extension=xhprof.so</div><div class="line">xhprof.output_dir=/tmp</div><div class="line"></div><div class="line">//重启php-fpm</div><div class="line">sudo service php5-fpm restart</div></pre></td></tr></table></figure>
+<p>php7 的安装</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">//绘图</div><div class="line">sudo apt-get install graphviz </div><div class="line"></div><div class="line">git <span class="built_in">clone</span> https://github.com/longxinH/xhprof</div><div class="line"></div><div class="line"><span class="built_in">cd</span> xhprof/extension</div><div class="line">/usr/bin/phpize7.0</div><div class="line">./configure --with-php-config=/usr/bin/php-config7.0</div><div class="line">make &amp;&amp; sudo make install</div><div class="line"></div><div class="line">//编辑 /etc/php/7.0/fpm/conf.d/xhprof.ini</div><div class="line">extension=xhprof.so</div><div class="line">xhprof.output_dir=/tmp</div><div class="line"></div><div class="line">//重启php-fpm</div><div class="line">sudo service php7.0-fpm restart</div></pre></td></tr></table></figure>
+<p>使用</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">testXhprof</span><span class="params">()</span></span>&#123;</div><div class="line">    $ch = curl_init();</div><div class="line">    curl_setopt($ch, CURLOPT_URL, <span class="string">"http://www.baidu.com"</span>);</div><div class="line">    curl_setopt($ch, CURLOPT_HEADER, <span class="keyword">false</span>);</div><div class="line">    $result=curl_exec($ch);</div><div class="line">    curl_close($ch);</div><div class="line">&#125;</div><div class="line"></div><div class="line">xhprof_enable();</div><div class="line">testXhprof();</div><div class="line">$xhprof_data = xhprof_disable();</div><div class="line"><span class="keyword">echo</span> <span class="string">"done-----"</span>;</div><div class="line"></div><div class="line">$XHPROF_ROOT = realpath(dirname(<span class="keyword">__FILE__</span>) .<span class="string">'/'</span>);</div><div class="line"><span class="keyword">include_once</span> $XHPROF_ROOT . <span class="string">"/xhprof/xhprof_lib/utils/xhprof_lib.php"</span>;</div><div class="line"><span class="keyword">include_once</span> $XHPROF_ROOT . <span class="string">"/xhprof/xhprof_lib/utils/xhprof_runs.php"</span>;</div><div class="line">$xhprof_runs = <span class="keyword">new</span> XHProfRuns_Default();</div><div class="line">$run_id = $xhprof_runs-&gt;save_run($xhprof_data, <span class="string">"xhprof"</span>);</div><div class="line"><span class="keyword">echo</span> $run_id; <span class="comment">//输出的id</span></div><div class="line"><span class="meta">?&gt;</span></div></pre></td></tr></table></figure>
+<p>打开本地连接 则可以查看刚刚运行代码的性能如何。 <code>http://127.0.0.1/xhprof_html/index.php</code> 这里列出了需要测试性能的id，点击id则可清晰查看性能。</p>
+<p>页面看到的表格即为分析内容，提供的数据为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Calls：函数的调用次数</div><div class="line">Incl. Wall Time (microsec) ：包含内部函数花费的时间，单位微秒</div><div class="line">Excl. Wall Time (microsec)：不包含内部函数花费的时间，单位微秒及所占百分比(%)</div><div class="line"></div><div class="line">Incl.：为 Including 包含的简写</div><div class="line">Excl.：为 Excluding 不包含的简写</div><div class="line">Wall Time：挂钟时间即任务花费的时间</div></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/xhprof/xhprof1.png" alt="分析页面"></p>
+<p>也可以点击页面上面的[View Full Callgraph] ，红色地方是值得我们关注的耗时点。</p>
+<a id="more"></a>
+<p><img src="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/xhprof/xhprof2.png" alt="分析图片"></p>
+<h2 id="xhprof-随机调用方法"><a href="#xhprof-随机调用方法" class="headerlink" title="xhprof 随机调用方法"></a>xhprof 随机调用方法</h2><p>线上代码一般有很多请求，不会每个请求都屌用一次xhprof测试性能，所以我们可以随机调用查看代码的性能如何。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getXhprof</span><span class="params">($rate=<span class="number">1</span>)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (rand(<span class="number">1</span>, $rate) == <span class="number">1</span>) &#123;</div><div class="line">        xhprof_enable();</div><div class="line">        register_shutdown_function(<span class="string">'shutdown'</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">shutdown</span> <span class="params">()</span> </span>&#123;</div><div class="line">    $xhprof_data = xhprof_disable();</div><div class="line">    $XHPROF_ROOT = realpath(dirname(<span class="keyword">__FILE__</span>) .<span class="string">'/'</span>);</div><div class="line">    <span class="keyword">include_once</span> $XHPROF_ROOT . <span class="string">"/xhprof/xhprof_lib/utils/xhprof_lib.php"</span>;</div><div class="line">    <span class="keyword">include_once</span> $XHPROF_ROOT . <span class="string">"/xhprof/xhprof_lib/utils/xhprof_runs.php"</span>;</div><div class="line">    $xhprof_runs = <span class="keyword">new</span> XHProfRuns_Default();</div><div class="line">    $run_id = $xhprof_runs-&gt;save_run($xhprof_data, <span class="string">"xhprof"</span>);</div><div class="line">&#125;</div><div class="line"><span class="meta">?&gt;</span></div></pre></td></tr></table></figure>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>今晚加鸡腿<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">redis</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">xhprof</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">golang</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://www.forster.site/2016-12-29-xhprof.html" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-      
-        </div></section>
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
+<nav id="article-nav">
+  
+    <a href="/2017-01-14-golang改造.html" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Golang改造
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016-12-17-docker.html" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">docker简介</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016-11-11-redis_req_limit.html" class="archive-article-date">
-  	<time datetime="2016-11-03T15:24:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-11-03</time>
-</a>
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#xhprof-介绍"><span class="toc-number">1.</span> <span class="toc-text">xhprof 介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#xhprof-使用"><span class="toc-number">2.</span> <span class="toc-text">xhprof 使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#xhprof-随机调用方法"><span class="toc-number">3.</span> <span class="toc-text">xhprof 随机调用方法</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016-11-11-redis_req_limit.html">Redis频次控制</a>
-    </h1>
-  
+        
+    </div>
+</aside>
 
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">redis</a>
-        		</li>
-      		
-		</ul>
-	</div>
 
-          
+  
+  <!-- UY BEGIN -->
+<div id="uyan_frame" ></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2147812"></script>
+<!-- UY END -->
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
   
-    </div></section>
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -261,9 +371,9 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,

@@ -6,25 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://www.forster.site">
-  <title>Ad-Pacing 均匀出量总结 | Forster&#39;s Blog</title>
+  <title>AES学习 | Forster&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="大部分广告经常面临一个问题，广告上线后瞬间就产生大量的曝光，推广计划瞬间达到每天的下量而不得不暂停推广。最近我通过改造平台的均匀出量功能对广告曝光速度进行实时控制，进而使得广告当天的消耗曲线跟平台消耗曲线相符。​       在实现均匀出量功能时，需要考虑到的因素有广告主的广告推广日限量，前一段时段广告消耗速度，消耗量，广告推广的时间段，平台大盘流量预估等。 问题之前均匀出量的方案比较粗暴，其公式">
-<meta name="keywords" content="pacing">
+  <meta name="description" content="DES/3DES/AESDES/3DES/AES 都是对称加密算法。  DES:   目前的数据加密标准，适用于适用于加密大量数据的场合. 密钥为64位. DES加密过程为：C=Ek1(P)   3DES:   是基于DES，对一块数据用三个不同的密钥进行三次加密，强度更高。 密钥为3*64位 3DES加密过程为：C=Ek3(Dk2(Ek1(P)))   AES(Advanced Encrypti">
+<meta name="keywords" content="AES,DES">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Ad-Pacing 均匀出量总结">
-<meta property="og:url" content="http://www.forster.site/title.html">
+<meta property="og:title" content="AES学习">
+<meta property="og:url" content="http://www.forster.site/2017-03-13-AES学习.html">
 <meta property="og:site_name" content="Forster&#39;s Blog">
-<meta property="og:description" content="大部分广告经常面临一个问题，广告上线后瞬间就产生大量的曝光，推广计划瞬间达到每天的下量而不得不暂停推广。最近我通过改造平台的均匀出量功能对广告曝光速度进行实时控制，进而使得广告当天的消耗曲线跟平台消耗曲线相符。​       在实现均匀出量功能时，需要考虑到的因素有广告主的广告推广日限量，前一段时段广告消耗速度，消耗量，广告推广的时间段，平台大盘流量预估等。 问题之前均匀出量的方案比较粗暴，其公式">
+<meta property="og:description" content="DES/3DES/AESDES/3DES/AES 都是对称加密算法。  DES:   目前的数据加密标准，适用于适用于加密大量数据的场合. 密钥为64位. DES加密过程为：C=Ek1(P)   3DES:   是基于DES，对一块数据用三个不同的密钥进行三次加密，强度更高。 密钥为3*64位 3DES加密过程为：C=Ek3(Dk2(Ek1(P)))   AES(Advanced Encrypti">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/adpacing/a_400.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/adpacing/b_400.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/adpacing/a_9000.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/adpacing/b_9000.png">
-<meta property="og:updated_time" content="2017-11-04T15:43:43.794Z">
+<meta property="og:updated_time" content="2017-11-04T15:44:34.490Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Ad-Pacing 均匀出量总结">
-<meta name="twitter:description" content="大部分广告经常面临一个问题，广告上线后瞬间就产生大量的曝光，推广计划瞬间达到每天的下量而不得不暂停推广。最近我通过改造平台的均匀出量功能对广告曝光速度进行实时控制，进而使得广告当天的消耗曲线跟平台消耗曲线相符。​       在实现均匀出量功能时，需要考虑到的因素有广告主的广告推广日限量，前一段时段广告消耗速度，消耗量，广告推广的时间段，平台大盘流量预估等。 问题之前均匀出量的方案比较粗暴，其公式">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/adpacing/a_400.png">
+<meta name="twitter:title" content="AES学习">
+<meta name="twitter:description" content="DES/3DES/AESDES/3DES/AES 都是对称加密算法。  DES:   目前的数据加密标准，适用于适用于加密大量数据的场合. 密钥为64位. DES加密过程为：C=Ek1(P)   3DES:   是基于DES，对一块数据用三个不同的密钥进行三次加密，强度更高。 密钥为3*64位 3DES加密过程为：C=Ek3(Dk2(Ek1(P)))   AES(Advanced Encrypti">
   
     <link rel="alternative" href="/atom.xml" title="Forster&#39;s Blog" type="application/atom+xml">
   
@@ -138,94 +133,87 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-2016-10-03-ad-pacing" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-2017-03-13-AES学习" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Ad-Pacing 均匀出量总结
+      AES学习
     </h1>
   
 
 
         
-        <a href="/title.html" class="archive-article-date">
-  	<time datetime="2016-10-28T01:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-10-28</time>
+        <a href="/2017-03-13-AES学习.html" class="archive-article-date">
+  	<time datetime="2017-03-13T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-13</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>大部分广告经常面临一个问题，广告上线后瞬间就产生大量的曝光，推广计划瞬间达到每天的下量而不得不暂停推广。最近我通过改造平台的均匀出量功能对广告曝光速度进行实时控制，进而使得广告当天的消耗曲线跟平台消耗曲线相符。<br>​       在实现均匀出量功能时，需要考虑到的因素有广告主的广告推广日限量，前一段时段广告消耗速度，消耗量，广告推广的时间段，平台大盘流量预估等。</p>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>之前均匀出量的方案比较粗暴，其公式是</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Q = (S + Z) / Y</div></pre></td></tr></table></figure>
+        <h2 id="DES-3DES-AES"><a href="#DES-3DES-AES" class="headerlink" title="DES/3DES/AES"></a>DES/3DES/AES</h2><p>DES/3DES/AES 都是对称加密算法。</p>
 <ul>
-<li>S值为根据上一个时间段投放比例求得这个时间段计划推广量</li>
-<li>Z值为上一个时间段的余量</li>
-<li>Y值为预估的该时间段最大出量推广量</li>
-<li>Q值为用户每小时请求广告的频率</li>
+<li><p>DES: </p>
+<ul>
+<li>目前的数据加密标准，适用于适用于加密大量数据的场合.</li>
+<li>密钥为64位.</li>
+<li>DES加密过程为：C=Ek1(P)</li>
 </ul>
-<p>上面的公式存在比较多的问题：</p>
+</li>
+<li><p>3DES: </p>
 <ul>
-<li><p>这几个变量都是通过配置文件固定的，导致每个同等级的广告出量的预估都一样，但是每个广告的优先级却不一样的情况下，其出量速度是不同的。举个例子，广告A和广告B的计划推广量都是200，但是广告A是游戏，广告B是应用，广告A的优先级比广告B高，正常来说用户获取这两个广告的概率一样，但是点击并安装激活广告A的概率可能比B的高，就会导致A已经放完量，B却没放完。</p>
+<li>是基于DES，对一块数据用三个不同的密钥进行三次加密，强度更高。</li>
+<li>密钥为3*64位</li>
+<li>3DES加密过程为：C=Ek3(Dk2(Ek1(P)))</li>
+</ul>
 </li>
-<li><p>如果上一个时间段的余量全部放到下一个时间段放，下一个时间段计划放的量会有一个陡增，效果与我们的目标不符。</p>
+<li><p>AES(Advanced Encryption Standard):</p>
+<ul>
+<li>高级加密标准，是下一代的加密算法标准，速度快，安全级别高.</li>
+<li>密钥支持128，192 和 256位,并且用128位（16字节）分组加密和解密数据。(迭代，对称密钥分组的密码)</li>
+<li>加密过程使用了 SubBytes（字节替代）、ShiftRows（行移位）、MixColumns（列混淆）、AddRoundKey(轮密钥加)。</li>
+</ul>
 </li>
-<li><p>广告的消耗是指对广告主结算的量，而不是请求数，一个用户能请求到广告，就应该让用户继续完成这个广告。所以这条公式并没有直接限制广告的请求量。</p>
+</ul>
 <a id="more"></a>
-</li>
-</ul>
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><ol>
-<li>首先统计前两天和上周同日对广告主有效的激活数(CPA)和请求数(REQ)，把这3天的数据算出平均数，得到当天的平台大盘的预估曲线；使用上周同日是防止节假日数据量的激增。</li>
-<li>把一天时间通过每5分钟分隔成288个时间段，每个用户在相应的广告激活一次则实时记录一次，记录一个广告在不同时间点激活的情况。</li>
-<li>一开始并没有考虑到广告的激活数跟请求数是不对等的；一个用户从请求一个广告到激活广告对应的应用是需要多个动作才完成，请求－&gt;展示-&gt;点击-&gt;下载-&gt;安装-&gt;激活. 所以一开始的公式如下：</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">F = (L - C) * P / SUMp</div></pre></td></tr></table></figure>
+<h2 id="AES-工作模式"><a href="#AES-工作模式" class="headerlink" title="AES 工作模式"></a>AES 工作模式</h2><p>AES共有ECB、CBC、CFB、OFB、CTR五种模式.</p>
 <ul>
-<li>L: 广告的限量</li>
-<li>C: 该广告当前时间段之前已经消耗的量</li>
-<li>P: 平台大盘这个时间段预估的激活数</li>
-<li>SUMp: 大盘剩余时间预估的激活数；前一个时间段的余量放到剩余的投放时间里面按照比例分配到各时间段投放</li>
-<li>F: 预估该时间段限制广告投放请求数</li>
+<li>ECB: <ul>
+<li>将整个明文分成若干段相同的小段，然后对每一小段进行加密.</li>
+<li>优点：简单快速，利于并行加解密</li>
+<li>缺点：同明文输出同密文，可能导致明文攻击。</li>
 </ul>
-<ol>
-<li>只限制激活数是不行的，因为请求数与激活数不对等，一个用户请求成功广告不应该不跟这个用户结算，因此我们只能限制请求，而每个用户当没有达到请求广告限制数前，都应该能获取到这个广告，而不是通过概率限制用户获取广告。因此把请求数与激活数的比例引入公式中</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">F = (L - C) * REQp / SUMp</div></pre></td></tr></table></figure>
-<ul>
-<li>REQp: 平台大盘这个时间段预估的请求数</li>
+</li>
+<li>CBC:<ul>
+<li>将明文切分成若干小段，每一小段与初始块或者上一段的密文段进行异或运算后，再与密钥进行加密。</li>
+<li>优点：相同明文不同密文，不会明文攻击</li>
+<li>缺点：一个明文错误影响多个结果。</li>
 </ul>
-<ol>
-<li>以上的工作看上去很不错，但是我们会发现只用以上的公式会出现以前方案存在的问题：每个同等级的广告出量的预估都一样。 因为每个广告都有自己的优先级，一个广告列表有多个广告，用户点击这些广告的概率会因为广告位置的不同而不同，或者因为兴趣不同而不同。因此这里引入一个不断变化的参数，使广告的出量自动调整。</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">F = (L - C) * REQp / SUMp * \alpha</div></pre></td></tr></table></figure>
-<ul>
-<li>alpha : <ul>
-<li>每5分钟统计这个广告激活数与请求数的比例得出来，如果这个广告限制的请求数转化成实际的激活数达不到预估的激活数，则把 alpha 调高，超过预估值则调低；然后当广告的优先级上升，我们就会根据之前的优先级和现在的优先级做一个比例，使alpha调低，让广告不至于一下子飙上去，优先级下降同理。</li>
-<li>广告的限量比较少的话，我们会使 alpha 的上升调慢，例如本来根据现实数据计算到的 alpha 是10的，但是实际 alpha 就只上升5.</li>
-<li>当广告的激活数与限制请求数的比例不变，alpha值则不变</li>
+</li>
+<li>CFB:<ul>
+<li>能够将块密文转换为流密文,同一明文不同密文</li>
+<li>优点：流密文 安全性高</li>
+<li>缺点：串行运算，一个明文错误影响多个结果。</li>
+</ul>
+</li>
+<li>OFB:<ul>
+<li>与CFB类似，初始块加密后的高n位作为下一次加解密的后补位</li>
+<li>优点：流密文 安全性高</li>
+<li>缺点：串行运算，一个明文错误影响多个结果。</li>
+</ul>
+</li>
+<li>CTR:<ul>
+<li>用密钥对输入的计数器加密，然后同明文异或得到密文。</li>
+<li>优点：采用了流密钥方式加解密，适合于并行运算</li>
+<li>缺点：明文攻击</li>
 </ul>
 </li>
 </ul>
-<h2 id="存在问题"><a href="#存在问题" class="headerlink" title="存在问题"></a>存在问题</h2><ul>
-<li>每个时段用户数是不一样的，所以应该用户数也是需要自己调整的，但是因为成本问题，暂时先不考虑。</li>
-</ul>
-<h2 id="优化后的效果"><a href="#优化后的效果" class="headerlink" title="优化后的效果"></a>优化后的效果</h2><ul>
-<li><p>以前量少的广告一下子就能把量出完。如下图：</p>
-<p><img src="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/adpacing/a_400.png" alt="限量200的广告A"></p>
-</li>
-<li><p>量少的广告计划在一整天投放，到23点50分还有量可以出，如下图：</p>
-<p><img src="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/adpacing/b_400.png" alt="限量200的广告B"></p>
-</li>
-<li><p>量大的广告一天投放计划中，到了下午2点基本就消耗完了，如下图：</p>
-<p><img src="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/adpacing/a_9000.png" alt="限量8000的广告D"></p>
-</li>
-<li><p>量大的广告的曲线基本跟大盘数据相同<br><img src="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/adpacing/b_9000.png" alt="限量8000的广告D"></p>
-</li>
-</ul>
+<h2 id="php调用AES-ECB-pkcs5padding"><a href="#php调用AES-ECB-pkcs5padding" class="headerlink" title="php调用AES/ECB/pkcs5padding"></a>php调用AES/ECB/pkcs5padding</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 加密</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">aesEcb128Encrypt</span><span class="params">($input, $key)</span> </span>&#123;</div><div class="line">    $size = mcrypt_get_block_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_ECB);</div><div class="line">    $input = pkcs5Pad($input, $size);</div><div class="line"></div><div class="line">    $td = mcrypt_module_open(MCRYPT_RIJNDAEL_128, <span class="string">''</span>, MCRYPT_MODE_ECB, <span class="string">''</span>);</div><div class="line">    $iv = mcrypt_create_iv (mcrypt_enc_get_iv_size($td), MCRYPT_RAND);</div><div class="line">    mcrypt_generic_init($td, $key, $iv);</div><div class="line">    $data = mcrypt_generic($td, $input);</div><div class="line">    mcrypt_generic_deinit($td);</div><div class="line">    mcrypt_module_close($td);</div><div class="line">    $data = base64_encode($data);</div><div class="line">    <span class="keyword">return</span> $data;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">pkcs5Pad</span> <span class="params">($text, $blocksize)</span> </span>&#123;</div><div class="line">    $pad = $blocksize - (strlen($text) % $blocksize);</div><div class="line">    <span class="keyword">return</span> $text . str_repeat(chr($pad), $pad);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">pkcs5Unpad</span><span class="params">($text)</span> </span>&#123;</div><div class="line">    $pad = ord($text&#123;strlen($text)<span class="number">-1</span>&#125;);</div><div class="line">    <span class="keyword">if</span> ($pad &gt; strlen($text)) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (strspn($text, chr($pad), strlen($text) - $pad) != $pad) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> substr($text, <span class="number">0</span>, <span class="number">-1</span> * $pad);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 解密</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">aesEcb128Decrypt</span><span class="params">($str, $key)</span> </span>&#123;</div><div class="line">    $decrypted = mcrypt_decrypt(</div><div class="line">        MCRYPT_RIJNDAEL_128,</div><div class="line">        $key,</div><div class="line">        base64_decode($str),</div><div class="line">        MCRYPT_MODE_ECB</div><div class="line">    );</div><div class="line">    <span class="keyword">return</span> pkcs5Unpad($decrypted);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="python调用AES-ECB-pkcs5padding"><a href="#python调用AES-ECB-pkcs5padding" class="headerlink" title="python调用AES/ECB/pkcs5padding"></a>python调用AES/ECB/pkcs5padding</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># -*- coding=utf-8-*-</span></div><div class="line"></div><div class="line"><span class="keyword">from</span> Crypto.Cipher <span class="keyword">import</span> AES</div><div class="line"><span class="keyword">import</span> base64</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">encrypt</span><span class="params">(data, key)</span>:</span></div><div class="line">    cipher = AES.new(key, AES.MODE_ECB)</div><div class="line">    x = AES.block_size - (len(data) % AES.block_size)</div><div class="line">    <span class="keyword">if</span> x != <span class="number">0</span>:</div><div class="line">        data = data + chr(x)*x</div><div class="line">        msg = cipher.encrypt(data)</div><div class="line">        msg = base64.b64encode(msg)</div><div class="line">    <span class="keyword">return</span> msg</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">decrypt</span><span class="params">(data, key)</span>:</span></div><div class="line">    cipher = AES.new(key, AES.MODE_ECB)</div><div class="line">    decryptByts = base64.b64decode(data)</div><div class="line">    msg = cipher.decrypt(decryptByts)</div><div class="line">    paddingLen = ord(msg[len(msg)<span class="number">-1</span>])</div><div class="line">    <span class="keyword">return</span> msg[<span class="number">0</span>:-paddingLen]</div></pre></td></tr></table></figure>
 
       
 
@@ -260,7 +248,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">pacing</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">AES</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">DES</a>
         		</li>
       		
 		</ul>
@@ -316,7 +308,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://www.forster.site/title.html" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://www.forster.site/2017-03-13-AES学习.html" alt="微信分享二维码">
     </div>
 </div>
 
@@ -330,15 +322,20 @@
   
 <nav id="article-nav">
   
-    <a href="/title.html" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2017-03-15-tornado与gevent.html" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          mac搭建LNMP(linux+nginx+mysql+php)环境
+          tornado与gevent
         
       </div>
     </a>
   
+  
+    <a href="/2017-02-21-ssdb和redis比较.html" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">ssdb与redis比较</div>
+      <i class="icon-circle-right"></i>
+    </a>
   
 </nav>
 
@@ -363,7 +360,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题"><span class="toc-number">1.</span> <span class="toc-text">问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解决方案"><span class="toc-number">2.</span> <span class="toc-text">解决方案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#存在问题"><span class="toc-number">3.</span> <span class="toc-text">存在问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#优化后的效果"><span class="toc-number">4.</span> <span class="toc-text">优化后的效果</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#DES-3DES-AES"><span class="toc-number">1.</span> <span class="toc-text">DES/3DES/AES</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AES-工作模式"><span class="toc-number">2.</span> <span class="toc-text">AES 工作模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#php调用AES-ECB-pkcs5padding"><span class="toc-number">3.</span> <span class="toc-text">php调用AES/ECB/pkcs5padding</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#python调用AES-ECB-pkcs5padding"><span class="toc-number">4.</span> <span class="toc-text">python调用AES/ECB/pkcs5padding</span></a></li></ol>
                     </div>
                 </span>
             </div>

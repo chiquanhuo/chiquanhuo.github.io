@@ -6,15 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://www.forster.site">
-  <title>Tag: redis | Forster&#39;s Blog</title>
+  <title>HTTP反向代理初识 | Forster&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Forster&#39;s Blog">
-<meta property="og:url" content="http://www.forster.site/tags/redis/index.html">
+  <meta name="description" content="背景最近把一个服务从PHP迁移到Go版本；但是对外接口的处理依然由PHP处理，然后内部实时请求Go这个服务并获取对应的数据。此服务需要可用性非常高，必须保证数据零丢失。 一开始通过Go服务写数据，为了保证数据不丢失，打算采用redis队列来处理数据。但是存在一些问题：  服务长时间挂掉，大量数据堆积队列 并不能实时写入数据，需要根据服务的消费速度来决定写入时间；会导致有部分数据在需要读的情况下，还">
+<meta name="keywords" content="nginx,haproxy">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTTP反向代理初识">
+<meta property="og:url" content="http://www.forster.site/2017-07-12-HTTP反向代理初识.html">
 <meta property="og:site_name" content="Forster&#39;s Blog">
+<meta property="og:description" content="背景最近把一个服务从PHP迁移到Go版本；但是对外接口的处理依然由PHP处理，然后内部实时请求Go这个服务并获取对应的数据。此服务需要可用性非常高，必须保证数据零丢失。 一开始通过Go服务写数据，为了保证数据不丢失，打算采用redis队列来处理数据。但是存在一些问题：  服务长时间挂掉，大量数据堆积队列 并不能实时写入数据，需要根据服务的消费速度来决定写入时间；会导致有部分数据在需要读的情况下，还">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/proxy/http.png">
+<meta property="og:updated_time" content="2017-11-04T15:44:10.697Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Forster&#39;s Blog">
+<meta name="twitter:title" content="HTTP反向代理初识">
+<meta name="twitter:description" content="背景最近把一个服务从PHP迁移到Go版本；但是对外接口的处理依然由PHP处理，然后内部实时请求Go这个服务并获取对应的数据。此服务需要可用性非常高，必须保证数据零丢失。 一开始通过Go服务写数据，为了保证数据不丢失，打算采用redis队列来处理数据。但是存在一些问题：  服务长时间挂掉，大量数据堆积队列 并不能实时写入数据，需要根据服务的消费速度来决定写入时间；会导致有部分数据在需要读的情况下，还">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/proxy/http.png">
   
     <link rel="alternative" href="/atom.xml" title="Forster&#39;s Blog" type="application/atom+xml">
   
@@ -128,114 +135,258 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-2017-07-12-HTTP反向代理初识" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017-02-17-redigo与redis.v5比较.html" class="archive-article-date">
-  	<time datetime="2017-02-17T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-02-17</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017-02-17-redigo与redis.v5比较.html">redigo与redis.v5比较</a>
+    <h1 class="article-title" itemprop="name">
+      HTTP反向代理初识
     </h1>
   
 
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2017-07-12-HTTP反向代理初识.html" class="archive-article-date">
+  	<time datetime="2017-07-12T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-12</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>最近把一个服务从PHP迁移到Go版本；但是对外接口的处理依然由PHP处理，然后内部实时请求Go这个服务并获取对应的数据。此服务需要可用性非常高，必须保证数据零丢失。</p>
+<p>一开始通过Go服务写数据，为了保证数据不丢失，打算采用<code>redis队列</code>来处理数据。但是存在一些问题：</p>
+<ul>
+<li>服务长时间挂掉，大量数据堆积队列</li>
+<li>并不能实时写入数据，需要根据服务的消费速度来决定写入时间；会导致有部分数据在需要读的情况下，还没被写入</li>
+<li>redis 挂掉，数据会丢失</li>
+</ul>
+<p>后续，通过查看<code>nginx</code>和<code>haproxy</code> 资料了解到HTTP反向代理方案可比较好地支持该服务的需求，带来比较高的可用性。</p>
+<a id="more"></a>
+<h2 id="反向代理"><a href="#反向代理" class="headerlink" title="反向代理"></a>反向代理</h2><p>HTTP 反向代理：客户端向反向代理中已命名好的接口发送普通请求，在多个内网服务器环境下，反向代理将判断向哪个内网服务器转交请求，并将获得的内容返回给客户端。</p>
+<p>目前由两种通用的工具：nginx，haproxy</p>
+<p>HTTP反向代理优势：</p>
+<ul>
+<li>负载均衡</li>
+<li>可出错重试，某个内网服务器挂掉后，可把请求转移到其他服务器</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/proxy/http.png" alt="http"></p>
+<p>因此暂时考虑到2个方案：</p>
+<ol>
+<li>nginx上配置端口，直接转发到每个内网服务器的端口</li>
+<li>haproxy上配置端口，直接转发到每个内网服务器的端口</li>
+</ol>
+<h2 id="nginx"><a href="#nginx" class="headerlink" title="nginx"></a>nginx</h2><p>nginx 里面有以下参数可解决上面的问题</p>
+<ul>
+<li>max_fails：允许请求失败的次数默认为1.当超过最大次数时，返回<code>proxy_next_upstream</code> 模块定义的错误</li>
+<li>fail_timeout：<code>max_fails</code>次失败后，暂停的时间</li>
+<li>proxy_next_upstream：出现故障时，返回的状态码</li>
+<li>proxy_next_upstream_tries: 出现故障后 重试次数</li>
+</ul>
+<p>nginx 的负载均衡常用的有3个方式</p>
+<ol>
+<li>轮询： 按时间顺序逐一分配到不同服务器</li>
+<li>weight：根据权值分配流量</li>
+<li>ip hash: 每个访问固定到一个服务器</li>
+</ol>
+<h2 id="haproxy"><a href="#haproxy" class="headerlink" title="haproxy"></a>haproxy</h2><ul>
+<li>haproxy 是一个简单的代理软件，稳定性好，支持负载均衡，出错重试等机制。一般使用场景是mysql集群环境。</li>
+<li>haproxy 不支持keep-alive</li>
+<li>haproxy有以下参数来支持良好的特性<ul>
+<li>retries: n次链接失败认为服务不可用</li>
+<li>mode：处理的类型，默认为<code>http</code></li>
+<li>balance：负载均衡算法</li>
+<li>server：内网服务器ip 127.0.0.1:80 weight 100 check</li>
+</ul>
+</li>
+</ul>
+<h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><ol>
+<li>服务使用supervisor启动</li>
+<li>6台服务器重启测试<ol>
+<li>一次性重启</li>
+<li>一台一台重启，2台间隔10s</li>
+</ol>
+</li>
+</ol>
+<p>实验结果：</p>
+<pre><code>1. 方案1和方案2都会出现几个error
+2. 当长时间stop的时候，haproxy 如果 `retries` 设置 3，则必有3个error
+3. nginx的处理可以动态扩容，而haproxy不可
+</code></pre>
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>今晚加鸡腿<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">redis</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">nginx</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">golang</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">haproxy</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://www.forster.site/2017-07-12-HTTP反向代理初识.html" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-      
-        </div></section>
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
+<nav id="article-nav">
+  
+    <a href="/2017-08-15-golang笔记-并发.html" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Golang 并发使用
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017-05-22-初识Spark.html" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">初识Spark</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016-11-11-redis_req_limit.html" class="archive-article-date">
-  	<time datetime="2016-11-03T15:24:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-11-03</time>
-</a>
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#反向代理"><span class="toc-number">2.</span> <span class="toc-text">反向代理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nginx"><span class="toc-number">3.</span> <span class="toc-text">nginx</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#haproxy"><span class="toc-number">4.</span> <span class="toc-text">haproxy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实验"><span class="toc-number">5.</span> <span class="toc-text">实验</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016-11-11-redis_req_limit.html">Redis频次控制</a>
-    </h1>
-  
+        
+    </div>
+</aside>
 
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">redis</a>
-        		</li>
-      		
-		</ul>
-	</div>
 
-          
+  
+  <!-- UY BEGIN -->
+<div id="uyan_frame" ></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2147812"></script>
+<!-- UY END -->
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
   
-    </div></section>
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -261,9 +412,9 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,

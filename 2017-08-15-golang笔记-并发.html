@@ -6,15 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://www.forster.site">
-  <title>Tag: redis | Forster&#39;s Blog</title>
+  <title>Golang 并发使用 | Forster&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Forster&#39;s Blog">
-<meta property="og:url" content="http://www.forster.site/tags/redis/index.html">
+  <meta name="description" content="GoroutineGolang 提供了极其简单的方式支持并发操作。Golang通过go 关键字可以简单地启动一个协程实现goroutine 功能。Goroutine 有以下特性：  协作式调度 “无锁”的优点只在单线程下有效，如果$GOMAXPROCS &amp;gt; 1且需加锁保护数据时，效率会变慢 封装了异步IO 需同步访问共享内存">
+<meta name="keywords" content="Golang">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Golang 并发使用">
+<meta property="og:url" content="http://www.forster.site/2017-08-15-golang笔记-并发.html">
 <meta property="og:site_name" content="Forster&#39;s Blog">
+<meta property="og:description" content="GoroutineGolang 提供了极其简单的方式支持并发操作。Golang通过go 关键字可以简单地启动一个协程实现goroutine 功能。Goroutine 有以下特性：  协作式调度 “无锁”的优点只在单线程下有效，如果$GOMAXPROCS &amp;gt; 1且需加锁保护数据时，效率会变慢 封装了异步IO 需同步访问共享内存">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-11-04T15:44:05.856Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Forster&#39;s Blog">
+<meta name="twitter:title" content="Golang 并发使用">
+<meta name="twitter:description" content="GoroutineGolang 提供了极其简单的方式支持并发操作。Golang通过go 关键字可以简单地启动一个协程实现goroutine 功能。Goroutine 有以下特性：  协作式调度 “无锁”的优点只在单线程下有效，如果$GOMAXPROCS &amp;gt; 1且需加锁保护数据时，效率会变慢 封装了异步IO 需同步访问共享内存">
   
     <link rel="alternative" href="/atom.xml" title="Forster&#39;s Blog" type="application/atom+xml">
   
@@ -128,114 +133,229 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-2017-08-15-golang笔记-并发" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017-02-17-redigo与redis.v5比较.html" class="archive-article-date">
-  	<time datetime="2017-02-17T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-02-17</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017-02-17-redigo与redis.v5比较.html">redigo与redis.v5比较</a>
+    <h1 class="article-title" itemprop="name">
+      Golang 并发使用
     </h1>
   
 
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2017-08-15-golang笔记-并发.html" class="archive-article-date">
+  	<time datetime="2017-08-15T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Goroutine"><a href="#Goroutine" class="headerlink" title="Goroutine"></a>Goroutine</h2><p>Golang 提供了极其简单的方式支持并发操作。Golang通过<code>go</code> 关键字可以简单地启动一个协程实现<code>goroutine</code> 功能。<br>Goroutine 有以下特性：</p>
+<ol>
+<li>协作式调度</li>
+<li>“无锁”的优点只在单线程下有效，如果$GOMAXPROCS &gt; 1且需加锁保护数据时，效率会变慢</li>
+<li>封装了异步IO</li>
+<li>需同步访问共享内存</li>
+</ol>
+<a id="more"></a>
+<p>一个简单的<code>goroutine</code>例子：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> main</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">	<span class="string">"fmt"</span></div><div class="line">  	<span class="string">"time"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">say</span><span class="params">(s <span class="keyword">string</span>)</span></span> &#123;</div><div class="line">  <span class="keyword">for</span> i := <span class="number">0</span>； i &lt; <span class="number">5</span>; i++ &#123;</div><div class="line">    time.Sleep(<span class="number">100</span> * time.Millisecond)</div><div class="line">    fmt.Println(s)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">  <span class="keyword">go</span> say(<span class="string">"world"</span>)</div><div class="line">  say(<span class="string">"hello"</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>以上例子存在一些问题：</p>
+<ol>
+<li>无法控制并发</li>
+<li>只适用于不需要立即得到处理结果的情景</li>
+</ol>
+<h2 id="Channel"><a href="#Channel" class="headerlink" title="Channel"></a>Channel</h2><p>如果同一个时间段内请求数很多，每一个请求都启动一个goroutine，资源的消耗就不可控。解决方法是使用<code>channel</code>.</p>
+<p>Channel:</p>
+<ol>
+<li>用于同步并发运行的函数，并通过传递指定类型的值来进行通信</li>
+<li><code>&lt;-</code>预算符的位置决定channel的读或写操作</li>
+</ol>
+<p>一个简单的使用例子：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">     message := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">string</span>) <span class="comment">// no buffer</span></div><div class="line">     count := <span class="number">3</span></div><div class="line"></div><div class="line">     <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</div><div class="line">          <span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= count; i++ &#123;</div><div class="line">               fmt.Println(<span class="string">"send message"</span>)</div><div class="line">               message &lt;- fmt.Sprintf(<span class="string">"message %d"</span>, i)</div><div class="line">          &#125;</div><div class="line">     &#125;()</div><div class="line"></div><div class="line">     time.Sleep(time.Second * <span class="number">3</span>)</div><div class="line"></div><div class="line">     <span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= count; i++ &#123;</div><div class="line">          fmt.Println(&lt;-message)</div><div class="line">     &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>以上例子，虽然控制了系统的并发，但是channel没有buffer，因此是同步执行的channel。该程序，在没有buffer的channel下，需要在发送者和接收者都完成任务后才执行结束，这种做法会导致buffer block。</p>
+<p>为了避免阻塞，我们需要为channel提供buffer。异步的例子如下：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">     message := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">string</span>，<span class="number">2</span>) <span class="comment">// 2 buffer</span></div><div class="line">     count := <span class="number">3</span></div><div class="line"></div><div class="line">     <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</div><div class="line">          <span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= count; i++ &#123;</div><div class="line">               fmt.Println(<span class="string">"send message"</span>)</div><div class="line">               message &lt;- fmt.Sprintf(<span class="string">"message %d"</span>, i)</div><div class="line">          &#125;</div><div class="line">          <span class="built_in">close</span>(message) <span class="comment">// close后，读取操作不会被阻塞</span></div><div class="line">     &#125;()</div><div class="line"></div><div class="line">     time.Sleep(time.Second * <span class="number">3</span>)</div><div class="line"></div><div class="line">     <span class="comment">// 可用range expression替换，但需要close channel </span></div><div class="line">     <span class="keyword">for</span> msg := <span class="keyword">range</span> message &#123;</div><div class="line">     	  fmt.Println(msg)</div><div class="line">	 &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>以上例子，通过改变channel的容量，控制系统的吞吐量。</p>
+<h2 id="Deadlock"><a href="#Deadlock" class="headerlink" title="Deadlock"></a>Deadlock</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">     c := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)</div><div class="line">     c &lt;- <span class="number">1</span>    <span class="comment">// write to a channel</span></div><div class="line">     val := &lt;-c <span class="comment">// read from a channel</span></div><div class="line">     fmt.Println(val)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>运行上面程序会抛出error，这个error为<code>deadlock</code>.<br>Deadlock: 两个<code>goroutine</code>互相等待对方执行，但双方都没有执行的情况。<br>一个接收器已经做好准备接收数据时，写入操作才会成功；但是以上例子，写入操作阻塞了整个程序。</p>
+<h2 id="Select"><a href="#Select" class="headerlink" title="Select"></a>Select</h2><p>在现实项目中，我们会需要更多的channel来支持功能，并且希望读取到的数据越快越好；Select能很好地支持这种情况。<br>Select:</p>
+<ol>
+<li>跟switch类似，但一般用于监听io操作。</li>
+<li>使用select实现timeout机制</li>
+</ol>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">     message := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">string</span>，<span class="number">2</span>) <span class="comment">// 2 buffer</span></div><div class="line">     count := <span class="number">3</span></div><div class="line"></div><div class="line">     <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</div><div class="line">          <span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= count; i++ &#123;</div><div class="line">               fmt.Println(<span class="string">"send message"</span>)</div><div class="line">               message &lt;- fmt.Sprintf(<span class="string">"message %d"</span>, i)</div><div class="line">          &#125;</div><div class="line">          <span class="built_in">close</span>(message) <span class="comment">// close后，读取操作不会被阻塞</span></div><div class="line">     &#125;()</div><div class="line"></div><div class="line">     <span class="comment">// timeout 机制</span></div><div class="line">	 <span class="keyword">select</span> &#123;</div><div class="line">	 <span class="keyword">case</span> &lt;-time.After(time.Millisecond * <span class="number">20</span>):</div><div class="line">	 	<span class="keyword">return</span></div><div class="line">	 <span class="keyword">case</span> &lt;-message:</div><div class="line">	 	<span class="keyword">for</span> msg := <span class="keyword">range</span> message &#123;</div><div class="line">     	  fmt.Println(msg)</div><div class="line">		&#125;  </div><div class="line">     <span class="keyword">default</span>:</div><div class="line">        <span class="comment">// 带有default</span></div><div class="line">	 &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>总结：<br>golang 的优势是出色的处理并发的能力，因此我们对<code>goroutine</code>的理解非常重要。</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>今晚加鸡腿<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">redis</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">golang</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Golang</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://www.forster.site/2017-08-15-golang笔记-并发.html" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-      
-        </div></section>
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
+<nav id="article-nav">
+  
+    <a href="/2017-09-08-zeppelin便捷转化crontab.html" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Zeppelin便捷转化Crontab
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017-07-12-HTTP反向代理初识.html" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">HTTP反向代理初识</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016-11-11-redis_req_limit.html" class="archive-article-date">
-  	<time datetime="2016-11-03T15:24:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-11-03</time>
-</a>
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Goroutine"><span class="toc-number">1.</span> <span class="toc-text">Goroutine</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Channel"><span class="toc-number">2.</span> <span class="toc-text">Channel</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Deadlock"><span class="toc-number">3.</span> <span class="toc-text">Deadlock</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Select"><span class="toc-number">4.</span> <span class="toc-text">Select</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016-11-11-redis_req_limit.html">Redis频次控制</a>
-    </h1>
-  
+        
+    </div>
+</aside>
 
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">redis</a>
-        		</li>
-      		
-		</ul>
-	</div>
 
-          
+  
+  <!-- UY BEGIN -->
+<div id="uyan_frame" ></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2147812"></script>
+<!-- UY END -->
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
   
-    </div></section>
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -261,9 +381,9 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,

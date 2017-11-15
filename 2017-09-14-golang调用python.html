@@ -6,15 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://www.forster.site">
-  <title>Tag: redis | Forster&#39;s Blog</title>
+  <title>Golang调用Python | Forster&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Forster&#39;s Blog">
-<meta property="og:url" content="http://www.forster.site/tags/redis/index.html">
+  <meta name="description" content="背景 Python 一个适用于机器学习的语言 Golang 一个适用于服务端开发的语言 目前在数据挖掘和建模中，使用最多的语言是Python。大数据时代，绝大部分使用Golang语言应对高并发请求的场景。在这个背景下，Golang+Python的需求应运而生。  原理 Python 提供C-API , 而Go通过cgo 与c语言交互。因此，通过Go调用libpython实现调用Python的功能。">
+<meta name="keywords" content="Golang,python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Golang调用Python">
+<meta property="og:url" content="http://www.forster.site/2017-09-14-golang调用python.html">
 <meta property="og:site_name" content="Forster&#39;s Blog">
+<meta property="og:description" content="背景 Python 一个适用于机器学习的语言 Golang 一个适用于服务端开发的语言 目前在数据挖掘和建模中，使用最多的语言是Python。大数据时代，绝大部分使用Golang语言应对高并发请求的场景。在这个背景下，Golang+Python的需求应运而生。  原理 Python 提供C-API , 而Go通过cgo 与c语言交互。因此，通过Go调用libpython实现调用Python的功能。">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-11-04T15:43:52.786Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Forster&#39;s Blog">
+<meta name="twitter:title" content="Golang调用Python">
+<meta name="twitter:description" content="背景 Python 一个适用于机器学习的语言 Golang 一个适用于服务端开发的语言 目前在数据挖掘和建模中，使用最多的语言是Python。大数据时代，绝大部分使用Golang语言应对高并发请求的场景。在这个背景下，Golang+Python的需求应运而生。  原理 Python 提供C-API , 而Go通过cgo 与c语言交互。因此，通过Go调用libpython实现调用Python的功能。">
   
     <link rel="alternative" href="/atom.xml" title="Forster&#39;s Blog" type="application/atom+xml">
   
@@ -128,114 +133,223 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-2017-09-14-golang调用python" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017-02-17-redigo与redis.v5比较.html" class="archive-article-date">
-  	<time datetime="2017-02-17T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-02-17</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017-02-17-redigo与redis.v5比较.html">redigo与redis.v5比较</a>
+    <h1 class="article-title" itemprop="name">
+      Golang调用Python
     </h1>
   
 
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2017-09-14-golang调用python.html" class="archive-article-date">
+  	<time datetime="2017-09-14T13:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-14</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><ul>
+<li>Python 一个适用于机器学习的语言</li>
+<li>Golang 一个适用于服务端开发的语言</li>
+<li>目前在数据挖掘和建模中，使用最多的语言是Python。大数据时代，绝大部分使用Golang语言应对高并发请求的场景。在这个背景下，Golang+Python的需求应运而生。</li>
+</ul>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><ul>
+<li>Python 提供<code>C-API</code> , 而Go通过<code>cgo</code> 与c语言交互。因此，通过Go调用libpython实现调用Python的功能。</li>
+<li>目前市场上使用最多的轮子是 <a href="https://github.com/sbinet/go-python" target="_blank" rel="external">sbinet/go-python</a></li>
+</ul>
+<a id="more"></a>
+<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><ul>
+<li>首先写一个Python脚本</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python</span></div><div class="line"><span class="comment"># -*- coding: utf-8 -*-</span></div><div class="line"><span class="keyword">import</span> sys</div><div class="line"><span class="keyword">import</span> json</div><div class="line">reload(sys)</div><div class="line">sys.setdefaultencoding(<span class="string">'utf-8'</span>)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">(arvg)</span>:</span></div><div class="line">  <span class="keyword">print</span> arvg</div><div class="line">  res = &#123;</div><div class="line">      <span class="string">'price'</span>: <span class="number">0.01</span>,</div><div class="line">      <span class="string">'name'</span>: <span class="string">"test"</span>,</div><div class="line">  &#125;</div><div class="line">  final = json.dumps(res)</div><div class="line">  <span class="keyword">return</span> final</div></pre></td></tr></table></figure>
+<ul>
+<li>Go调用Python</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> main</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">	<span class="string">"fmt"</span></div><div class="line">  	<span class="string">"github.com/sbinet/go-python"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="keyword">type</span> Test <span class="keyword">struct</span> &#123;</div><div class="line">	Str2Py <span class="function"><span class="keyword">func</span><span class="params">(<span class="keyword">string</span>)</span>*<span class="title">python</span>.<span class="title">PyObject</span></span></div><div class="line"><span class="function">  	<span class="title">Py2Str</span> <span class="title">func</span><span class="params">(*python.PyObject)</span><span class="title">string</span></span></div><div class="line"><span class="function">&#125;</span></div><div class="line"><span class="function"></span></div><div class="line"><span class="function"><span class="title">func</span> <span class="title">NewTest</span><span class="params">()</span> *<span class="title">Test</span></span> &#123;</div><div class="line">  	err := python.Initialize()</div><div class="line">  	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</div><div class="line">      	<span class="built_in">panic</span>(err.Error())</div><div class="line">  	&#125;</div><div class="line">  	test := &amp;Test &#123;</div><div class="line">      	Str2Py: python.PyString_FromString,</div><div class="line">      	Py2Str: python.PyString_AsString,</div><div class="line">  	&#125;</div><div class="line">  	<span class="keyword">return</span> test</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="params">(test *Test)</span><span class="title">ImportModule</span><span class="params">(dir, name <span class="keyword">string</span>)</span> *<span class="title">python</span>.<span class="title">PyObject</span></span> &#123;</div><div class="line">  	module := python.PyImport_ImportModule(<span class="string">"sys"</span>)</div><div class="line">  	path := module.GetAttrStrng(<span class="string">"path"</span>)</div><div class="line">  	python.PyList_Insert(path, <span class="number">0</span>, test.Str2Py(dir))</div><div class="line">  	<span class="keyword">return</span> python.PyImport_ImportModule(name)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">  	test := NewTest()</div><div class="line">  	module := test.ImportModel(<span class="string">"/home/tmp/test"</span>, <span class="string">"test"</span>)</div><div class="line">  	f := module.GetAttrString(<span class="string">"test"</span>)</div><div class="line">  	argv := python.PyTuple_New(<span class="number">1</span>)</div><div class="line"> 	python.PyTuple_SetItem(a, <span class="number">0</span>, test.Str2Py(<span class="string">"test"</span>))</div><div class="line">  	res := f.Call(argv, python.Py_None)</div><div class="line">  	fmt.Println(test.Py2Str(res))</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><p>output</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">test</div><div class="line">&#123;"price": 0.01, "name": "test"&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>整个执行的过程是：</p>
+<ul>
+<li>首先将python脚本的路径添加到sys.path</li>
+<li>go 调用PyImport_ImportModule 把sys.path 导入</li>
+<li>使用GetAttrString 根据属性名获取对象属性</li>
+<li>使用call 调用python函数</li>
+<li>PyString_AsString python字符串转为go字符串 </li>
+</ul>
+</li>
+</ul>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>今晚加鸡腿<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">redis</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Golang</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">golang</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">python</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://www.forster.site/2017-09-14-golang调用python.html" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-      
-        </div></section>
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2017-09-08-zeppelin便捷转化crontab.html" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Zeppelin便捷转化Crontab</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016-11-11-redis_req_limit.html" class="archive-article-date">
-  	<time datetime="2016-11-03T15:24:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-11-03</time>
-</a>
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原理"><span class="toc-number">2.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#例子"><span class="toc-number">3.</span> <span class="toc-text">例子</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016-11-11-redis_req_limit.html">Redis频次控制</a>
-    </h1>
-  
+        
+    </div>
+</aside>
 
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">redis</a>
-        		</li>
-      		
-		</ul>
-	</div>
 
-          
+  
+  <!-- UY BEGIN -->
+<div id="uyan_frame" ></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2147812"></script>
+<!-- UY END -->
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
   
-    </div></section>
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -261,9 +375,9 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
