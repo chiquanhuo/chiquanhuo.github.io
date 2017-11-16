@@ -13,7 +13,7 @@ http://www.forster.site/2017-02-09-golang正则表达式.html
 http://www.forster.site/2017-01-14-golang改造.html
 http://www.forster.site/2016-12-29-xhprof.html
 http://www.forster.site/2016-12-17-docker.html
-http://www.forster.site/2016-11-17-celery.html
 http://www.forster.site/2016-11-11-redis_req_limit.html
+http://www.forster.site/2016-11-17-celery.html
 http://www.forster.site/2016-11-03-mac-lnmp.html
 http://www.forster.site/2016-10-03-ad-pacing.html
