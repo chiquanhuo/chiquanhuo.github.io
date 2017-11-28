@@ -6,20 +6,24 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://www.forster.site">
-  <title>redigo与redis.v5比较 | Forster&#39;s Blog</title>
+  <title>CircuitBreaker | Forster&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="背景看到golang有两个redis库，不知道执行效率上面哪个包比较好。于是在本地环境使用benchmark测试了下，得到的结果并不是redis.v5上面给出的结果。只能说每个库的执行效率上的差别并不是那么明显，而且redis.v5反而比较差，也不知道是不是代码有问题还是我的本地环境有问题。">
-<meta name="keywords" content="redis,golang">
+  <meta name="description" content="背景运行在不同进程中的软件通常需要对远程进行调用。远程调用可能会失败，或者在没有响应的情况下挂起，直到达到某个超时限制。如果在无响应的情况下，系统需要处理多个请求，则可能会用尽关键资源，导致系统故障。Michael Nygard 提出 cirucitbreaker pattern 防止这种灾难性的故障。 原理Circuitbreaker 的思路非常简单：将需要监控的函数调用包装在circuitbr">
+<meta name="keywords" content="Golang,circuitbreaker">
 <meta property="og:type" content="article">
-<meta property="og:title" content="redigo与redis.v5比较">
-<meta property="og:url" content="http://www.forster.site/2017-02-17-redigo与redis.v5比较.html">
+<meta property="og:title" content="CircuitBreaker">
+<meta property="og:url" content="http://www.forster.site/2017-11-28-circuitbreaker.html">
 <meta property="og:site_name" content="Forster&#39;s Blog">
-<meta property="og:description" content="背景看到golang有两个redis库，不知道执行效率上面哪个包比较好。于是在本地环境使用benchmark测试了下，得到的结果并不是redis.v5上面给出的结果。只能说每个库的执行效率上的差别并不是那么明显，而且redis.v5反而比较差，也不知道是不是代码有问题还是我的本地环境有问题。">
+<meta property="og:description" content="背景运行在不同进程中的软件通常需要对远程进行调用。远程调用可能会失败，或者在没有响应的情况下挂起，直到达到某个超时限制。如果在无响应的情况下，系统需要处理多个请求，则可能会用尽关键资源，导致系统故障。Michael Nygard 提出 cirucitbreaker pattern 防止这种灾难性的故障。 原理Circuitbreaker 的思路非常简单：将需要监控的函数调用包装在circuitbr">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-11-04T15:44:55.189Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/circuitbreaker/circuitbreaker.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/circuitbreaker/circuitbreaker.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/circuitbreaker/state.png">
+<meta property="og:updated_time" content="2017-11-28T09:59:55.625Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="redigo与redis.v5比较">
-<meta name="twitter:description" content="背景看到golang有两个redis库，不知道执行效率上面哪个包比较好。于是在本地环境使用benchmark测试了下，得到的结果并不是redis.v5上面给出的结果。只能说每个库的执行效率上的差别并不是那么明显，而且redis.v5反而比较差，也不知道是不是代码有问题还是我的本地环境有问题。">
+<meta name="twitter:title" content="CircuitBreaker">
+<meta name="twitter:description" content="背景运行在不同进程中的软件通常需要对远程进行调用。远程调用可能会失败，或者在没有响应的情况下挂起，直到达到某个超时限制。如果在无响应的情况下，系统需要处理多个请求，则可能会用尽关键资源，导致系统故障。Michael Nygard 提出 cirucitbreaker pattern 防止这种灾难性的故障。 原理Circuitbreaker 的思路非常简单：将需要监控的函数调用包装在circuitbr">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/circuitbreaker/circuitbreaker.png">
   
     <link rel="alternative" href="/atom.xml" title="Forster&#39;s Blog" type="application/atom+xml">
   
@@ -147,102 +151,38 @@ var _hmt = _hmt || [];
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-2017-02-17-redigo与redis.v5比较" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-2017-11-28-circuitbreaker" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      redigo与redis.v5比较
+      CircuitBreaker
     </h1>
   
 
 
         
-        <a href="/2017-02-17-redigo与redis.v5比较.html" class="archive-article-date">
-  	<time datetime="2017-02-17T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-02-17</time>
+        <a href="/2017-11-28-circuitbreaker.html" class="archive-article-date">
+  	<time datetime="2017-11-28T13:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-28</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>看到golang有两个redis库，不知道执行效率上面哪个包比较好。于是在本地环境使用benchmark测试了下，得到的结果并不是redis.v5上面给出的结果。只能说每个库的执行效率上的差别并不是那么明显，而且redis.v5反而比较差，也不知道是不是代码有问题还是我的本地环境有问题。</p>
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>运行在不同进程中的软件通常需要对远程进行调用。远程调用可能会失败，或者在没有响应的情况下挂起，直到达到某个超时限制。如果在无响应的情况下，系统需要处理多个请求，则可能会用尽关键资源，导致系统故障。Michael Nygard 提出 <code>cirucitbreaker pattern</code> 防止这种灾难性的故障。</p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>Circuitbreaker 的思路非常简单：将需要监控的函数调用包装在circuitbreaker对象中，当函数调用故障达到一定的阀值，circuirbreaker将跳闸。所有需要调用函数的请求将直接返回错误而不直接调用函数。当经过一定时间后，circuitbreaker的跳闸半开状态，允许部分请求调用函数实现自复位行为，来判断调用函数是否成功，如果成功则重置断路器。</p>
 <a id="more"></a>
-<h2 id="redis-v5"><a href="#redis-v5" class="headerlink" title="redis.v5"></a>redis.v5</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> redis_test</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">    <span class="string">"bytes"</span></div><div class="line">    <span class="string">"gopkg.in/redis.v5"</span></div><div class="line">    <span class="string">"testing"</span></div><div class="line">    <span class="string">"time"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">BenchmarkRedis</span><span class="params">(b *testing.B)</span></span> &#123;</div><div class="line">    client := redis.NewClient(&amp;redis.Options&#123;</div><div class="line">        Addr: <span class="string">":6379"</span>,</div><div class="line">        PoolSize: <span class="number">100</span>,</div><div class="line">    &#125;)</div><div class="line">    <span class="keyword">defer</span> client.Close()</div><div class="line">    value := <span class="keyword">string</span>(bytes.Repeat([]<span class="keyword">byte</span>[<span class="string">'1'</span>], <span class="number">64</span>))</div><div class="line">    b.ResetTimer()</div><div class="line">    b.RunParallel(<span class="function"><span class="keyword">func</span><span class="params">(pb *testing.PB)</span></span> &#123;</div><div class="line">        <span class="keyword">for</span> pb.Next() &#123;</div><div class="line">            <span class="keyword">if</span> err := client.Set(<span class="string">"key"</span>, value, <span class="number">0</span>).Err(); err != <span class="literal">nil</span> &#123;</div><div class="line">                b.Fatal(err)</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="redigo"><a href="#redigo" class="headerlink" title="redigo"></a>redigo</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> redis_test</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">    <span class="string">"bytes"</span></div><div class="line">    <span class="string">"github.com/garyburd/redigo/redis"</span></div><div class="line">    <span class="string">"testing"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">BenchmarkRedis</span><span class="params">(b *testing.B)</span></span> &#123;</div><div class="line">    pool := &amp;redis.Pool&#123;</div><div class="line">        MaxActive: <span class="number">100</span>,</div><div class="line">        Dial: <span class="function"><span class="keyword">func</span><span class="params">()</span> <span class="params">(redis.Conn, error)</span></span> &#123;</div><div class="line">            <span class="keyword">return</span> redis.Dial(<span class="string">"tcp"</span>, <span class="string">":6379"</span>)</div><div class="line">        &#125;,</div><div class="line">    &#125;</div><div class="line">    value := <span class="keyword">string</span>(bytes.Repeat([]<span class="keyword">byte</span>[<span class="string">'1'</span>], <span class="number">64</span>))</div><div class="line">    b.ResetTimer()</div><div class="line">    b.RunParallel(<span class="function"><span class="keyword">func</span><span class="params">(pb *testing.PB)</span></span> &#123;</div><div class="line">        conn := pool.Get()</div><div class="line">        <span class="keyword">for</span> pb.Next() &#123;</div><div class="line">            _, err := conn.Do(<span class="string">"SET"</span>, <span class="string">"key"</span>, value)</div><div class="line">            <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</div><div class="line">                b.Fatal(err)</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">go <span class="built_in">test</span> --bench=BenchmarkRedis --benchmem</div></pre></td></tr></table></figure>
-<h2 id="效率的比较"><a href="#效率的比较" class="headerlink" title="效率的比较"></a>效率的比较</h2><table>
-<thead>
-<tr>
-<th>test</th>
-<th>times</th>
-<th>ns/op</th>
-<th>B/op</th>
-<th>allocs/op</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>redigo100conns10kb</td>
-<td>50000</td>
-<td>28945 ns/op</td>
-<td>88 B/op</td>
-<td>4 allocs/op</td>
-</tr>
-<tr>
-<td>redigo10conns10kb</td>
-<td>50000</td>
-<td>30157 ns/op</td>
-<td>88 B/op</td>
-<td>4 allocs/op</td>
-</tr>
-<tr>
-<td>redigo100conns1kb</td>
-<td>100000</td>
-<td>17102 ns/op</td>
-<td>88 B/op</td>
-<td>4 allocs/op</td>
-</tr>
-<tr>
-<td>redigo10conns1kb</td>
-<td>100000</td>
-<td>16554 ns/op</td>
-<td>88 B/op</td>
-<td>4 allocs/op</td>
-</tr>
-<tr>
-<td>goredis100conns10kb</td>
-<td>50000</td>
-<td>28163 ns/op</td>
-<td>405 B/op</td>
-<td>12 allocs/op</td>
-</tr>
-<tr>
-<td>goredis10conns10kb</td>
-<td>50000</td>
-<td>27837 ns/op</td>
-<td>405 B/op</td>
-<td>12 allocs/op</td>
-</tr>
-<tr>
-<td>goredis100cons1kb</td>
-<td>50000</td>
-<td>23133 ns/op</td>
-<td>405 B/op</td>
-<td>12 allocs/op</td>
-</tr>
-<tr>
-<td>goredis10conns1kb</td>
-<td>50000</td>
-<td>20482 ns/op</td>
-<td>405 B/op</td>
-<td>12 allocs/op</td>
-</tr>
-</tbody>
-</table>
-<p>分别设置缓存池为100和10，写入1kb或者10kb的数据，得到上面的结果，可以看出效率上面差距都不是很大，很多时候是redigo的效率比较好。</p>
+<p><img src="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/circuitbreaker/circuitbreaker.png" alt="circuitbreaker timeout"></p>
+<p>这是一个简单的例子，以调用函数timeout为例。</p>
+<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><p><img src="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/circuitbreaker/circuitbreaker.png" alt="circuitbreaker timeout"></p>
+<p>这是一个简单的例子，以调用函数timeout为例。</p>
+<p><img src="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/circuitbreaker/state.png" alt="circuitbreaker exmaple"></p>
+<p>这是一个circuitbreaker 状态转换图，用一个变量来保存最后一个错误时间，来判断是否达到一定时间间隔后尝试重置circuitbreaker。</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p>根据以上思路，我使用golang实现circuitbreaker库</p>
+<p><a href="https://github.com/chiquanhuo/circuitbreaker" target="_blank" rel="external">circuitbreaker</a></p>
 
       
 
@@ -256,11 +196,11 @@ var _hmt = _hmt || [];
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">redis</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Golang</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">golang</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">circuitbreaker</a>
         		</li>
       		
 		</ul>
@@ -316,7 +256,7 @@ var _hmt = _hmt || [];
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://www.forster.site/2017-02-17-redigo与redis.v5比较.html" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://www.forster.site/2017-11-28-circuitbreaker.html" alt="微信分享二维码">
     </div>
 </div>
 
@@ -330,18 +270,9 @@ var _hmt = _hmt || [];
   
 <nav id="article-nav">
   
-    <a href="/2017-02-21-ssdb和redis比较.html" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          ssdb与redis比较
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017-02-09-golang正则表达式.html" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Golang正则表达式</div>
+    <a href="/2017-09-14-golang调用python.html" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Golang调用Python</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -368,7 +299,7 @@ var _hmt = _hmt || [];
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-v5"><span class="toc-number">2.</span> <span class="toc-text">redis.v5</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redigo"><span class="toc-number">3.</span> <span class="toc-text">redigo</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#效率的比较"><span class="toc-number">4.</span> <span class="toc-text">效率的比较</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原理"><span class="toc-number">2.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#例子"><span class="toc-number">3.</span> <span class="toc-text">例子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码"><span class="toc-number">4.</span> <span class="toc-text">代码</span></a></li></ol>
                     </div>
                 </span>
             </div>
@@ -394,7 +325,7 @@ var _hmt = _hmt || [];
 <script src="//imsun.github.io/gitment/dist/gitment.browser.js"></script>
 <script>
 var gitment = new Gitment({
-  id: "http://www.forster.site/2017-02-17-redigo与redis.v5比较.html",
+  id: "http://www.forster.site/2017-11-28-circuitbreaker.html",
   owner: 'chiquanhuo',
   repo: 'chiquanhuo.github.io',
   oauth: {

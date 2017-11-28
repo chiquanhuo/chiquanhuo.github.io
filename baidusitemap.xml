@@ -3,6 +3,25 @@
 
 
     
+  <url>
+    <loc>http://www.forster.site/2017-11-28-circuitbreaker.html</loc>
+    <lastmod>2017-11-28T09:59:55.625Z</lastmod>
+    <data>
+        <display>
+        <title>CircuitBreaker</title>
+        <pubTime>2017-11-28T13:00:00.000Z</pubTime>
+        
+        <tag>Golang</tag>
+         
+        <tag>circuitbreaker</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
     
   <url>
     <loc>http://www.forster.site/2017-05-22-%E5%88%9D%E8%AF%86Spark.html</loc>
@@ -139,9 +158,9 @@
         <title>tornado与gevent</title>
         <pubTime>2017-03-29T14:00:00.000Z</pubTime>
         
-        <tag>gevent</tag>
-         
         <tag>python</tag>
+         
+        <tag>gevent</tag>
          
          
            
