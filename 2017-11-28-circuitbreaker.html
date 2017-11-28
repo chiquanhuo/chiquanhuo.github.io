@@ -17,9 +17,8 @@
 <meta property="og:description" content="背景运行在不同进程中的软件通常需要对远程进行调用。远程调用可能会失败，或者在没有响应的情况下挂起，直到达到某个超时限制。如果在无响应的情况下，系统需要处理多个请求，则可能会用尽关键资源，导致系统故障。Michael Nygard 提出 cirucitbreaker pattern 防止这种灾难性的故障。 原理Circuitbreaker 的思路非常简单：将需要监控的函数调用包装在circuitbr">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/circuitbreaker/circuitbreaker.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/circuitbreaker/circuitbreaker.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/circuitbreaker/state.png">
-<meta property="og:updated_time" content="2017-11-28T09:59:55.625Z">
+<meta property="og:updated_time" content="2017-11-28T12:18:57.122Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CircuitBreaker">
 <meta name="twitter:description" content="背景运行在不同进程中的软件通常需要对远程进行调用。远程调用可能会失败，或者在没有响应的情况下挂起，直到达到某个超时限制。如果在无响应的情况下，系统需要处理多个请求，则可能会用尽关键资源，导致系统故障。Michael Nygard 提出 cirucitbreaker pattern 防止这种灾难性的故障。 原理Circuitbreaker 的思路非常简单：将需要监控的函数调用包装在circuitbr">
@@ -175,8 +174,6 @@ var _hmt = _hmt || [];
         <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>运行在不同进程中的软件通常需要对远程进行调用。远程调用可能会失败，或者在没有响应的情况下挂起，直到达到某个超时限制。如果在无响应的情况下，系统需要处理多个请求，则可能会用尽关键资源，导致系统故障。Michael Nygard 提出 <code>cirucitbreaker pattern</code> 防止这种灾难性的故障。</p>
 <h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>Circuitbreaker 的思路非常简单：将需要监控的函数调用包装在circuitbreaker对象中，当函数调用故障达到一定的阀值，circuirbreaker将跳闸。所有需要调用函数的请求将直接返回错误而不直接调用函数。当经过一定时间后，circuitbreaker的跳闸半开状态，允许部分请求调用函数实现自复位行为，来判断调用函数是否成功，如果成功则重置断路器。</p>
 <a id="more"></a>
-<p><img src="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/circuitbreaker/circuitbreaker.png" alt="circuitbreaker timeout"></p>
-<p>这是一个简单的例子，以调用函数timeout为例。</p>
 <h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><p><img src="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/circuitbreaker/circuitbreaker.png" alt="circuitbreaker timeout"></p>
 <p>这是一个简单的例子，以调用函数timeout为例。</p>
 <p><img src="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/circuitbreaker/state.png" alt="circuitbreaker exmaple"></p>
@@ -493,6 +490,22 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">gevent</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Protobuf</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">验证码</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Spark</a>
               </li>
              
@@ -505,27 +518,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">gevent</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">验证码</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">crontab</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">circuitbreaker</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Protobuf</a>
               </li>
             
             <div class="clearfix"></div>
