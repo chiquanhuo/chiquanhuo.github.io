@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="Forster&#39;s Blog">
 <meta property="og:description" content="背景 Python 一个适用于机器学习的语言 Golang 一个适用于服务端开发的语言 目前在数据挖掘和建模中，使用最多的语言是Python。大数据时代，绝大部分使用Golang语言应对高并发请求的场景。在这个背景下，Golang+Python的需求应运而生。  原理 Python 提供C-API , 而Go通过cgo 与c语言交互。因此，通过Go调用libpython实现调用Python的功能。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-11-04T15:43:52.786Z">
+<meta property="og:updated_time" content="2017-11-29T06:00:12.145Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Golang调用Python">
 <meta name="twitter:description" content="背景 Python 一个适用于机器学习的语言 Golang 一个适用于服务端开发的语言 目前在数据挖掘和建模中，使用最多的语言是Python。大数据时代，绝大部分使用Golang语言应对高并发请求的场景。在这个背景下，Golang+Python的需求应运而生。  原理 Python 提供C-API , 而Go通过cgo 与c语言交互。因此，通过Go调用libpython实现调用Python的功能。">
@@ -181,11 +181,11 @@ var _hmt = _hmt || [];
 <h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><ul>
 <li>首先写一个Python脚本</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python</span></div><div class="line"><span class="comment"># -*- coding: utf-8 -*-</span></div><div class="line"><span class="keyword">import</span> sys</div><div class="line"><span class="keyword">import</span> json</div><div class="line">reload(sys)</div><div class="line">sys.setdefaultencoding(<span class="string">'utf-8'</span>)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">(arvg)</span>:</span></div><div class="line">  <span class="keyword">print</span> arvg</div><div class="line">  res = &#123;</div><div class="line">      <span class="string">'price'</span>: <span class="number">0.01</span>,</div><div class="line">      <span class="string">'name'</span>: <span class="string">"test"</span>,</div><div class="line">  &#125;</div><div class="line">  final = json.dumps(res)</div><div class="line">  <span class="keyword">return</span> final</div></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python</span></div><div class="line"><span class="comment"># -*- coding: utf-8 -*-</span></div><div class="line"><span class="keyword">import</span> sys</div><div class="line"><span class="keyword">import</span> json</div><div class="line">reload(sys)</div><div class="line">sys.setdefaultencoding(<span class="string">'utf-8'</span>)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">(argv)</span>:</span></div><div class="line">  <span class="keyword">print</span> argv</div><div class="line">  res = &#123;</div><div class="line">      <span class="string">'price'</span>: <span class="number">0.01</span>,</div><div class="line">      <span class="string">'name'</span>: <span class="string">"test"</span>,</div><div class="line">  &#125;</div><div class="line">  final = json.dumps(res)</div><div class="line">  <span class="keyword">return</span> final</div></pre></td></tr></table></figure>
 <ul>
 <li>Go调用Python</li>
 </ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> main</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">	<span class="string">"fmt"</span></div><div class="line">  	<span class="string">"github.com/sbinet/go-python"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="keyword">type</span> Test <span class="keyword">struct</span> &#123;</div><div class="line">	Str2Py <span class="function"><span class="keyword">func</span><span class="params">(<span class="keyword">string</span>)</span>*<span class="title">python</span>.<span class="title">PyObject</span></span></div><div class="line"><span class="function">  	<span class="title">Py2Str</span> <span class="title">func</span><span class="params">(*python.PyObject)</span><span class="title">string</span></span></div><div class="line"><span class="function">&#125;</span></div><div class="line"><span class="function"></span></div><div class="line"><span class="function"><span class="title">func</span> <span class="title">NewTest</span><span class="params">()</span> *<span class="title">Test</span></span> &#123;</div><div class="line">  	err := python.Initialize()</div><div class="line">  	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</div><div class="line">      	<span class="built_in">panic</span>(err.Error())</div><div class="line">  	&#125;</div><div class="line">  	test := &amp;Test &#123;</div><div class="line">      	Str2Py: python.PyString_FromString,</div><div class="line">      	Py2Str: python.PyString_AsString,</div><div class="line">  	&#125;</div><div class="line">  	<span class="keyword">return</span> test</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="params">(test *Test)</span><span class="title">ImportModule</span><span class="params">(dir, name <span class="keyword">string</span>)</span> *<span class="title">python</span>.<span class="title">PyObject</span></span> &#123;</div><div class="line">  	module := python.PyImport_ImportModule(<span class="string">"sys"</span>)</div><div class="line">  	path := module.GetAttrStrng(<span class="string">"path"</span>)</div><div class="line">  	python.PyList_Insert(path, <span class="number">0</span>, test.Str2Py(dir))</div><div class="line">  	<span class="keyword">return</span> python.PyImport_ImportModule(name)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">  	test := NewTest()</div><div class="line">  	module := test.ImportModel(<span class="string">"/home/tmp/test"</span>, <span class="string">"test"</span>)</div><div class="line">  	f := module.GetAttrString(<span class="string">"test"</span>)</div><div class="line">  	argv := python.PyTuple_New(<span class="number">1</span>)</div><div class="line"> 	python.PyTuple_SetItem(a, <span class="number">0</span>, test.Str2Py(<span class="string">"test"</span>))</div><div class="line">  	res := f.Call(argv, python.Py_None)</div><div class="line">  	fmt.Println(test.Py2Str(res))</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> main</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">	<span class="string">"fmt"</span></div><div class="line">  	<span class="string">"github.com/sbinet/go-python"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="keyword">type</span> Test <span class="keyword">struct</span> &#123;</div><div class="line">	Str2Py <span class="function"><span class="keyword">func</span><span class="params">(<span class="keyword">string</span>)</span>*<span class="title">python</span>.<span class="title">PyObject</span></span></div><div class="line"><span class="function">  	<span class="title">Py2Str</span> <span class="title">func</span><span class="params">(*python.PyObject)</span><span class="title">string</span></span></div><div class="line"><span class="function">&#125;</span></div><div class="line"><span class="function"></span></div><div class="line"><span class="function"><span class="title">func</span> <span class="title">NewTest</span><span class="params">()</span> *<span class="title">Test</span></span> &#123;</div><div class="line">  	err := python.Initialize()</div><div class="line">  	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</div><div class="line">      	<span class="built_in">panic</span>(err.Error())</div><div class="line">  	&#125;</div><div class="line">  	test := &amp;Test &#123;</div><div class="line">      	Str2Py: python.PyString_FromString,</div><div class="line">      	Py2Str: python.PyString_AsString,</div><div class="line">  	&#125;</div><div class="line">  	<span class="keyword">return</span> test</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="params">(test *Test)</span><span class="title">ImportModule</span><span class="params">(dir, name <span class="keyword">string</span>)</span> *<span class="title">python</span>.<span class="title">PyObject</span></span> &#123;</div><div class="line">  	module := python.PyImport_ImportModule(<span class="string">"sys"</span>)</div><div class="line">  	path := module.GetAttrString(<span class="string">"path"</span>)</div><div class="line">  	python.PyList_Insert(path, <span class="number">0</span>, test.Str2Py(dir))</div><div class="line">  	<span class="keyword">return</span> python.PyImport_ImportModule(name)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">  	test := NewTest()</div><div class="line">  	module := test.ImportModule(<span class="string">"/home/tmp/test"</span>, <span class="string">"test"</span>)</div><div class="line">  	f := module.GetAttrString(<span class="string">"test"</span>)</div><div class="line">  	argv := python.PyTuple_New(<span class="number">1</span>)</div><div class="line"> 	python.PyTuple_SetItem(argv, <span class="number">0</span>, test.Str2Py(<span class="string">"test"</span>))</div><div class="line">  	res := f.Call(argv, python.Py_None)</div><div class="line">  	fmt.Println(test.Py2Str(res))</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <ul>
 <li><p>output</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">test</div><div class="line">&#123;"price": 0.01, "name": "test"&#125;</div></pre></td></tr></table></figure>
@@ -196,10 +196,11 @@ var _hmt = _hmt || [];
 <li>go 调用PyImport_ImportModule 把sys.path 导入</li>
 <li>使用GetAttrString 根据属性名获取对象属性</li>
 <li>使用call 调用python函数</li>
-<li>PyString_AsString python字符串转为go字符串 </li>
+<li>PyString_AsString python字符串转为go字符串</li>
 </ul>
 </li>
 </ul>
+<h2 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h2><p>经过实践，发现使用golang的goroutine 调用python脚本，会导致oom，因此该库还是不适用于并发情况下。目前比较好的做法是python做成一个服务端，与golang那边进行网络交互。</p>
 
       
 
@@ -325,7 +326,7 @@ var _hmt = _hmt || [];
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原理"><span class="toc-number">2.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#例子"><span class="toc-number">3.</span> <span class="toc-text">例子</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原理"><span class="toc-number">2.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#例子"><span class="toc-number">3.</span> <span class="toc-text">例子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#后续"><span class="toc-number">4.</span> <span class="toc-text">后续</span></a></li></ol>
                     </div>
                 </span>
             </div>
@@ -487,10 +488,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">docker</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">xhprof</a>
               </li>
              
@@ -503,11 +500,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Golang</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">ssdb</a>
+                <a href="javascript:void(0)" class="js-tag color2">docker</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -519,6 +512,14 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Golang</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">ssdb</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">gevent</a>
               </li>
              
@@ -527,15 +528,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Protobuf</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">验证码</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Spark</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -547,11 +540,19 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">crontab</a>
+                <a href="javascript:void(0)" class="js-tag color5">circuitbreaker</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">circuitbreaker</a>
+                <a href="javascript:void(0)" class="js-tag color4">Protobuf</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Spark</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">crontab</a>
               </li>
             
             <div class="clearfix"></div>
