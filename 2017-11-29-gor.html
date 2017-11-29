@@ -6,15 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://www.forster.site">
-  <title>Archives: 2016/12 | Forster&#39;s Blog</title>
+  <title>Gor | Forster&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Forster&#39;s Blog">
-<meta property="og:url" content="http://www.forster.site/archives/2016/12/index.html">
+  <meta name="description" content="背景在项目中，我们都希望能重现线上的情况，而gor工具能帮我们将http流量录制一份放到开发环境中进行重现。通过使用Gor工具，我们能方便地获取真实的用户流量测试代码。  https://github.com/bobthecow/gor">
+<meta name="keywords" content="Golang,gor">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Gor">
+<meta property="og:url" content="http://www.forster.site/2017-11-29-gor.html">
 <meta property="og:site_name" content="Forster&#39;s Blog">
+<meta property="og:description" content="背景在项目中，我们都希望能重现线上的情况，而gor工具能帮我们将http流量录制一份放到开发环境中进行重现。通过使用Gor工具，我们能方便地获取真实的用户流量测试代码。  https://github.com/bobthecow/gor">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-11-29T14:00:28.910Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Forster&#39;s Blog">
+<meta name="twitter:title" content="Gor">
+<meta name="twitter:description" content="背景在项目中，我们都希望能重现线上的情况，而gor工具能帮我们将http流量录制一份放到开发环境中进行重现。通过使用Gor工具，我们能方便地获取真实的用户流量测试代码。  https://github.com/bobthecow/gor">
   
     <link rel="alternative" href="/atom.xml" title="Forster&#39;s Blog" type="application/atom+xml">
   
@@ -142,104 +147,192 @@ var _hmt = _hmt || [];
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-2017-11-29-gor" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016-12-29-xhprof.html" class="archive-article-date">
-  	<time datetime="2016-12-29T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-29</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016-12-29-xhprof.html">PHP性能测试工具－xhprof</a>
+    <h1 class="article-title" itemprop="name">
+      Gor
     </h1>
   
 
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2017-11-29-gor.html" class="archive-article-date">
+  	<time datetime="2017-11-29T13:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-29</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在项目中，我们都希望能重现线上的情况，而gor工具能帮我们将http流量录制一份放到开发环境中进行重现。通过使用Gor工具，我们能方便地获取真实的用户流量测试代码。</p>
+<blockquote>
+<p><a href="https://github.com/bobthecow/gor" target="_blank" rel="external">https://github.com/bobthecow/gor</a></p>
+</blockquote>
+<a id="more"></a>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>Gor工具由两部分组成：监听者 和 重放者。</p>
+<p>监听者(listener): 实时获取线上流量，把监听到的流量复制一份到系统。</p>
+<p>重放者(reply server): 把流量转发到指定地址。</p>
+<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><h3 id="监听"><a href="#监听" class="headerlink" title="监听"></a>监听</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gor --input-raw :80 --output-file <span class="string">"xxx.gor"</span> --http-allow-url <span class="string">'/xxx'</span></div></pre></td></tr></table></figure>
+<p>上面例子的参数含义：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">--input-raw: 需要监听的端口</div><div class="line">--output-file: 放到指定的地址</div><div class="line">--http-allow-url: 会被监听到的http地址</div></pre></td></tr></table></figure></p>
+<h3 id="重放"><a href="#重放" class="headerlink" title="重放"></a>重放</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gor --input-file xxx.gor --http-allow-url <span class="string">'/xxx'</span> --output-http http://xxx</div></pre></td></tr></table></figure>
+<p>上面例子的参数含义：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">--input-file: 重放的文件</div><div class="line">--output-http: 转换后的地址</div><div class="line">--http-allow-url: 需要重放的http地址</div></pre></td></tr></table></figure></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">xhprof</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Golang</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">gor</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://www.forster.site/2017-11-29-gor.html" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016-12-17-docker.html" class="archive-article-date">
-  	<time datetime="2016-12-17T15:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-17</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2017-11-28-circuitbreaker.html" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">CircuitBreaker</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016-12-17-docker.html">docker简介</a>
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">docker</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原理"><span class="toc-number">2.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#例子"><span class="toc-number">3.</span> <span class="toc-text">例子</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#监听"><span class="toc-number">3.1.</span> <span class="toc-text">监听</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#重放"><span class="toc-number">3.2.</span> <span class="toc-text">重放</span></a></li></ol></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+        
+    </div>
+</aside>
+
+
+
   
   
-    </div></section>
+  
   
 
-    
+  
+
+  
+
+  
+  <div id="gitment-ctn"></div> 
+<link rel="stylesheet" href="//imsun.github.io/gitment/style/default.css">
+<script src="//imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+var gitment = new Gitment({
+  id: "http://www.forster.site/2017-11-29-gor.html",
+  owner: 'chiquanhuo',
+  repo: 'chiquanhuo.github.io',
+  oauth: {
+    client_id: '0f46e8d569557b5e38b0',
+    client_secret: 'ddc2bde0ec0ab5ffeb81e34a9e3e239bc553dea3',
+  },
+})
+gitment.render('gitment-ctn')
+</script>
+  
 
 
           </div>
@@ -265,8 +358,8 @@ var _hmt = _hmt || [];
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
