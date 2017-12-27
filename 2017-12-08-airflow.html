@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="Forster&#39;s Blog">
 <meta property="og:description" content="背景在项目中，有很多独立的任务需要定时执行，如果使用crontab并不能很清晰方便地查看任务执行状态。但使用airflow我们可以非常方便地查看我们需要执行的任务是否执行成功。 Airflow提供了非常丰富的operator供我们使用，其中用得最多的是BashOperator 和 SSHExecuteOperator。 如果这些operator不能满足需求，还可以自己新建定制operator。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-12-26T15:53:48.213Z">
+<meta property="og:updated_time" content="2017-12-27T08:55:07.234Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="管理任务神器-Airflow">
 <meta name="twitter:description" content="背景在项目中，有很多独立的任务需要定时执行，如果使用crontab并不能很清晰方便地查看任务执行状态。但使用airflow我们可以非常方便地查看我们需要执行的任务是否执行成功。 Airflow提供了非常丰富的operator供我们使用，其中用得最多的是BashOperator 和 SSHExecuteOperator。 如果这些operator不能满足需求，还可以自己新建定制operator。">
@@ -175,10 +175,11 @@ var _hmt = _hmt || [];
 </blockquote>
 <a id="more"></a>
 <h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><p>为了独立airflow的运行环境，且airflow是在python环境下执行的，我们可以使用<code>virtualenv</code> 独立环境。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">pip install virtualenv</div><div class="line"></div><div class="line">virtualenv ENV`</div><div class="line"></div><div class="line"><span class="built_in">source</span> ~/ENV/bin/activate</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">pip install virtualenv</div><div class="line"></div><div class="line">virtualenv ENV</div><div class="line"></div><div class="line"><span class="built_in">source</span> ~/ENV/bin/activate</div></pre></td></tr></table></figure>
 <p>在独立的环境下，我们安装airflow</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">pip install airflow</div><div class="line"></div><div class="line"><span class="comment"># 使用的是 sqlite database</span></div><div class="line">airflow initdb</div><div class="line"></div><div class="line"><span class="comment"># start the web server, default port is 8080</span></div><div class="line">airflow webserver -p 8080</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">pip install airflow</div><div class="line"></div><div class="line"><span class="comment"># 使用的是 sqlite database</span></div><div class="line"><span class="comment"># mysql可以在airflow.cfg里面改写成sql_alchemy_conn = mysql://username:pass@host/db</span></div><div class="line">airflow initdb</div><div class="line"></div><div class="line"><span class="comment"># start the web server, default port is 8080</span></div><div class="line">airflow webserver -p 8080</div></pre></td></tr></table></figure>
 <p>直到这里，我们现在就可以通过<code>localhost:8080/</code> 看到airflow的UI页面。</p>
+<p>Airflow 有两个重要的概念：DAG 和 task。 DAG (Directed Acyclic Graph) 是需要执行的任务的集合，在这个集合中我们可以定义任务的依赖关系。比如一个简单的的 DAG 包含三个 task：A、B、C，A 执行成功之后 B 才能执行，C 不依赖 A 和 B 即可执行。DAG 是一个 Python 文件，存放在 DAG 目录，Airflow 会动态的从这个目录读取Python文件，构建 DAG object，每个 DAG object 代表了一个 workflow，每个 workflow 可以包含任意个 task。</p>
 <h2 id="Examples"><a href="#Examples" class="headerlink" title="Examples"></a>Examples</h2><h3 id="简单tutorial"><a href="#简单tutorial" class="headerlink" title="简单tutorial"></a>简单tutorial</h3><p>首先我们从官网中可以查看到一个简单的例子，基本上这个例子可以满足大部分的需求。在<code>~/airflow/dags</code>下，新建一个新的dags.py</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> airflow <span class="keyword">import</span> DAG</div><div class="line"><span class="keyword">from</span> airflow.operators.bash_operator <span class="keyword">import</span> BashOperator</div><div class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime, timedelta</div><div class="line"></div><div class="line"></div><div class="line">default_args = &#123;</div><div class="line">    <span class="string">'owner'</span>: <span class="string">'forster'</span>,</div><div class="line">    <span class="string">'depends_on_past'</span>: <span class="keyword">False</span>,</div><div class="line">    <span class="string">'start_date'</span>: datetime(<span class="number">2017</span>, <span class="number">12</span>, <span class="number">26</span>),</div><div class="line">&#125;</div><div class="line"></div><div class="line">dag = DAG(<span class="string">'tutorial'</span>, default_args=default_args)</div><div class="line"></div><div class="line"><span class="comment"># t1, t2 are examples of tasks created by instantiating operators</span></div><div class="line">t1 = BashOperator(</div><div class="line">    task_id=<span class="string">'print_date'</span>,</div><div class="line">    bash_command=<span class="string">'date'</span>,</div><div class="line">    dag=dag)</div><div class="line"></div><div class="line">t2 = BashOperator(</div><div class="line">    task_id=<span class="string">'sleep'</span>,</div><div class="line">    bash_command=<span class="string">'sleep 5'</span>,</div><div class="line">    retries=<span class="number">3</span>,</div><div class="line">    dag=dag)</div><div class="line"></div><div class="line"><span class="comment"># t1执行完，t2才开始执行</span></div><div class="line">t2.set_upstream(t1)</div></pre></td></tr></table></figure>
 <h3 id="SSHExecuteOperator"><a href="#SSHExecuteOperator" class="headerlink" title="SSHExecuteOperator"></a>SSHExecuteOperator</h3><p>在项目中，我们经常需要连接远程服务器进行一些操作，因此我们可以使用<code>SSHExecuteOperator</code>实现。SSHExecuteOperator 连接远程服务器有两种方法：ssh-keygen 和 keypass; 这里我们使用rsa。 不过这里的<code>SSHExecuteOperator</code> 会有个问题，在远程服务器执行时间长了会断掉连接。</p>
@@ -188,8 +189,10 @@ var _hmt = _hmt || [];
 <li>在 ~/airflow/dags/ 下新建ssh_test.py</li>
 <li>在airflow页面的admin的connections 添加 <code>test_addr</code>，填写对应的host和port，在extra字段中加入 <code>{&quot;key_file&quot;: &quot;~/.ssh/id_rsa&quot;}</code></li>
 </ol>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> airflow</div><div class="line"><span class="keyword">from</span> airflow.models <span class="keyword">import</span> DAG</div><div class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime</div><div class="line"><span class="keyword">from</span> airflow <span class="keyword">import</span> operators</div><div class="line"><span class="keyword">from</span> airflow.contrib.hooks <span class="keyword">import</span> SSHHook</div><div class="line"><span class="keyword">from</span> airflow.models <span class="keyword">import</span> BaseOperator</div><div class="line"><span class="keyword">from</span> airflow.contrib.operators <span class="keyword">import</span> SSHExecuteOperator</div><div class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> timedelta</div><div class="line"><span class="keyword">from</span> airflow.operators.bash_operator <span class="keyword">import</span> BashOperator</div><div class="line"><span class="keyword">from</span> airflow.operators.latest_only_operator <span class="keyword">import</span> LatestOnlyOperator</div><div class="line"></div><div class="line"></div><div class="line">default_dags = &#123;</div><div class="line">    <span class="string">'owner'</span>: <span class="string">'forster'</span>,</div><div class="line">    <span class="string">'depends_on_past'</span>: <span class="keyword">False</span>,</div><div class="line">    <span class="string">'start_date'</span>: datetime(<span class="number">2017</span>, <span class="number">12</span>, <span class="number">10</span>),</div><div class="line">&#125;</div><div class="line"></div><div class="line">dag = DAG(</div><div class="line">    dag_id=<span class="string">'test_ssh'</span>,</div><div class="line">    default_args=default_dags,</div><div class="line">    schedule_interval=<span class="string">'0 7 * * *'</span></div><div class="line">)</div><div class="line"></div><div class="line">sshHook = SSHHook(conn_id=<span class="string">'test_addr'</span>)</div><div class="line"></div><div class="line"><span class="comment"># 保证只执行最新的task</span></div><div class="line">latest_only = LatestOnlyOperator(task_id=<span class="string">'latest_only'</span>, dag=dag)</div><div class="line"></div><div class="line">task = SSHExecuteOperator(</div><div class="line">    task_id=<span class="string">"test"</span>,</div><div class="line">    bash_command=<span class="string">"date &gt;&gt; ~/test.log "</span>, <span class="comment"># command string 最后需要加上一个空格</span></div><div class="line">    ssh_hook=sshHook,</div><div class="line">    pool=<span class="string">'test-server'</span>, <span class="comment"># dag在独立的pool下执行,不受其他dag影响</span></div><div class="line">    dag=dag)</div><div class="line"></div><div class="line">task.set_upstream(latest_only)</div></pre></td></tr></table></figure>
-<h2 id="自定义Operator"><a href="#自定义Operator" class="headerlink" title="自定义Operator"></a>自定义Operator</h2><p>待续 …</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> airflow</div><div class="line"><span class="keyword">from</span> airflow.models <span class="keyword">import</span> DAG</div><div class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime</div><div class="line"><span class="keyword">from</span> airflow <span class="keyword">import</span> operators</div><div class="line"><span class="keyword">from</span> airflow.contrib.hooks <span class="keyword">import</span> SSHHook</div><div class="line"><span class="keyword">from</span> airflow.models <span class="keyword">import</span> BaseOperator</div><div class="line"><span class="keyword">from</span> airflow.contrib.operators <span class="keyword">import</span> SSHExecuteOperator</div><div class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> timedelta</div><div class="line"><span class="keyword">from</span> airflow.operators.bash_operator <span class="keyword">import</span> BashOperator</div><div class="line"><span class="keyword">from</span> airflow.operators.latest_only_operator <span class="keyword">import</span> LatestOnlyOperator</div><div class="line"></div><div class="line"></div><div class="line">default_dags = &#123;</div><div class="line">    <span class="string">'owner'</span>: <span class="string">'forster'</span>,</div><div class="line">    <span class="string">'depends_on_past'</span>: <span class="keyword">False</span>,</div><div class="line">    <span class="string">'start_date'</span>: datetime(<span class="number">2017</span>, <span class="number">12</span>, <span class="number">10</span>),</div><div class="line">&#125;</div><div class="line"></div><div class="line">dag = DAG(</div><div class="line">    dag_id=<span class="string">'test_ssh'</span>,</div><div class="line">    default_args=default_dags,</div><div class="line">    schedule_interval=<span class="string">'0 7 * * *'</span></div><div class="line">)</div><div class="line"></div><div class="line">sshHook = SSHHook(conn_id=<span class="string">'test_addr'</span>)</div><div class="line"></div><div class="line"><span class="comment"># 保证只执行最新的task</span></div><div class="line">latest_only = LatestOnlyOperator(task_id=<span class="string">'latest_only'</span>, dag=dag)</div><div class="line"></div><div class="line">task = SSHExecuteOperator(</div><div class="line">    task_id=<span class="string">"test"</span>,</div><div class="line">    bash_command=<span class="string">"date &gt; ~/test.log "</span>, <span class="comment"># command string 最后需要加上一个空格</span></div><div class="line">    ssh_hook=sshHook,</div><div class="line">    pool=<span class="string">'test-server'</span>, <span class="comment"># dag在独立的pool下执行,不受其他dag影响</span></div><div class="line">    dag=dag)</div><div class="line"></div><div class="line">task.set_upstream(latest_only)</div></pre></td></tr></table></figure>
+<h2 id="自定义Operator"><a href="#自定义Operator" class="headerlink" title="自定义Operator"></a>自定义Operator</h2><p>当原来的operator不能满足我们需求，我们可以自己自定义operator。这个自定义的operator需要在<code>$AIRFLOW_HOME/plugins</code> 下新建。每个自定义operator都需要继承<code>BaseOperator</code>，并且改写<code>execute</code>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> airflow <span class="keyword">import</span> models, AirflowException</div><div class="line"><span class="keyword">from</span> airflow.util.decorators <span class="keyword">import</span> apply_defaults</div><div class="line"><span class="keyword">from</span> airflow.models <span class="keyword">import</span> Variable</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">TestOperator</span><span class="params">(models.BaseOperator)</span>:</span></div><div class="line"></div><div class="line"><span class="meta">    @apply_defaults</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, *args, **kwargs)</span>:</span></div><div class="line">        super(TestOperator, self).__init__(*args, **kwargs)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">execute</span><span class="params">(self, context)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            <span class="keyword">print</span> <span class="string">"test ok"</span></div><div class="line">        <span class="keyword">except</span>:</div><div class="line">            <span class="keyword">raise</span> AirflowException(<span class="string">"fail"</span>)</div><div class="line">            </div><div class="line">            <span class="comment"># variable 对应ui页面的admin里面的variables</span></div></pre></td></tr></table></figure>
+<p>想要动态生成dag，则只需要使用<code>globals()[dag_name] = dag</code> 因为globals 函数返回一个全局变量的字典，airflow可以读取这个字典识别出dag。</p>
 
       
 
@@ -452,11 +455,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">LNMP</a>
+                <a href="javascript:void(0)" class="js-tag color2">celery</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">docker</a>
+                <a href="javascript:void(0)" class="js-tag color5">LNMP</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -468,10 +471,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">celery</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">pacing</a>
               </li>
              
@@ -480,11 +479,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Golang</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">ssdb</a>
+                <a href="javascript:void(0)" class="js-tag color2">docker</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -504,6 +499,14 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Golang</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">ssdb</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">nginx</a>
               </li>
              
@@ -516,6 +519,18 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Spark</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Protobuf</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">crontab</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">circuitbreaker</a>
               </li>
              
@@ -525,18 +540,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">airflow</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Protobuf</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Spark</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">crontab</a>
               </li>
             
             <div class="clearfix"></div>
