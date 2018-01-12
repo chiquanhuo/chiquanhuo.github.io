@@ -4,6 +4,40 @@
 
     
   <url>
+    <loc>http://www.forster.site/2018-01-08-falsk+uwsgi.html</loc>
+    <lastmod>2018-01-12T06:29:57.109Z</lastmod>
+    <data>
+        <display>
+        <title>flask+uwsgi 搭建web服务端</title>
+        <pubTime>2018-01-08T12:00:00.000Z</pubTime>
+        
+        <tag>uwsgi</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.forster.site/2017-08-15-golang%E7%AC%94%E8%AE%B0-%E5%B9%B6%E5%8F%91.html</loc>
+    <lastmod>2017-12-27T15:22:46.969Z</lastmod>
+    <data>
+        <display>
+        <title>Golang 并发使用</title>
+        <pubTime>2017-08-15T14:00:00.000Z</pubTime>
+        
+        <tag>Golang</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://www.forster.site/2017-12-08-airflow.html</loc>
     <lastmod>2017-12-27T08:55:07.234Z</lastmod>
     <data>
@@ -269,23 +303,6 @@
         <tag>nginx</tag>
          
         <tag>haproxy</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://www.forster.site/2017-08-15-golang%E7%AC%94%E8%AE%B0-%E5%B9%B6%E5%8F%91.html</loc>
-    <lastmod>2017-11-04T15:44:05.856Z</lastmod>
-    <data>
-        <display>
-        <title>Golang 并发使用</title>
-        <pubTime>2017-08-15T14:00:00.000Z</pubTime>
-        
-        <tag>Golang</tag>
          
          
            

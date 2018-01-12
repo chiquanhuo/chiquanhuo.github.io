@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="Forster&#39;s Blog">
 <meta property="og:description" content="GoroutineGolang 提供了极其简单的方式支持并发操作。Golang通过go 关键字可以简单地启动一个协程实现goroutine 功能。Goroutine 有以下特性：  协作式调度 “无锁”的优点只在单线程下有效，如果$GOMAXPROCS &amp;gt; 1且需加锁保护数据时，效率会变慢 封装了异步IO 需同步访问共享内存">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-11-04T15:44:05.856Z">
+<meta property="og:updated_time" content="2017-12-27T15:22:46.969Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Golang 并发使用">
 <meta name="twitter:description" content="GoroutineGolang 提供了极其简单的方式支持并发操作。Golang通过go 关键字可以简单地启动一个协程实现goroutine 功能。Goroutine 有以下特性：  协作式调度 “无锁”的优点只在单线程下有效，如果$GOMAXPROCS &amp;gt; 1且需加锁保护数据时，效率会变慢 封装了异步IO 需同步访问共享内存">
@@ -182,13 +182,19 @@ var _hmt = _hmt || [];
 <li>无法控制并发</li>
 <li>只适用于不需要立即得到处理结果的情景</li>
 </ol>
-<h2 id="Channel"><a href="#Channel" class="headerlink" title="Channel"></a>Channel</h2><p>如果同一个时间段内请求数很多，每一个请求都启动一个goroutine，资源的消耗就不可控。解决方法是使用<code>channel</code>.</p>
+<h2 id="Channel"><a href="#Channel" class="headerlink" title="Channel"></a>Channel</h2><p>如果同一个时间段内请求数很多，每一个请求都启动一个goroutine，资源的消耗就不可控。解决方法是使用<code>channel</code>.<br>channel是可以让一个goroutine发送特定值到另一个goroutine的通信机制。</p>
 <p>Channel:</p>
 <ol>
 <li>用于同步并发运行的函数，并通过传递指定类型的值来进行通信</li>
-<li><code>&lt;-</code>预算符的位置决定channel的读或写操作</li>
+<li><code>&lt;-</code>预算符的位置决定channel的读或写操作<pre><code>+ ch &lt;- x // 发送语句
++ x &lt;- chn // 接收
++ &lt;-chn // 丢弃结果
+</code></pre></li>
+<li>make(chan int, 0) 第二个参数表示通道的容量，0表示无缓冲<pre><code>+ 无缓冲的通道会阻塞，直到有接收方接受数据
++ 可用于发送和接收同步化
+</code></pre>一个简单的使用例子：<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">     message := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">string</span>) <span class="comment">// no buffer</span></div><div class="line">     count := <span class="number">3</span></div><div class="line"></div><div class="line">     <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</div><div class="line">          <span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= count; i++ &#123;</div><div class="line">               fmt.Println(<span class="string">"send message"</span>)</div><div class="line">               message &lt;- fmt.Sprintf(<span class="string">"message %d"</span>, i)</div><div class="line">          &#125;</div><div class="line">     &#125;()</div><div class="line"></div><div class="line">     time.Sleep(time.Second * <span class="number">3</span>)</div><div class="line"></div><div class="line">     <span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= count; i++ &#123;</div><div class="line">          fmt.Println(&lt;-message)</div><div class="line">     &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
 </ol>
-<p>一个简单的使用例子：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">     message := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">string</span>) <span class="comment">// no buffer</span></div><div class="line">     count := <span class="number">3</span></div><div class="line"></div><div class="line">     <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</div><div class="line">          <span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= count; i++ &#123;</div><div class="line">               fmt.Println(<span class="string">"send message"</span>)</div><div class="line">               message &lt;- fmt.Sprintf(<span class="string">"message %d"</span>, i)</div><div class="line">          &#125;</div><div class="line">     &#125;()</div><div class="line"></div><div class="line">     time.Sleep(time.Second * <span class="number">3</span>)</div><div class="line"></div><div class="line">     <span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= count; i++ &#123;</div><div class="line">          fmt.Println(&lt;-message)</div><div class="line">     &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>以上例子，虽然控制了系统的并发，但是channel没有buffer，因此是同步执行的channel。该程序，在没有buffer的channel下，需要在发送者和接收者都完成任务后才执行结束，这种做法会导致buffer block。</p>
 <p>为了避免阻塞，我们需要为channel提供buffer。异步的例子如下：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">     message := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">string</span>，<span class="number">2</span>) <span class="comment">// 2 buffer</span></div><div class="line">     count := <span class="number">3</span></div><div class="line"></div><div class="line">     <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</div><div class="line">          <span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= count; i++ &#123;</div><div class="line">               fmt.Println(<span class="string">"send message"</span>)</div><div class="line">               message &lt;- fmt.Sprintf(<span class="string">"message %d"</span>, i)</div><div class="line">          &#125;</div><div class="line">          <span class="built_in">close</span>(message) <span class="comment">// close后，读取操作不会被阻塞</span></div><div class="line">     &#125;()</div><div class="line"></div><div class="line">     time.Sleep(time.Second * <span class="number">3</span>)</div><div class="line"></div><div class="line">     <span class="comment">// 可用range expression替换，但需要close channel </span></div><div class="line">     <span class="keyword">for</span> msg := <span class="keyword">range</span> message &#123;</div><div class="line">     	  fmt.Println(msg)</div><div class="line">	 &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>以上例子，通过改变channel的容量，控制系统的吞吐量。</p>
@@ -368,7 +374,7 @@ gitment.render('gitment-ctn')
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2017 Forster
+    		&copy; 2018 Forster
     	</div>
         <div class="footer-right">
 <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
@@ -468,6 +474,14 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">LNMP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">pacing</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">redis</a>
               </li>
              
@@ -476,7 +490,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">LNMP</a>
+                <a href="javascript:void(0)" class="js-tag color2">docker</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">golang</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -485,18 +503,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">PHP</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">pacing</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">golang</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">docker</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -524,6 +530,14 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">验证码</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Protobuf</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">nginx</a>
               </li>
              
@@ -532,19 +546,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">验证码</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Spark</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Protobuf</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">crontab</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -552,11 +554,19 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">gor</a>
+                <a href="javascript:void(0)" class="js-tag color3">crontab</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">uwsgi</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">airflow</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">gor</a>
               </li>
             
             <div class="clearfix"></div>
