@@ -6,15 +6,23 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://www.forster.site">
-  <title>Archives: 2017/2 | Forster&#39;s Blog</title>
+  <title>Python垃圾回收机制 | Forster&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Forster&#39;s Blog">
-<meta property="og:url" content="http://www.forster.site/archives/2017/02/index.html">
+  <meta name="description" content="简介这段时间了解了下Python的垃圾回收机制，这里做些笔记。 现在高级语言很多都采用了垃圾收集机制，Python也一样有自己的垃圾回收机制。Python采用的是引用计数机制为主，标记-清除和分代收集两种机制为辅的策略。">
+<meta name="keywords" content="Python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python垃圾回收机制">
+<meta property="og:url" content="http://www.forster.site/2018-01-31-python回收机制.html">
 <meta property="og:site_name" content="Forster&#39;s Blog">
+<meta property="og:description" content="简介这段时间了解了下Python的垃圾回收机制，这里做些笔记。 现在高级语言很多都采用了垃圾收集机制，Python也一样有自己的垃圾回收机制。Python采用的是引用计数机制为主，标记-清除和分代收集两种机制为辅的策略。">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/garbage/garbage.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/garbage/example.png">
+<meta property="og:updated_time" content="2018-01-31T09:58:06.391Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Forster&#39;s Blog">
+<meta name="twitter:title" content="Python垃圾回收机制">
+<meta name="twitter:description" content="简介这段时间了解了下Python的垃圾回收机制，这里做些笔记。 现在高级语言很多都采用了垃圾收集机制，Python也一样有自己的垃圾回收机制。Python采用的是引用计数机制为主，标记-清除和分代收集两种机制为辅的策略。">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/garbage/garbage.png">
   
     <link rel="alternative" href="/atom.xml" title="Forster&#39;s Blog" type="application/atom+xml">
   
@@ -142,147 +150,221 @@ var _hmt = _hmt || [];
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-2018-01-31-python回收机制" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Python垃圾回收机制
+    </h1>
+  
+
+
+        
+        <a href="/2018-01-31-python回收机制.html" class="archive-article-date">
+  	<time datetime="2018-01-31T12:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-01-31</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>这段时间了解了下Python的垃圾回收机制，这里做些笔记。</p>
+<p>现在高级语言很多都采用了垃圾收集机制，Python也一样有自己的垃圾回收机制。Python采用的是<code>引用计数机制</code>为主，<code>标记-清除</code>和<code>分代收集</code>两种机制为辅的策略。</p>
+<a id="more"></a>
+<h2 id="引用计数机制"><a href="#引用计数机制" class="headerlink" title="引用计数机制"></a>引用计数机制</h2><p>引用计数机制非常简单易懂。python 里面每个东西都是一个对象，结构体是PyObject<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> struct_object &#123;</div><div class="line">    <span class="keyword">int</span> ob_refcnt;</div><div class="line">    struct_typeobject *ob_type;</div><div class="line">&#125;PyObject;</div></pre></td></tr></table></figure></p>
+<p><code>ob_refcnt</code> 用来对引用计数。当一个新对象引用它的时候，ob_refcnt会增加；当引用它的对象被删除后，ob_refcnt会减少。当ob_refcnt为0时，这个对象生命会结束。</p>
+<p>引用计数优点：</p>
+<ul>
+<li>简单</li>
+<li>实时：处理回收内存的时间会分摊到不同时间点</li>
+</ul>
+<p>引用计数缺点：</p>
+<ul>
+<li>维护引用计数消耗资源</li>
+<li>不能解决循环引用的情况，导致内存泄漏</li>
+</ul>
+<h2 id="标记-清除机制"><a href="#标记-清除机制" class="headerlink" title="标记-清除机制"></a>标记-清除机制</h2><p><img src="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/garbage/garbage.png" alt="标记清除图"></p>
+<p>基本思路：首先初始所有对象标记为白色，并确定根节点对象（这些对象是不会被删除），标记它们为黑色（表示对象有效）。将有效对象引用的对象标记为灰色（表示对象可达，但它们所引用的对象还没检查），检查完灰色对象引用的对象后，将灰色标记为黑色。重复直到不存在灰色节点为止。最后白色结点都是需要清除的对象。</p>
+<h2 id="分代收集机制"><a href="#分代收集机制" class="headerlink" title="分代收集机制"></a>分代收集机制</h2><p>分代收集机制：收集与分代，通过链表把需要回收的对象收集。</p>
+<h3 id="组织回收对象"><a href="#组织回收对象" class="headerlink" title="组织回收对象"></a>组织回收对象</h3><p>循环引用只会出现在“内部存在可以对其他对象引用的对象”，比如：list，class等。使用链表将这些对象组织起来。每个链表节点如下所示：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* GC information is stored BEFORE the object structure. */</span></div><div class="line"><span class="keyword">typedef</span> <span class="keyword">union</span> _gc_head &#123;</div><div class="line">    <span class="class"><span class="keyword">struct</span> &#123;</span></div><div class="line">        <span class="keyword">union</span> _gc_head *gc_next;</div><div class="line">        <span class="keyword">union</span> _gc_head *gc_prev;</div><div class="line">        Py_ssize_t gc_refs;</div><div class="line">    &#125; gc;</div><div class="line">    <span class="keyword">long</span> <span class="keyword">double</span> dummy;  <span class="comment">/* force worst-case alignment */</span></div><div class="line">&#125; PyGC_Head;</div></pre></td></tr></table></figure></p>
+<p>每个对象都需要包含上面的结构。<code>PyGC_Head</code> 把每个对象连接起来，通过双向链表判断是否需要回收。所有创建的对象都会被插入这个链表中。</p>
+<p>需要标记垃圾回收的对象的结构是：PyGC_Head / PyObject_Head / PyObject</p>
+<p>垃圾回收执行阶段，PyGC_Head 的地址和 PyObject_Head 的地址可来回转换。</p>
+<h3 id="分代"><a href="#分代" class="headerlink" title="分代"></a>分代</h3><p>基本思想是：对象存在时间越长，越可能不是垃圾，应该越少去收集。将回收对象分成数个代，每个代就是一个链表。代进行标记-清除的时间与代内对象存活时间成正比例关系。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*** Global GC state ***/</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">gc_generation</span> &#123;</span></div><div class="line">    PyGC_Head head;</div><div class="line">    <span class="keyword">int</span> threshold; <span class="comment">/* collection threshold */</span></div><div class="line">    <span class="keyword">int</span> count; <span class="comment">/* count of allocations or collections of younger</span></div><div class="line"><span class="comment">    generations */</span></div><div class="line">&#125;;<span class="comment">//每个代的结构</span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> NUM_GENERATIONS 3<span class="comment">//代的个数</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> GEN_HEAD(n) (&amp;generations[n].head)</span></div><div class="line"></div><div class="line"><span class="comment">/* linked lists of container objects */</span></div><div class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">gc_generation</span> <span class="title">generations</span>[<span class="title">NUM_GENERATIONS</span>] = &#123;</span></div><div class="line"><span class="comment">/* PyGC_Head,                               threshold,      count */</span></div><div class="line">    &#123;&#123;&#123;GEN_HEAD(<span class="number">0</span>), GEN_HEAD(<span class="number">0</span>), <span class="number">0</span>&#125;&#125;,           <span class="number">700</span>,            <span class="number">0</span>&#125;,</div><div class="line">    &#123;&#123;&#123;GEN_HEAD(<span class="number">1</span>), GEN_HEAD(<span class="number">1</span>), <span class="number">0</span>&#125;&#125;,           <span class="number">10</span>,             <span class="number">0</span>&#125;,</div><div class="line">    &#123;&#123;&#123;GEN_HEAD(<span class="number">2</span>), GEN_HEAD(<span class="number">2</span>), <span class="number">0</span>&#125;&#125;,           <span class="number">10</span>,             <span class="number">0</span>&#125;,</div><div class="line">&#125;;</div><div class="line"></div><div class="line">PyGC_Head *_PyGC_generation0 = GEN_HEAD(<span class="number">0</span>);</div></pre></td></tr></table></figure>
+<p>从上面我们可以看到python 里面默认有3代，没代有自己的threshold(阀值)，引用对象数达到这个阀值则会触发垃圾回收。<br>0代触发将清理所有三代，1代触发会清理1,2代，2代触发后只会清理自己。在清理0代时，会将三个链表（代）链接起来，清理1代的时，会链接1,2两代。</p>
+<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><p>如下图所示，list1与list2循环引用，加上一个外部a引用list1，这个外部a帮助我们判断循环引用进行垃圾回收。</p>
+<p><img src="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/garbage/example.png" alt="例子"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">list1 = []</div><div class="line">list2 = []</div><div class="line">list1.append(list2)</div><div class="line">list2.append(list1)</div><div class="line">a = list1</div><div class="line">list3 = []</div><div class="line">list4 = []</div><div class="line">list3.append(list4)</div><div class="line">list4.append(list3)</div></pre></td></tr></table></figure>
+<p>使用用标记-清除机制处理循环引用情况：</p>
+<ol>
+<li>把引用计数复制到副本，用于确定根对象。</li>
+<li>确定根对象。这个根对象是不能被删除的，也就是说，有可收集对象链表外部的某个引用在引用这个对象，删除这个对象会导致错误。</li>
+<li>确定有效引用计数。有效引用计数就是去除循环引用后的计数。具体的操作是在一个循环环里面引用中，对象的各自的引用计数值都减去1.</li>
+<li>把不为0的对象标记为根对象。</li>
+<li>把内存链表一分为二，一条链表维护根对象集合(root)，一条维护剩下的对象(unreachable); 当在unreachable里面找到root表中，对象直接或间接引用的对象，这些对象从unreachable转到root表</li>
+<li>剩下的unreacheable表的对象都需要垃圾回收。</li>
+<li>回收list3，list4。首先处理list3， 调用list_clear；list4 的引用计数为0，引发对象销毁，则调用list4的list_dealloc。list4 从可收集摘除，然后调整list4所引用的所有对象的引用计数，影响到list3，然后使其引用计数变为0， 然后list3触发销毁。</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* Set all gc_refs = ob_refcnt.  After this, gc_refs is &gt; 0 for all objects</span></div><div class="line"><span class="comment">* in containers, and is GC_REACHABLE for all tracked gc objects not in</span></div><div class="line"><span class="comment">* containers.</span></div><div class="line"><span class="comment">*/</span></div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">update_refs</span><span class="params">(PyGC_Head *containers)</span></span></div><div class="line"><span class="function"></span>&#123;</div><div class="line">    PyGC_Head *gc = containers-&gt;gc.gc_next;</div><div class="line">    <span class="keyword">for</span> (; gc != containers; gc = gc-&gt;gc.gc_next) &#123;</div><div class="line">        assert(gc-&gt;gc.gc_refs == GC_REACHABLE);</div><div class="line">        gc-&gt;gc.gc_refs = Py_REFCNT(FROM_GC(gc));</div><div class="line">        assert(gc-&gt;gc.gc_refs != <span class="number">0</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/* A traversal callback for subtract_refs. */</span></div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">visit_decref</span><span class="params">(PyObject *op, <span class="keyword">void</span> *data)</span></span></div><div class="line"><span class="function"></span>&#123;</div><div class="line">    assert(op != <span class="literal">NULL</span>);</div><div class="line">    <span class="keyword">if</span> (PyObject_IS_GC(op)) &#123;</div><div class="line">        PyGC_Head *gc = AS_GC(op);</div><div class="line">        <span class="comment">/* We're only interested in gc_refs for objects in the</span></div><div class="line"><span class="comment">         * generation being collected, which can be recognized</span></div><div class="line"><span class="comment">         * because only they have positive gc_refs.</span></div><div class="line"><span class="comment">         */</span></div><div class="line">        assert(gc-&gt;gc.gc_refs != <span class="number">0</span>); <span class="comment">/* else refcount was too small */</span></div><div class="line">        <span class="keyword">if</span> (gc-&gt;gc.gc_refs &gt; <span class="number">0</span>)</div><div class="line">            gc-&gt;gc.gc_refs--;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/* Subtract internal references from gc_refs.  After this, gc_refs is &gt;= 0</span></div><div class="line"><span class="comment">* for all objects in containers, and is GC_REACHABLE for all tracked gc</span></div><div class="line"><span class="comment">* objects not in containers.  The ones with gc_refs &gt; 0 are directly</span></div><div class="line"><span class="comment">* reachable from outside containers, and so can't be collected.</span></div><div class="line"><span class="comment">*/</span></div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">subtract_refs</span><span class="params">(PyGC_Head *containers)</span></span></div><div class="line"><span class="function"></span>&#123;</div><div class="line">    traverseproc traverse;</div><div class="line">    PyGC_Head *gc = containers-&gt;gc.gc_next;</div><div class="line">    <span class="keyword">for</span> (; gc != containers; gc=gc-&gt;gc.gc_next) &#123;</div><div class="line">        traverse = Py_TYPE(FROM_GC(gc))-&gt;tp_traverse;</div><div class="line">        (<span class="keyword">void</span>) traverse(FROM_GC(gc),</div><div class="line">                        (visitproc)visit_decref,</div><div class="line">                        <span class="literal">NULL</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="GC库"><a href="#GC库" class="headerlink" title="GC库"></a>GC库</h2><p>python有gc库，可显式进行垃圾回收。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">gc.enable()  <span class="comment"># 开启gc（默认情况下是开启的）</span></div><div class="line"></div><div class="line">gc.disable()  <span class="comment"># 关闭gc</span></div><div class="line"></div><div class="line">gc.isenabled()  <span class="comment"># 判断gc是否开启</span></div><div class="line">　　</div><div class="line">gc.collection()  <span class="comment"># 执行一次垃圾回收，不管gc是否处于开启状态都能使用</span></div><div class="line">　　</div><div class="line">gc.set_threshold(t0, t1, t2)  <span class="comment"># 设置垃圾回收阈值; set_threshold(0) 禁用gc</span></div><div class="line"></div><div class="line">gc.get_threshold()  <span class="comment"># 获得当前的垃圾回收阈值</span></div><div class="line">　　</div><div class="line">gc.get_objects()  <span class="comment"># 返回所有被垃圾回收器（collector）管理的对象</span></div><div class="line"></div><div class="line">gc.get_referents(*obj)  <span class="comment"># 返回obj对象直接指向的对象</span></div><div class="line"></div><div class="line">gc.get_referrers(*obj)  <span class="comment"># 返回所有直接指向obj的对象</span></div></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>python的垃圾回收机制比较复杂，仍然需要花比较多时间理解里面的源码。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><blockquote>
+<p>Python源码剖析</p>
+</blockquote>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017-02-21-ssdb和redis比较.html" class="archive-article-date">
-  	<time datetime="2017-02-21T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-02-21</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017-02-21-ssdb和redis比较.html">ssdb与redis比较</a>
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Golang</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">ssdb</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Python</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://www.forster.site/2018-01-31-python回收机制.html" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017-02-17-redigo与redis.v5比较.html" class="archive-article-date">
-  	<time datetime="2017-02-17T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-02-17</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2018-01-16-进程、线程和协程的关系.html" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">进程、线程、协程</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017-02-17-redigo与redis.v5比较.html">redigo与redis.v5比较</a>
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">redis</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">golang</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#简介"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#引用计数机制"><span class="toc-number">2.</span> <span class="toc-text">引用计数机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#标记-清除机制"><span class="toc-number">3.</span> <span class="toc-text">标记-清除机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分代收集机制"><span class="toc-number">4.</span> <span class="toc-text">分代收集机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#组织回收对象"><span class="toc-number">4.1.</span> <span class="toc-text">组织回收对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分代"><span class="toc-number">4.2.</span> <span class="toc-text">分代</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#例子"><span class="toc-number">5.</span> <span class="toc-text">例子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GC库"><span class="toc-number">6.</span> <span class="toc-text">GC库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">7.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">8.</span> <span class="toc-text">参考</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017-02-09-golang正则表达式.html" class="archive-article-date">
-  	<time datetime="2017-02-09T13:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-02-09</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017-02-09-golang正则表达式.html">Golang正则表达式</a>
-    </h1>
-  
+        
+    </div>
+</aside>
 
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">golang</a>
-        		</li>
-      		
-		</ul>
-	</div>
 
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
   
-    </div></section>
+  
   
 
-    
+  
+
+  
+
+  
+  <div id="gitment-ctn"></div> 
+<link rel="stylesheet" href="//imsun.github.io/gitment/style/default.css">
+<script src="//imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+var gitment = new Gitment({
+  id: "http://www.forster.site/2018-01-31-python回收机制.html",
+  owner: 'chiquanhuo',
+  repo: 'chiquanhuo.github.io',
+  oauth: {
+    client_id: '0f46e8d569557b5e38b0',
+    client_secret: 'ddc2bde0ec0ab5ffeb81e34a9e3e239bc553dea3',
+  },
+})
+gitment.render('gitment-ctn')
+</script>
+  
 
 
           </div>
@@ -308,8 +390,8 @@ var _hmt = _hmt || [];
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

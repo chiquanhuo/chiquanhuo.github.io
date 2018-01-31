@@ -144,6 +144,94 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-2017-07-12-HTTP反向代理初识" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017-07-12-HTTP反向代理初识.html">HTTP反向代理初识</a>
+    </h1>
+  
+
+
+        
+        <a href="/2017-07-12-HTTP反向代理初识.html" class="archive-article-date">
+  	<time datetime="2017-07-12T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-12</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>最近把一个服务从PHP迁移到Go版本；但是对外接口的处理依然由PHP处理，然后内部实时请求Go这个服务并获取对应的数据。此服务需要可用性非常高，必须保证数据零丢失。</p>
+<p>一开始通过Go服务写数据，为了保证数据不丢失，打算采用<code>redis队列</code>来处理数据。但是存在一些问题：</p>
+<ul>
+<li>服务长时间挂掉，大量数据堆积队列</li>
+<li>并不能实时写入数据，需要根据服务的消费速度来决定写入时间；会导致有部分数据在需要读的情况下，还没被写入</li>
+<li>redis 挂掉，数据会丢失</li>
+</ul>
+<p>后续，通过查看<code>nginx</code>和<code>haproxy</code> 资料了解到HTTP反向代理方案可比较好地支持该服务的需求，带来比较高的可用性。</p>
+        
+          <a class="article-more-a" href="/2017-07-12-HTTP反向代理初识.html#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">nginx</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">haproxy</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017-07-12-HTTP反向代理初识.html">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-2017-05-22-初识Spark" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -915,98 +1003,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-2016-12-29-xhprof" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016-12-29-xhprof.html">PHP性能测试工具－xhprof</a>
-    </h1>
-  
-
-
-        
-        <a href="/2016-12-29-xhprof.html" class="archive-article-date">
-  	<time datetime="2016-12-29T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-29</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="xhprof-介绍"><a href="#xhprof-介绍" class="headerlink" title="xhprof 介绍"></a>xhprof 介绍</h2><p>xhprof是一个分层PHP性能分析工具。它报告函数级别的请求次数和各种指标，包括阻塞时间，CPU时间和内存使用情况。我们可以很清晰地从xhprof得到系统中存在哪些性能消耗大的函数，以便进行优化，是测试php代码的性能的利器。</p>
-<h2 id="xhprof-使用"><a href="#xhprof-使用" class="headerlink" title="xhprof 使用"></a>xhprof 使用</h2><p><a href="https://github.com/phacility/xhprof" target="_blank" rel="external">Git 仓库</a><br>php5 的安装</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">//绘图</div><div class="line">sudo apt-get install graphviz </div><div class="line"></div><div class="line">git <span class="built_in">clone</span> https://github.com/phacility/xhprof.git</div><div class="line"></div><div class="line"><span class="built_in">cd</span> xhprof/extension</div><div class="line">phpize</div><div class="line">./configure</div><div class="line">make &amp;&amp; sudo make install</div><div class="line"></div><div class="line">//编辑 /etc/php5/fpm/conf.d/xhprof.ini</div><div class="line">extension=xhprof.so</div><div class="line">xhprof.output_dir=/tmp</div><div class="line"></div><div class="line">//重启php-fpm</div><div class="line">sudo service php5-fpm restart</div></pre></td></tr></table></figure>
-<p>php7 的安装</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">//绘图</div><div class="line">sudo apt-get install graphviz </div><div class="line"></div><div class="line">git <span class="built_in">clone</span> https://github.com/longxinH/xhprof</div><div class="line"></div><div class="line"><span class="built_in">cd</span> xhprof/extension</div><div class="line">/usr/bin/phpize7.0</div><div class="line">./configure --with-php-config=/usr/bin/php-config7.0</div><div class="line">make &amp;&amp; sudo make install</div><div class="line"></div><div class="line">//编辑 /etc/php/7.0/fpm/conf.d/xhprof.ini</div><div class="line">extension=xhprof.so</div><div class="line">xhprof.output_dir=/tmp</div><div class="line"></div><div class="line">//重启php-fpm</div><div class="line">sudo service php7.0-fpm restart</div></pre></td></tr></table></figure>
-<p>使用</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">testXhprof</span><span class="params">()</span></span>&#123;</div><div class="line">    $ch = curl_init();</div><div class="line">    curl_setopt($ch, CURLOPT_URL, <span class="string">"http://www.baidu.com"</span>);</div><div class="line">    curl_setopt($ch, CURLOPT_HEADER, <span class="keyword">false</span>);</div><div class="line">    $result=curl_exec($ch);</div><div class="line">    curl_close($ch);</div><div class="line">&#125;</div><div class="line"></div><div class="line">xhprof_enable();</div><div class="line">testXhprof();</div><div class="line">$xhprof_data = xhprof_disable();</div><div class="line"><span class="keyword">echo</span> <span class="string">"done-----"</span>;</div><div class="line"></div><div class="line">$XHPROF_ROOT = realpath(dirname(<span class="keyword">__FILE__</span>) .<span class="string">'/'</span>);</div><div class="line"><span class="keyword">include_once</span> $XHPROF_ROOT . <span class="string">"/xhprof/xhprof_lib/utils/xhprof_lib.php"</span>;</div><div class="line"><span class="keyword">include_once</span> $XHPROF_ROOT . <span class="string">"/xhprof/xhprof_lib/utils/xhprof_runs.php"</span>;</div><div class="line">$xhprof_runs = <span class="keyword">new</span> XHProfRuns_Default();</div><div class="line">$run_id = $xhprof_runs-&gt;save_run($xhprof_data, <span class="string">"xhprof"</span>);</div><div class="line"><span class="keyword">echo</span> $run_id; <span class="comment">//输出的id</span></div><div class="line"><span class="meta">?&gt;</span></div></pre></td></tr></table></figure>
-<p>打开本地连接 则可以查看刚刚运行代码的性能如何。 <code>http://127.0.0.1/xhprof_html/index.php</code> 这里列出了需要测试性能的id，点击id则可清晰查看性能。</p>
-<p>页面看到的表格即为分析内容，提供的数据为：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Calls：函数的调用次数</div><div class="line">Incl. Wall Time (microsec) ：包含内部函数花费的时间，单位微秒</div><div class="line">Excl. Wall Time (microsec)：不包含内部函数花费的时间，单位微秒及所占百分比(%)</div><div class="line"></div><div class="line">Incl.：为 Including 包含的简写</div><div class="line">Excl.：为 Excluding 不包含的简写</div><div class="line">Wall Time：挂钟时间即任务花费的时间</div></pre></td></tr></table></figure>
-<p><img src="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/xhprof/xhprof1.png" alt="分析页面"></p>
-<p>也可以点击页面上面的[View Full Callgraph] ，红色地方是值得我们关注的耗时点。</p>
-        
-          <a class="article-more-a" href="/2016-12-29-xhprof.html#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">xhprof</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PHP</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016-12-29-xhprof.html">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
@@ -1121,15 +1117,15 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">pacing</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">LNMP</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">redis</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">pacing</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1169,10 +1165,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">验证码</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">gevent</a>
               </li>
              
@@ -1181,11 +1173,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Protobuf</a>
+                <a href="javascript:void(0)" class="js-tag color4">验证码</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Spark</a>
+                <a href="javascript:void(0)" class="js-tag color4">Protobuf</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1197,7 +1189,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">circuitbreaker</a>
+                <a href="javascript:void(0)" class="js-tag color1">Spark</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1205,15 +1197,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">uwsgi</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">go</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
+                <a href="javascript:void(0)" class="js-tag color5">circuitbreaker</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1221,7 +1205,23 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">uwsgi</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">gor</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">go</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Python</a>
               </li>
             
             <div class="clearfix"></div>
