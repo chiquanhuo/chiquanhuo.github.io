@@ -16,13 +16,13 @@
 <meta property="og:site_name" content="Forster&#39;s Blog">
 <meta property="og:description" content="简介这段时间了解了下Python的垃圾回收机制，这里做些笔记。 现在高级语言很多都采用了垃圾收集机制，Python也一样有自己的垃圾回收机制。Python采用的是引用计数机制为主，标记-清除和分代收集两种机制为辅的策略。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/garbage/garbage.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/garbage/tag.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/garbage/example.png">
-<meta property="og:updated_time" content="2018-01-31T09:58:06.391Z">
+<meta property="og:updated_time" content="2018-01-31T10:02:37.558Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Python垃圾回收机制">
 <meta name="twitter:description" content="简介这段时间了解了下Python的垃圾回收机制，这里做些笔记。 现在高级语言很多都采用了垃圾收集机制，Python也一样有自己的垃圾回收机制。Python采用的是引用计数机制为主，标记-清除和分代收集两种机制为辅的策略。">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/garbage/garbage.png">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/garbage/tag.png">
   
     <link rel="alternative" href="/atom.xml" title="Forster&#39;s Blog" type="application/atom+xml">
   
@@ -186,7 +186,7 @@ var _hmt = _hmt || [];
 <li>维护引用计数消耗资源</li>
 <li>不能解决循环引用的情况，导致内存泄漏</li>
 </ul>
-<h2 id="标记-清除机制"><a href="#标记-清除机制" class="headerlink" title="标记-清除机制"></a>标记-清除机制</h2><p><img src="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/garbage/garbage.png" alt="标记清除图"></p>
+<h2 id="标记-清除机制"><a href="#标记-清除机制" class="headerlink" title="标记-清除机制"></a>标记-清除机制</h2><p><img src="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/garbage/tag.png" alt="标记清除图"></p>
 <p>基本思路：首先初始所有对象标记为白色，并确定根节点对象（这些对象是不会被删除），标记它们为黑色（表示对象有效）。将有效对象引用的对象标记为灰色（表示对象可达，但它们所引用的对象还没检查），检查完灰色对象引用的对象后，将灰色标记为黑色。重复直到不存在灰色节点为止。最后白色结点都是需要清除的对象。</p>
 <h2 id="分代收集机制"><a href="#分代收集机制" class="headerlink" title="分代收集机制"></a>分代收集机制</h2><p>分代收集机制：收集与分代，通过链表把需要回收的对象收集。</p>
 <h3 id="组织回收对象"><a href="#组织回收对象" class="headerlink" title="组织回收对象"></a>组织回收对象</h3><p>循环引用只会出现在“内部存在可以对其他对象引用的对象”，比如：list，class等。使用链表将这些对象组织起来。每个链表节点如下所示：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* GC information is stored BEFORE the object structure. */</span></div><div class="line"><span class="keyword">typedef</span> <span class="keyword">union</span> _gc_head &#123;</div><div class="line">    <span class="class"><span class="keyword">struct</span> &#123;</span></div><div class="line">        <span class="keyword">union</span> _gc_head *gc_next;</div><div class="line">        <span class="keyword">union</span> _gc_head *gc_prev;</div><div class="line">        Py_ssize_t gc_refs;</div><div class="line">    &#125; gc;</div><div class="line">    <span class="keyword">long</span> <span class="keyword">double</span> dummy;  <span class="comment">/* force worst-case alignment */</span></div><div class="line">&#125; PyGC_Head;</div></pre></td></tr></table></figure></p>
@@ -474,11 +474,11 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">LNMP</a>
+                <a href="javascript:void(0)" class="js-tag color1">redis</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">redis</a>
+                <a href="javascript:void(0)" class="js-tag color2">celery</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -486,7 +486,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">celery</a>
+                <a href="javascript:void(0)" class="js-tag color5">LNMP</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -514,14 +514,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">AES</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">DES</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">gevent</a>
               </li>
              
@@ -530,11 +522,31 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">AES</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">DES</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">验证码</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Spark</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Protobuf</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">circuitbreaker</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">crontab</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -546,18 +558,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Spark</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">crontab</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">circuitbreaker</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">airflow</a>
               </li>
              
@@ -566,19 +566,19 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">gor</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">go</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">gor</a>
               </li>
             
             <div class="clearfix"></div>
