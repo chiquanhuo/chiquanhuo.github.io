@@ -4,14 +4,14 @@
 
     
   <url>
-    <loc>http://www.forster.site/2018-01-08-falsk+uwsgi.html</loc>
-    <lastmod>2018-01-31T03:32:54.833Z</lastmod>
+    <loc>http://www.forster.site/2018-01-16-%E8%BF%9B%E7%A8%8B%E3%80%81%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%8D%8F%E7%A8%8B%E7%9A%84%E5%85%B3%E7%B3%BB.html</loc>
+    <lastmod>2018-01-31T03:50:05.978Z</lastmod>
     <data>
         <display>
-        <title>flask+uwsgi 搭建web服务端</title>
-        <pubTime>2018-01-08T12:00:00.000Z</pubTime>
+        <title>进程、线程、协程</title>
+        <pubTime>2018-01-16T12:00:00.000Z</pubTime>
         
-        <tag>uwsgi</tag>
+        <tag>操作系统</tag>
          
          
            
@@ -21,14 +21,14 @@
 
     
   <url>
-    <loc>http://www.forster.site/2018-01-16-%E8%BF%9B%E7%A8%8B%E3%80%81%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%8D%8F%E7%A8%8B%E7%9A%84%E5%85%B3%E7%B3%BB.html</loc>
-    <lastmod>2018-01-31T03:31:25.396Z</lastmod>
+    <loc>http://www.forster.site/2018-01-08-falsk+uwsgi.html</loc>
+    <lastmod>2018-01-31T03:32:54.833Z</lastmod>
     <data>
         <display>
-        <title>进程、线程、协程</title>
-        <pubTime>2018-01-16T12:00:00.000Z</pubTime>
+        <title>flask+uwsgi 搭建web服务端</title>
+        <pubTime>2018-01-08T12:00:00.000Z</pubTime>
         
-        <tag>操作系统</tag>
+        <tag>uwsgi</tag>
          
          
            

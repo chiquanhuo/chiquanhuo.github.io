@@ -17,7 +17,7 @@
 <meta property="og:description" content="背景最近在看操作系统中的进程，线程，协程的含义和之间的关系，在这里作一些笔记。 进程与线程的关系首先我们都知道进程是资源拥有的基本单位。此外线程是独立调度与独立运行的基本单位，除了寄存器，程序计数器，内核对象，堆栈等必要的资源外基本不拥有其他资源。 在系统开销上，线程几乎不拥有系统资源，所以在进行切换时，线程切换的开销远小于进程。 线程是进程的一个实体，一个进程可以拥有多个线程，多个线程也可以并发">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/process/process.png">
-<meta property="og:updated_time" content="2018-01-31T03:31:25.396Z">
+<meta property="og:updated_time" content="2018-01-31T03:50:05.978Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="进程、线程、协程">
 <meta name="twitter:description" content="背景最近在看操作系统中的进程，线程，协程的含义和之间的关系，在这里作一些笔记。 进程与线程的关系首先我们都知道进程是资源拥有的基本单位。此外线程是独立调度与独立运行的基本单位，除了寄存器，程序计数器，内核对象，堆栈等必要的资源外基本不拥有其他资源。 在系统开销上，线程几乎不拥有系统资源，所以在进行切换时，线程切换的开销远小于进程。 线程是进程的一个实体，一个进程可以拥有多个线程，多个线程也可以并发">
@@ -181,23 +181,33 @@ var _hmt = _hmt || [];
 <p><img src="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/process/process.png" alt="进程"></p>
 <p>进程里面有两个重要概念：同步与互斥。<br>互斥：指某一资源同时只允许一个访问者对其进行访问，具有唯一性和排它性。但互斥无法限制访问者对资源的访问顺序，即访问是无序的。<br>同步：指对资源的有序访问，具有协作性。在多线程下串行访问资源，保证同时最多只能一个线程访问该资源。</p>
 <p>同步机制中遵循的原则：</p>
-<pre><code>+ 空闲让进；
-</code></pre><p>　+ 忙则等待（保证对临界区的互斥访问）；<br>　+ 有限等待（有限代表有限的时间，避免死等）；<br>　+ 让权等待（当进程不能进入自己的临界区时，应该释放处理机，以免陷入忙等状态）。<br>　<br>进程同步的方式有：</p>
-<pre><code>+ 临界量（关键代码）（不能跨进程）
-+ 信号量 （计数器访问）
-+ 事件
-+ 互斥量 （独占式访问资源）
-</code></pre><p>进程间通讯方式：</p>
-<pre><code>+ 管道通讯： FIFO （速度慢，容量有限）
-+ 消息队列
-+ 共享内存
-</code></pre><p>进程的调度算法：</p>
-<pre><code>+ 先来先服务（FCFS，First-Come-First-Served）
-+ 短作业优先（SJF,Shortest Process Next）
-+ 时间片轮转调度算法（RR，Round-Robin）
-+ 高响应比优先（HRRN，Highest Response Ratio Next）: 按照高响应比((已等待时间＋要求运行时间)/ 要求运行时间)
-+ 优先权(Priority)调度算法
-</code></pre><p>ThreadLocal 为每一个线程维护一个和该线程绑定的变量副本， 隔离多个线程的数据共享， 不需要对变量同步。</p>
+<ul>
+<li>空闲让进</li>
+<li>忙则等待（保证对临界区的互斥访问）；</li>
+<li>有限等待（有限代表有限的时间，避免死等）；</li>
+<li>让权等待（当进程不能进入自己的临界区时，应该释放处理机，以免陷入忙等状态）。<br>　<br>进程同步的方式有：<ul>
+<li>临界量（关键代码）（不能跨进程）</li>
+<li>信号量 （计数器访问）</li>
+<li>事件</li>
+<li>互斥量 （独占式访问资源）</li>
+</ul>
+</li>
+</ul>
+<p>进程间通讯方式：</p>
+<ul>
+<li>管道通讯： FIFO （速度慢，容量有限）</li>
+<li>消息队列</li>
+<li>共享内存</li>
+</ul>
+<p>进程的调度算法：</p>
+<ul>
+<li>先来先服务（FCFS，First-Come-First-Served）</li>
+<li>短作业优先（SJF,Shortest Process Next）</li>
+<li>时间片轮转调度算法（RR，Round-Robin）</li>
+<li>高响应比优先（HRRN，Highest Response Ratio Next）: 按照高响应比((已等待时间＋要求运行时间)/ 要求运行时间)</li>
+<li>优先权(Priority)调度算法</li>
+</ul>
+<p>ThreadLocal 为每一个线程维护一个和该线程绑定的变量副本， 隔离多个线程的数据共享， 不需要对变量同步。</p>
 <p>在linux 下可以通过 <code>sudo strace -p ** 检测进程</code> 来监控我们关注的进程情况。</p>
 <h2 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h2><p>每个进程至少有一个线程。线程是独立调度和分派的基本单位。</p>
 <p>同一进程中的多条线程将共享该进程中的全部系统资源。同一进程中的多个线程有各自的调用栈（call stack），自己的寄存器环境（register context），自己的线程本地存储（thread-local storage）。</p>
@@ -521,6 +531,10 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">验证码</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">gevent</a>
               </li>
              
@@ -529,15 +543,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Spark</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">验证码</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Protobuf</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Spark</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -549,15 +559,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">crontab</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">circuitbreaker</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">airflow</a>
+                <a href="javascript:void(0)" class="js-tag color3">crontab</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -570,6 +576,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">airflow</a>
               </li>
              
               <li class="article-tag-list-item">
