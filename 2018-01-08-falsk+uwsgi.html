@@ -16,10 +16,12 @@
 <meta property="og:site_name" content="Forster&#39;s Blog">
 <meta property="og:description" content="背景目前很多机器学习的项目都是通过python实现的，一般机器学习使用python的库比较多是numpy，sklearn，pickle等，而pickle库实现的数据结构又是python自己特有的，因此如果强行把python语言转化成golang语言会比较困难。虽然python的处理并发能力并没有golang强，但是使用flask+uwsgi搭建服务端的话，一般情况下能满足并发量大的情景。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-01-12T06:29:57.109Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/uwsgi/uwsgi.png">
+<meta property="og:updated_time" content="2018-01-31T03:32:54.833Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="flask+uwsgi 搭建web服务端">
 <meta name="twitter:description" content="背景目前很多机器学习的项目都是通过python实现的，一般机器学习使用python的库比较多是numpy，sklearn，pickle等，而pickle库实现的数据结构又是python自己特有的，因此如果强行把python语言转化成golang语言会比较困难。虽然python的处理并发能力并没有golang强，但是使用flask+uwsgi搭建服务端的话，一般情况下能满足并发量大的情景。">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/uwsgi/uwsgi.png">
   
     <link rel="alternative" href="/atom.xml" title="Forster&#39;s Blog" type="application/atom+xml">
   
@@ -183,9 +185,10 @@ var _hmt = _hmt || [];
 </blockquote>
 <p>首先我们需要了解wsgi。wsgi是作为 Web 服务器与 Web 应用程序之间的一种简单而通用的接口，基于cgi标准设计的。</p>
 <p>uWSGI 是一个web服务器，实现了wsgi， uwsgi协议。</p>
-<p>python中有一把锁，会将多线程退化为串行执行，一个多线程python的进程，并不能充分使用多核cpu资源，因此对于python来说，最好部署多进程应对高并发的场景。</p>
+<p>python中有一把GIL锁，会将多线程退化为串行执行，一个多线程python的进程，并不能充分使用多核cpu资源，因此对于python来说，最好部署多进程应对高并发的场景。</p>
 <p>uWSGI是多进程方式执行程序。 其中，通过配置，我们的uwsgi 可以有 1 master进程 和 N worker进程。主进程负责接收客户端请求，然后负载均衡（round-bin）地分配给n个worker去处理请求。一般情况下，worker数设置为CPU数量的2倍。</p>
 <p>一般为了增加线程数来提高服务端的效率，我们可以使用gevent，而uwsgi非常方便地支持了gevent，使得我们的uwsgi可以处理n*m个请求(m为线程数).</p>
+<p><img src="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/uwsgi/uwsgi.png" alt="uwsgi"></p>
 <p>uwsgi的项目配置可以参数下面<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">[uwsgi]</div><div class="line"></div><div class="line">http = :18001</div><div class="line"></div><div class="line">module = handle</div><div class="line"></div><div class="line">callable = app</div><div class="line"></div><div class="line">buffer-size = 32768</div><div class="line"></div><div class="line">processes = 4</div><div class="line"></div><div class="line">disable-logging = true</div><div class="line"></div><div class="line">http-keepalive = 1</div><div class="line"></div><div class="line">add-header = Connection: Keep-Alive</div><div class="line"></div><div class="line">disable-logging = true</div><div class="line"></div><div class="line">master = true</div><div class="line"></div><div class="line">gevent = 100</div></pre></td></tr></table></figure></p>
 <p>processes = 4：产生4个工作进程</p>
 <p>module = handle：加载指定的模块; callable = app; 加载指定的flask(wsgi)项目</p>
@@ -274,6 +277,15 @@ var _hmt = _hmt || [];
 
   
 <nav id="article-nav">
+  
+    <a href="/2018-01-15-快速排序.html" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          go实现快速排序
+        
+      </div>
+    </a>
   
   
     <a href="/2017-12-08-airflow.html" id="article-nav-older" class="article-nav-link-wrap">
@@ -450,11 +462,11 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">LNMP</a>
+                <a href="javascript:void(0)" class="js-tag color2">pacing</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">pacing</a>
+                <a href="javascript:void(0)" class="js-tag color5">LNMP</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -470,15 +482,23 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">golang</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">xhprof</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">golang</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Golang</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">ssdb</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -498,11 +518,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Golang</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">ssdb</a>
+                <a href="javascript:void(0)" class="js-tag color1">Spark</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -522,7 +538,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Spark</a>
+                <a href="javascript:void(0)" class="js-tag color3">crontab</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -530,7 +546,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">crontab</a>
+                <a href="javascript:void(0)" class="js-tag color3">airflow</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -538,7 +554,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">airflow</a>
+                <a href="javascript:void(0)" class="js-tag color3">go</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
               </li>
              
               <li class="article-tag-list-item">

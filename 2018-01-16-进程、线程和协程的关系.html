@@ -6,20 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://www.forster.site">
-  <title>Golang正则表达式 | Forster&#39;s Blog</title>
+  <title>进程、线程、协程 | Forster&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="背景原有的项目从php改为golang实现，提高响应时间，减少负载。其中需要通过使用正则表达规则判断字符串是否有连续重复字符。 php12345&amp;lt;?php$str = &quot;000000&quot;;if (preg_match(&apos;/^(.)\1*$&apos;), $str) &amp;#123;    echo true;&amp;#125; 此处返回true，因为php的正则表达是支持回溯判断的，所以这个pattern判断是">
-<meta name="keywords" content="golang">
+  <meta name="description" content="背景最近在看操作系统中的进程，线程，协程的含义和之间的关系，在这里作一些笔记。 进程与线程的关系首先我们都知道进程是资源拥有的基本单位。此外线程是独立调度与独立运行的基本单位，除了寄存器，程序计数器，内核对象，堆栈等必要的资源外基本不拥有其他资源。 在系统开销上，线程几乎不拥有系统资源，所以在进行切换时，线程切换的开销远小于进程。 线程是进程的一个实体，一个进程可以拥有多个线程，多个线程也可以并发">
+<meta name="keywords" content="操作系统">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Golang正则表达式">
-<meta property="og:url" content="http://www.forster.site/2017-02-09-golang正则表达式.html">
+<meta property="og:title" content="进程、线程、协程">
+<meta property="og:url" content="http://www.forster.site/2018-01-16-进程、线程和协程的关系.html">
 <meta property="og:site_name" content="Forster&#39;s Blog">
-<meta property="og:description" content="背景原有的项目从php改为golang实现，提高响应时间，减少负载。其中需要通过使用正则表达规则判断字符串是否有连续重复字符。 php12345&amp;lt;?php$str = &quot;000000&quot;;if (preg_match(&apos;/^(.)\1*$&apos;), $str) &amp;#123;    echo true;&amp;#125; 此处返回true，因为php的正则表达是支持回溯判断的，所以这个pattern判断是">
+<meta property="og:description" content="背景最近在看操作系统中的进程，线程，协程的含义和之间的关系，在这里作一些笔记。 进程与线程的关系首先我们都知道进程是资源拥有的基本单位。此外线程是独立调度与独立运行的基本单位，除了寄存器，程序计数器，内核对象，堆栈等必要的资源外基本不拥有其他资源。 在系统开销上，线程几乎不拥有系统资源，所以在进行切换时，线程切换的开销远小于进程。 线程是进程的一个实体，一个进程可以拥有多个线程，多个线程也可以并发">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-11-04T15:45:01.903Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/process/process.png">
+<meta property="og:updated_time" content="2018-01-31T03:31:25.396Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Golang正则表达式">
-<meta name="twitter:description" content="背景原有的项目从php改为golang实现，提高响应时间，减少负载。其中需要通过使用正则表达规则判断字符串是否有连续重复字符。 php12345&amp;lt;?php$str = &quot;000000&quot;;if (preg_match(&apos;/^(.)\1*$&apos;), $str) &amp;#123;    echo true;&amp;#125; 此处返回true，因为php的正则表达是支持回溯判断的，所以这个pattern判断是">
+<meta name="twitter:title" content="进程、线程、协程">
+<meta name="twitter:description" content="背景最近在看操作系统中的进程，线程，协程的含义和之间的关系，在这里作一些笔记。 进程与线程的关系首先我们都知道进程是资源拥有的基本单位。此外线程是独立调度与独立运行的基本单位，除了寄存器，程序计数器，内核对象，堆栈等必要的资源外基本不拥有其他资源。 在系统开销上，线程几乎不拥有系统资源，所以在进行切换时，线程切换的开销远小于进程。 线程是进程的一个实体，一个进程可以拥有多个线程，多个线程也可以并发">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/process/process.png">
   
     <link rel="alternative" href="/atom.xml" title="Forster&#39;s Blog" type="application/atom+xml">
   
@@ -147,38 +149,72 @@ var _hmt = _hmt || [];
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-2017-02-09-golang正则表达式" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-2018-01-16-进程、线程和协程的关系" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Golang正则表达式
+      进程、线程、协程
     </h1>
   
 
 
         
-        <a href="/2017-02-09-golang正则表达式.html" class="archive-article-date">
-  	<time datetime="2017-02-09T13:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-02-09</time>
+        <a href="/2018-01-16-进程、线程和协程的关系.html" class="archive-article-date">
+  	<time datetime="2018-01-16T12:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-01-16</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>原有的项目从php改为golang实现，提高响应时间，减少负载。其中需要通过使用正则表达规则判断字符串是否有连续重复字符。</p>
-<h2 id="php"><a href="#php" class="headerlink" title="php"></a>php</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">$str = <span class="string">"000000"</span>;</div><div class="line"><span class="keyword">if</span> (preg_match(<span class="string">'/^(.)\1*$'</span>), $str) &#123;</div><div class="line">    <span class="keyword">echo</span> <span class="keyword">true</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>此处返回true，因为php的正则表达是支持回溯判断的，所以这个pattern判断是有效的。</p>
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>最近在看操作系统中的进程，线程，协程的含义和之间的关系，在这里作一些笔记。</p>
+<h2 id="进程与线程的关系"><a href="#进程与线程的关系" class="headerlink" title="进程与线程的关系"></a>进程与线程的关系</h2><p>首先我们都知道进程是资源拥有的基本单位。此外线程是独立调度与独立运行的基本单位，除了寄存器，程序计数器，内核对象，堆栈等必要的资源外基本不拥有其他资源。</p>
+<p>在系统开销上，线程几乎不拥有系统资源，所以在进行切换时，线程切换的开销远小于进程。</p>
+<p>线程是进程的一个实体，一个进程可以拥有多个线程，多个线程也可以并发执行。一个没有线程的进程也可以看做是单线程的，同样线程也经常被看做是一种轻量级的进程。并且进程可以不依赖于线程而单独存在，而线程则不然。</p>
+<p>进程的控制表时PCB, 线程也有自己的控制表TCB。</p>
+<p>进程的切换会涉及到程序的上下文切换，这里会让系统开销很大。为了减少进程切换和创建的开销，我们引入线程。</p>
 <a id="more"></a>
-<h2 id="Golang"><a href="#Golang" class="headerlink" title="Golang"></a>Golang</h2><p>因为投放服务器都投放了各个产品，其它产品的请求量一天就达到了4000万，本产品只达到50万，所以把该产品更改为golang投放，投放服务器的负载并没有明显变化。</p>
-<p>一开始我选用了regexp包进行正则表达判断，这个引擎速度非常快且线程安全，但是发现这个regexp并不使用回溯法，不支持反向引用。因为regexp不用回溯，所以能够保证线性的执行时间O(n),而回溯法引擎很容易达到指数之行执行时间O(2^n)。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> main</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">    <span class="string">"fmt"</span></div><div class="line">    <span class="string">"regexp"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">    str := <span class="string">"00000"</span></div><div class="line">    pattern := <span class="string">`^(.)\1*$`</span></div><div class="line">    matched, _ := regexp.MatchString(pattern, str)</div><div class="line">    <span class="keyword">if</span> matched &#123;</div><div class="line">        fmt.Println(<span class="string">"ok"</span>)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>这里写的得不到我们想要的</p>
-<p>然后发现有个rubex包能支持回溯查询,但需要安装系统库<br><code>github.com/moovweb/rubex</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> main</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">    <span class="string">"fmt"</span></div><div class="line">    <span class="string">"github.com/moovweb/rubex"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">    str := <span class="string">"00000"</span></div><div class="line">    pattern := <span class="string">`^(.)\1*$`</span></div><div class="line">    matched, _ := regexp.MatchString(pattern, str)</div><div class="line">    <span class="keyword">if</span> matched &#123;</div><div class="line">        fmt.Println(<span class="string">"ok"</span>)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>这里的结果即为我们需要的。</p>
+<h2 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h2><p>以下是进程状态与转换的图：</p>
+<p><img src="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/process/process.png" alt="进程"></p>
+<p>进程里面有两个重要概念：同步与互斥。<br>互斥：指某一资源同时只允许一个访问者对其进行访问，具有唯一性和排它性。但互斥无法限制访问者对资源的访问顺序，即访问是无序的。<br>同步：指对资源的有序访问，具有协作性。在多线程下串行访问资源，保证同时最多只能一个线程访问该资源。</p>
+<p>同步机制中遵循的原则：</p>
+<pre><code>+ 空闲让进；
+</code></pre><p>　+ 忙则等待（保证对临界区的互斥访问）；<br>　+ 有限等待（有限代表有限的时间，避免死等）；<br>　+ 让权等待（当进程不能进入自己的临界区时，应该释放处理机，以免陷入忙等状态）。<br>　<br>进程同步的方式有：</p>
+<pre><code>+ 临界量（关键代码）（不能跨进程）
++ 信号量 （计数器访问）
++ 事件
++ 互斥量 （独占式访问资源）
+</code></pre><p>进程间通讯方式：</p>
+<pre><code>+ 管道通讯： FIFO （速度慢，容量有限）
++ 消息队列
++ 共享内存
+</code></pre><p>进程的调度算法：</p>
+<pre><code>+ 先来先服务（FCFS，First-Come-First-Served）
++ 短作业优先（SJF,Shortest Process Next）
++ 时间片轮转调度算法（RR，Round-Robin）
++ 高响应比优先（HRRN，Highest Response Ratio Next）: 按照高响应比((已等待时间＋要求运行时间)/ 要求运行时间)
++ 优先权(Priority)调度算法
+</code></pre><p>ThreadLocal 为每一个线程维护一个和该线程绑定的变量副本， 隔离多个线程的数据共享， 不需要对变量同步。</p>
+<p>在linux 下可以通过 <code>sudo strace -p ** 检测进程</code> 来监控我们关注的进程情况。</p>
+<h2 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h2><p>每个进程至少有一个线程。线程是独立调度和分派的基本单位。</p>
+<p>同一进程中的多条线程将共享该进程中的全部系统资源。同一进程中的多个线程有各自的调用栈（call stack），自己的寄存器环境（register context），自己的线程本地存储（thread-local storage）。</p>
+<p>linux， mac中使用的线程是<code>POSIX线程</code>.</p>
+<p>多线程：多个任务在一个进程中同时执行，合理使用CPU资源。多线程的运行是根据CPU切换完成。</p>
+<p>python 中提供两个线程库使用：<code>thread</code> 和 <code>threading</code>。<br>启动一个线程，只需要声明一个<code>thread</code>实例，并使用<code>start()</code> 启动。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">import</span> time, threading</div><div class="line"></div><div class="line"><span class="comment"># 新线程执行的代码:</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">loop</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">print</span> <span class="string">'thread %s is running...'</span> % threading.current_thread().name</div><div class="line">    n = <span class="number">0</span></div><div class="line">    <span class="keyword">while</span> n &lt; <span class="number">5</span>:</div><div class="line">        n = n + <span class="number">1</span></div><div class="line">        <span class="keyword">print</span> <span class="string">'thread %s &gt;&gt;&gt; %s'</span> % (threading.current_thread().name, n)</div><div class="line">        time.sleep(<span class="number">1</span>)</div><div class="line">        <span class="keyword">print</span> <span class="string">'thread %s ended.'</span> % threading.current_thread().name</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    <span class="keyword">print</span> <span class="string">'thread %s is running...'</span> % threading.current_thread().name</div><div class="line">    t = threading.Thread(target=loop, name=<span class="string">'LoopThread'</span>)</div><div class="line">    t.start()</div><div class="line">    t.join()</div><div class="line">    <span class="keyword">print</span> <span class="string">'thread %s ended.'</span> % threading.current_thread().name</div></pre></td></tr></table></figure></p>
+<p>在多线程中，有一个隐患是资源是共享的，资源被多个线程请求，很容易被改坏。为了防止资源被改坏，我们需要加上一个锁。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">data = <span class="number">0</span></div><div class="line">lock = threading.Lock()</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">run_thread</span><span class="params">(n)</span>:</span></div><div class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1000</span>):</div><div class="line">    <span class="comment"># 获取锁,只有一个线程能成功获取锁</span></div><div class="line">    lock.acquire()</div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        <span class="comment"># do something you want</span></div><div class="line">    <span class="keyword">finally</span>:</div><div class="line">        <span class="comment"># 释放锁</span></div><div class="line">        lock.release()</div></pre></td></tr></table></figure></p>
+<p>在多核CPU下，Python的线程虽然是真正的线程，但解释器执行代码时，有一个<code>GIL锁：Global Interpreter Lock</code>，任何Python线程执行前，必须先获得GIL锁，然后，每执行100条字节码，解释器就自动释放GIL锁，让别的线程有机会执行。这个GIL全局锁实际上把所有线程的执行代码都给上了锁，所以，多线程在Python中只能交替执行，即使100个线程跑在100核CPU上，也只能用到1个核。</p>
+<h3 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> threading</div><div class="line"></div><div class="line"><span class="comment"># 创建全局ThreadLocal对象:</span></div><div class="line">local_school = threading.local()</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">process_test</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">print</span> <span class="string">'Hello, %s (in %s)'</span> % (local_school.test, threading.current_thread().name)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">process_thread</span><span class="params">(data)</span>:</span></div><div class="line">    <span class="comment"># 绑定ThreadLocal的test:</span></div><div class="line">    local_school.test = data</div><div class="line">    process_test()</div></pre></td></tr></table></figure>
+<p>这里使用了<code>threadlocal</code> 对共享变量进行复制成副本。最常用的地方就是为每个线程绑定一个数据库连接，HTTP请求，用户身份信息等，这样一个线程的所有调用到的处理函数都可以非常方便地访问这些资源。</p>
+<h2 id="协程"><a href="#协程" class="headerlink" title="协程"></a>协程</h2><p>协程我们平时又称为微线程。协程是在一个线程里面执行的。<br>协程看上去是一个程序，但执行过程中，在程序内部可决定中断，然后转而执行别的程序，在适当的时候再返回来接着执行。<br>python 中 使用 <code>yield</code> 可一定程度上支持协程。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> time</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">consumer</span><span class="params">()</span>:</span></div><div class="line">    r = <span class="string">''</span></div><div class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</div><div class="line">        n = <span class="keyword">yield</span> r</div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> n:</div><div class="line">            <span class="keyword">return</span></div><div class="line">        print(<span class="string">'[CONSUMER] Consuming %s...'</span> % n)</div><div class="line">        time.sleep(<span class="number">1</span>)</div><div class="line">        r = <span class="string">'200 OK'</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">produce</span><span class="params">(c)</span>:</span></div><div class="line">    c.next()</div><div class="line">    n = <span class="number">0</span></div><div class="line">    <span class="keyword">while</span> n &lt; <span class="number">5</span>:</div><div class="line">        n = n + <span class="number">1</span></div><div class="line">        print(<span class="string">'[PRODUCER] Producing %s...'</span> % n)</div><div class="line">        r = c.send(n)</div><div class="line">        print(<span class="string">'[PRODUCER] Consumer return: %s'</span> % r)</div><div class="line">    c.close()</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__==<span class="string">'__main__'</span>:</div><div class="line">    c = consumer()</div><div class="line">    produce(c)</div></pre></td></tr></table></figure>
+<p>gevent是基于IO切换的协程。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这次对进程，线程和协程的知识作了简单的笔记。后续会深入理解其原理。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><blockquote>
+<p><a href="https://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000" target="_blank" rel="external">https://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000</a></p>
+</blockquote>
 
       
 
@@ -192,7 +228,7 @@ var _hmt = _hmt || [];
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">golang</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">操作系统</a>
         		</li>
       		
 		</ul>
@@ -248,7 +284,7 @@ var _hmt = _hmt || [];
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://www.forster.site/2017-02-09-golang正则表达式.html" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://www.forster.site/2018-01-16-进程、线程和协程的关系.html" alt="微信分享二维码">
     </div>
 </div>
 
@@ -262,18 +298,9 @@ var _hmt = _hmt || [];
   
 <nav id="article-nav">
   
-    <a href="/2017-02-17-redigo与redis.v5比较.html" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          redigo与redis.v5比较
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017-01-14-golang改造.html" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Golang改造</div>
+    <a href="/2018-01-15-快速排序.html" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">go实现快速排序</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -300,7 +327,7 @@ var _hmt = _hmt || [];
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#php"><span class="toc-number">2.</span> <span class="toc-text">php</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Golang"><span class="toc-number">3.</span> <span class="toc-text">Golang</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进程与线程的关系"><span class="toc-number">2.</span> <span class="toc-text">进程与线程的关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进程"><span class="toc-number">3.</span> <span class="toc-text">进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线程"><span class="toc-number">4.</span> <span class="toc-text">线程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ThreadLocal"><span class="toc-number">4.1.</span> <span class="toc-text">ThreadLocal</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#协程"><span class="toc-number">5.</span> <span class="toc-text">协程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">7.</span> <span class="toc-text">参考</span></a></li></ol>
                     </div>
                 </span>
             </div>
@@ -326,7 +353,7 @@ var _hmt = _hmt || [];
 <script src="//imsun.github.io/gitment/dist/gitment.browser.js"></script>
 <script>
 var gitment = new Gitment({
-  id: "http://www.forster.site/2017-02-09-golang正则表达式.html",
+  id: "http://www.forster.site/2018-01-16-进程、线程和协程的关系.html",
   owner: 'chiquanhuo',
   repo: 'chiquanhuo.github.io',
   oauth: {
