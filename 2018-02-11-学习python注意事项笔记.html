@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="Forster&#39;s Blog">
 <meta property="og:description" content="简介为什么使用Python？ Python 是一种方便更新的动态脚本语言。 使用python的时候，我们需要理解python里面，所有东西都是对象 all is object。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-02-11T12:42:53.017Z">
+<meta property="og:updated_time" content="2018-02-11T12:48:53.603Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="学习Python注意事项笔记">
 <meta name="twitter:description" content="简介为什么使用Python？ Python 是一种方便更新的动态脚本语言。 使用python的时候，我们需要理解python里面，所有东西都是对象 all is object。">
@@ -171,21 +171,12 @@ var _hmt = _hmt || [];
         <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>为什么使用Python？ Python 是一种方便更新的动态脚本语言。</p>
 <p>使用python的时候，我们需要理解python里面，所有东西都是对象 all is object。</p>
 <a id="more"></a>
-<h2 id="共识"><a href="#共识" class="headerlink" title="共识"></a>共识</h2><ol>
-<li><p>在python中没有私有成员这样的说话，虽然提供了 <code>__</code>为前缀判定为私有成员，但是我们依然可以改变这些变量。我们可以用<code>_</code>为前缀判定为私有成员，只需认为这个事私有成员，但我们依然可以改变。</p>
-</li>
-<li><p>因为python是有旧类式和新类式，但为了更好的开发维护，我们应该更多的使用新类式</p>
-</li>
-</ol>
+<h2 id="共识"><a href="#共识" class="headerlink" title="共识"></a>共识</h2><p>在python中没有私有成员这样的说话，虽然提供了 <code>__</code>为前缀判定为私有成员，但是我们依然可以改变这些变量。我们可以用<code>_</code>为前缀判定为私有成员，只需认为这个事私有成员，但我们依然可以改变。</p>
+<p>因为python是有旧类式和新类式，但为了更好的开发维护，我们应该更多的使用新类式</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">PyClass</span><span class="params">(object)</span>:</span></div><div class="line">    <span class="keyword">pass</span></div></pre></td></tr></table></figure>
-<ol>
-<li><p>在catch exceptions 时，不要使用print来获取错误信息，应该直接让程序抛出异常。</p>
-</li>
-<li><p>字符串的拼接时，不要使用<code>+</code>，因为会生成多个对象再进行拼接。我们应该使用空list，然后最后join在一起。</p>
-</li>
-<li><p>不要使用space，我们应该使用tab来实现缩进。因为一个tab只占用一个字节，一个space也是一个字节，4个space就是4个字节。</p>
-</li>
-</ol>
+<p>在catch exceptions 时，不要使用print来获取错误信息，应该直接让程序抛出异常。</p>
+<p>字符串的拼接时，不要使用<code>+</code>，因为会生成多个对象再进行拼接。我们应该使用空list，然后最后join在一起。</p>
+<p>不要使用space，我们应该使用tab来实现缩进。因为一个tab只占用一个字节，一个space也是一个字节，4个space就是4个字节。</p>
 <h2 id="皆为对象"><a href="#皆为对象" class="headerlink" title="皆为对象"></a>皆为对象</h2><p>在python中，所有东西都是对象， 除了一些关键字和运算符。</p>
 <p>可以通过<code>isinstance(xx, object)</code> 查看是否为object， type也是一个object。</p>
 <h2 id="迭代器"><a href="#迭代器" class="headerlink" title="迭代器"></a>迭代器</h2><p>python的迭代器可用next()访问。</p>
@@ -538,19 +529,19 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Golang</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">ssdb</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">AES</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">DES</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Golang</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">ssdb</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -590,7 +581,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">gor</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">airflow</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">uwsgi</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -598,19 +597,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">gor</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">uwsgi</a>
+                <a href="javascript:void(0)" class="js-tag color2">Python</a>
               </li>
             
             <div class="clearfix"></div>
