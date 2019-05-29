@@ -1,4 +1,3 @@
-http://www.forster.site/2018-05-05-xcode搭建OpenGL环境.html
 http://www.forster.site/2018-04-12-A*算法.html
 http://www.forster.site/2018-02-11-学习python注意事项笔记.html
 http://www.forster.site/2018-01-31-python回收机制.html
