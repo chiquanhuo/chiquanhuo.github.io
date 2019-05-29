@@ -6,15 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://www.forster.site">
-  <title>Archives: 2017/4 | Forster&#39;s Blog</title>
+  <title>xcode搭建OpenGL环境 | Forster&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Forster&#39;s Blog">
-<meta property="og:url" content="http://www.forster.site/archives/2017/04/index.html">
+  <meta name="description" content="简介最近开始学习OpenGL，学习书籍时蓝宝书《OpenGL超级宝典(第五版)》书里面有很多例子可以参考，可以更容易理解OpenGL。俗话说，工欲善其事，必先利其器。因此我们先搭建好环境，才能更好地往下学习。期间参考了网上很多教程，我借鉴过来，总结到这里。">
+<meta name="keywords" content="OpenGL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="xcode搭建OpenGL环境">
+<meta property="og:url" content="http://www.forster.site/2018-05-05-xcode搭建OpenGL环境.html">
 <meta property="og:site_name" content="Forster&#39;s Blog">
+<meta property="og:description" content="简介最近开始学习OpenGL，学习书籍时蓝宝书《OpenGL超级宝典(第五版)》书里面有很多例子可以参考，可以更容易理解OpenGL。俗话说，工欲善其事，必先利其器。因此我们先搭建好环境，才能更好地往下学习。期间参考了网上很多教程，我借鉴过来，总结到这里。">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-10-16T14:24:54.009Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Forster&#39;s Blog">
+<meta name="twitter:title" content="xcode搭建OpenGL环境">
+<meta name="twitter:description" content="简介最近开始学习OpenGL，学习书籍时蓝宝书《OpenGL超级宝典(第五版)》书里面有很多例子可以参考，可以更容易理解OpenGL。俗话说，工欲善其事，必先利其器。因此我们先搭建好环境，才能更好地往下学习。期间参考了网上很多教程，我借鉴过来，总结到这里。">
   
     <link rel="alternative" href="/atom.xml" title="Forster&#39;s Blog" type="application/atom+xml">
   
@@ -142,61 +147,182 @@ var _hmt = _hmt || [];
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-2018-05-05-xcode搭建OpenGL环境" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017-04-20-验证码总结.html" class="archive-article-date">
-  	<time datetime="2017-04-20T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-20</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017-04-20-验证码总结.html">captcha验证码总结</a>
+    <h1 class="article-title" itemprop="name">
+      xcode搭建OpenGL环境
     </h1>
   
 
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2018-05-05-xcode搭建OpenGL环境.html" class="archive-article-date">
+  	<time datetime="2018-05-05T12:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-05</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>最近开始学习OpenGL，学习书籍时蓝宝书《OpenGL超级宝典(第五版)》书里面有很多例子可以参考，可以更容易理解OpenGL。俗话说，工欲善其事，必先利其器。因此我们先搭建好环境，才能更好地往下学习。期间参考了网上很多教程，我借鉴过来，总结到这里。</p>
+<a id="more"></a>
+<h2 id="准备工具"><a href="#准备工具" class="headerlink" title="准备工具"></a>准备工具</h2><p>首先是我们的xcode，其次是书里提供的资源。</p>
+<blockquote>
+<p><a href="https://github.com/chiquanhuo/opengl_source" target="_blank" rel="external">https://github.com/chiquanhuo/opengl_source</a></p>
+</blockquote>
+<h2 id="创建工程"><a href="#创建工程" class="headerlink" title="创建工程"></a>创建工程</h2>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">验证码</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">OpenGL</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://www.forster.site/2018-05-05-xcode搭建OpenGL环境.html" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2018-04-12-A*算法.html" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">A*算法-python实现</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#简介"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#准备工具"><span class="toc-number">2.</span> <span class="toc-text">准备工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建工程"><span class="toc-number">3.</span> <span class="toc-text">创建工程</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
+        </div>
+        
+    </div>
+</aside>
+
+
+
+  
+  
+  
   
 
-    
+  
+
+  
+
+  
+  <div id="gitment-ctn"></div> 
+<link rel="stylesheet" href="//imsun.github.io/gitment/style/default.css">
+<script src="//imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+var gitment = new Gitment({
+  id: "http://www.forster.site/2018-05-05-xcode搭建OpenGL环境.html",
+  owner: 'chiquanhuo',
+  repo: 'chiquanhuo.github.io',
+  oauth: {
+    client_id: '0f46e8d569557b5e38b0',
+    client_secret: 'ddc2bde0ec0ab5ffeb81e34a9e3e239bc553dea3',
+  },
+})
+gitment.render('gitment-ctn')
+</script>
+  
 
 
           </div>
@@ -222,8 +348,8 @@ var _hmt = _hmt || [];
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

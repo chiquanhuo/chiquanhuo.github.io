@@ -17,7 +17,7 @@
 <meta property="og:description" content="背景最近把一个服务从PHP迁移到Go版本；但是对外接口的处理依然由PHP处理，然后内部实时请求Go这个服务并获取对应的数据。此服务需要可用性非常高，必须保证数据零丢失。 一开始通过Go服务写数据，为了保证数据不丢失，打算采用redis队列来处理数据。但是存在一些问题：  服务长时间挂掉，大量数据堆积队列 并不能实时写入数据，需要根据服务的消费速度来决定写入时间；会导致有部分数据在需要读的情况下，还">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://raw.githubusercontent.com/chiquanhuo/hexo_pictures/master/proxy/http.png">
-<meta property="og:updated_time" content="2017-11-04T15:44:10.697Z">
+<meta property="og:updated_time" content="2018-10-16T14:24:54.009Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HTTP反向代理初识">
 <meta name="twitter:description" content="背景最近把一个服务从PHP迁移到Go版本；但是对外接口的处理依然由PHP处理，然后内部实时请求Go这个服务并获取对应的数据。此服务需要可用性非常高，必须保证数据零丢失。 一开始通过Go服务写数据，为了保证数据不丢失，打算采用redis队列来处理数据。但是存在一些问题：  服务长时间挂掉，大量数据堆积队列 并不能实时写入数据，需要根据服务的消费速度来决定写入时间；会导致有部分数据在需要读的情况下，还">
@@ -399,7 +399,7 @@ gitment.render('gitment-ctn')
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2018 Forster
+    		&copy; 2019 Forster
     	</div>
         <div class="footer-right">
 <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
@@ -515,15 +515,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">docker</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">xhprof</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">docker</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -539,19 +539,19 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">gevent</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">AES</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">DES</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">gevent</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">python</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -583,6 +583,10 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">airflow</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">gor</a>
               </li>
              
@@ -595,15 +599,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">airflow</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Python</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">OpenGL</a>
               </li>
             
             <div class="clearfix"></div>
